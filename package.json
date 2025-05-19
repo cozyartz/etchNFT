@@ -9,6 +9,16 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.13"
+    "@rainbow-me/rainbowkit": "^2.2.5",
+    "astro": "^5.7.13",
+    "ethers": "^6.14.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "viem": "^2.29.4",
+    "wagmi": "^2.15.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5"
   }
 }

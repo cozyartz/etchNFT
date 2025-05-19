@@ -1,0 +1,43 @@
+---
+// src/layouts/BaseLayout.astro
+import WalletConnect from '../components/WalletConnect.astro';
+const { title = 'EtchNFT' } = Astro.props;
+---
+
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/src/global.css" />
+    <script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    <script src="https://kit.fontawesome.com/53a31143f8.js" crossorigin="anonymous"></script>
+  </head>
+  <body class="bg-white text-black dark:bg-zinc-900 dark:text-white transition-colors duration-300">
+    <header class="p-4 flex justify-between items-center border-b border-zinc-800">
+      <h1 class="text-2xl font-bold tracking-tight">EtchNFT</h1>
+      <div class="flex items-center gap-4">
+        <WalletConnect />
+        <button id="theme-toggle" class="text-xl">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+        </button>
+      </div>
+    </header>
+    <main class="min-h-screen">
+      <slot />
+    </main>
+    <script>
+      const toggle = document.getElementById('theme-toggle');
+      toggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      });
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else if (!localStorage.getItem('theme')) {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) document.documentElement.classList.add('dark');
+      }
+    </script>
+  </body>
+</html>

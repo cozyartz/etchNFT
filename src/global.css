@@ -1,0 +1,38 @@
+---
+// src/styles/global.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: theme('colors.white');
+  color: theme('colors.black');
+  @apply transition-colors duration-300 ease-in-out;
+}
+
+.dark body {
+  background-color: theme('colors.zinc.900');
+  color: theme('colors.white');
+}
+
+/* Smooth font rendering */
+*, *::before, *::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography tweaks */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+/* Reusable utility classes */
+.btn-primary {
+  @apply bg-white text-black dark:bg-zinc-100 dark:text-black px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-transform;
+}

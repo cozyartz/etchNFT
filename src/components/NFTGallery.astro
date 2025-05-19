@@ -1,0 +1,7 @@
+---
+import NFTGallery from './react/NFTGallery';
+const client: 'only' = 'only';
+const address = Astro.request?.url.searchParams.get('address') ?? '';
+---
+
+<NFTGallery client:only={client} address={address} />

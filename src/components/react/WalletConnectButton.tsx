@@ -1,0 +1,70 @@
+'use client';
+import '@rainbow-me/rainbowkit/styles.css';
+
+import {
+  getDefaultConfig,
+  RainbowKitProvider,
+  ConnectButton,
+  darkTheme,
+  lightTheme,
+} from '@rainbow-me/rainbowkit';
+import { WagmiProvider, useAccount, createConfig } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { mainnet, polygon, base, optimism } from 'wagmi/chains';
+import { ReactNode, useEffect, useState } from 'react';
+
+const wagmiConfig = getDefaultConfig({
+  appName: 'EtchNFT',
+  projectId: 'ETCH_NFT_DAPP', // replace with real WalletConnect Project ID if needed
+  chains: [mainnet, polygon, base, optimism],
+  ssr: true,
+});
+
+const queryClient = new QueryClient();
+
+function ThemeSync({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark');
+    setTheme(isDark ? 'dark' : 'light');
+  }, []);
+
+  return (
+    <RainbowKitProvider
+      modalSize="compact"
+      theme={theme === 'dark' ? darkTheme() : lightTheme()}
+    >
+      {children}
+    </RainbowKitProvider>
+  );
+}
+
+function WalletWatcher() {
+  const { address, isConnected } = useAccount();
+
+  useEffect(() => {
+    if (isConnected && address) {
+      window.dispatchEvent(
+        new CustomEvent('walletConnected', {
+          detail: { address },
+        })
+      );
+    }
+  }, [isConnected, address]);
+
+  return null;
+}
+
+export default function WalletConnectButton() {
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeSync>
+          <WalletWatcher />
+          <ConnectButton />
+        </ThemeSync>
+      </QueryClientProvider>
+    </WagmiProvider>
+  );
+}

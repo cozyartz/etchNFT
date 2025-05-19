@@ -1,0 +1,24 @@
+---
+import WalletConnectButton from './react/WalletConnectButton';
+const client: 'only' = 'only';
+---
+
+<div class="wallet-button">
+  <WalletConnectButton client:only={client} />
+</div>
+
+<div id="nft-gallery-wrapper" class="mt-8"></div>
+
+<script is:inline>
+  window.addEventListener('walletConnected', async (e) => {
+    const { address } = e.detail;
+    const wrapper = document.getElementById('nft-gallery-wrapper');
+    if (!wrapper) return;
+
+    wrapper.innerHTML = '<p class="text-gray-400 text-center">Loading your NFTs…</p>';
+    
+    const res = await fetch(`/components/NFTGallery?address=${address}`);
+    const html = await res.text();
+    wrapper.innerHTML = html;
+  });
+</script>
