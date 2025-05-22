@@ -1,0 +1,8 @@
+---
+import PageTransition from './react/PageTransition';
+const { default: content } = Astro.slots.default;
+---
+
+<PageTransition client:only="react">
+  {content}
+</PageTransition>

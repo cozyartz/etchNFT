@@ -1,42 +1,64 @@
 ---
-// src/layouts/BaseLayout.astro
-import WalletConnect from '../components/WalletConnect.astro';
-const { title = 'EtchNFT' } = Astro.props;
+import Meta from '../components/Meta.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageTransition from '../components/PageTransition.astro';
+import { CartProvider } from '../components/react/CartContext';
+
+const {
+  title = 'EtchNFT – Bring NFTs to Life',
+  description = 'Order laser-etched physical plaques of your NFTs, with crypto or card. Powered by Polygon.',
+  image = '/og-image.png',
+  url = 'https://etchnft.com'
+} = Astro.props;
 ---
 
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <link rel="stylesheet" href="/src/global.css" />
-    <script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    <Meta {title} {description} {image} {url} />
+
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="/src/styles/global.css" />
+
+    <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/53a31143f8.js" crossorigin="anonymous"></script>
+
+    <!-- Square Payments SDK (sandbox) -->
+    <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
   </head>
-  <body class="bg-white text-black dark:bg-zinc-900 dark:text-white transition-colors duration-300">
-    <header class="p-4 flex justify-between items-center border-b border-zinc-800">
-      <h1 class="text-2xl font-bold tracking-tight">EtchNFT</h1>
-      <div class="flex items-center gap-4">
-        <WalletConnect />
-        <button id="theme-toggle" class="text-xl">
-          <i class="fa-solid fa-circle-half-stroke"></i>
-        </button>
-      </div>
-    </header>
-    <main class="min-h-screen">
-      <slot />
-    </main>
+
+  <body class="bg-black text-white transition-colors duration-300 fade-in-up">
+    <CartProvider client:only="react">
+      <Nav />
+
+      <main class="min-h-screen relative z-10 px-4 sm:px-8 py-8">
+        <PageTransition>
+          <slot />
+        </PageTransition>
+      </main>
+
+      <Footer />
+    </CartProvider>
+
     <script>
       const toggle = document.getElementById('theme-toggle');
-      toggle.addEventListener('click', () => {
+      toggle?.addEventListener('click', () => {
         document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        localStorage.setItem(
+          'theme',
+          document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+        );
       });
-      if (localStorage.getItem('theme') === 'dark') {
+
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
         document.documentElement.classList.add('dark');
-      } else if (!localStorage.getItem('theme')) {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
     </script>
   </body>

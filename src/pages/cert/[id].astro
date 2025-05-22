@@ -1,0 +1,23 @@
+---
+const { id } = Astro.params;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>EtchNFT Certificate #{id}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="EtchNFT Certificate #{id}" />
+    <meta property="og:description" content="Official on-chain certificate for etched NFT" />
+    <meta property="og:image" content={`/cert/${id}/preview.png`} />
+    <meta property="og:url" content={`https://etchnft.com/cert/${id}`} />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body class="hero-gradient min-h-screen flex items-center justify-center text-center text-white px-6 py-12">
+    <div class="glass max-w-lg">
+      <h1 class="text-3xl font-bold mb-4 drop-shadow">Certificate #{id}</h1>
+      <p class="text-lg text-gray-300 mb-6">This certifies that this NFT was etched physically by EtchNFT.</p>
+      <img src={`/cert/${id}/preview.png`} alt="Certificate Preview" class="rounded shadow-lg" />
+    </div>
+  </body>
+</html>

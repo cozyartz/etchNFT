@@ -1,0 +1,16 @@
+---
+const {
+  title = 'EtchNFT – Bring NFTs to Life',
+  description = 'Order laser-etched physical plaques of your NFTs, with crypto or card. Powered by Polygon.',
+  image = '/og-image.png',
+  url = 'https://etchnft.com'
+} = Astro.props;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+<meta property="og:url" content={url} />
+<meta name="twitter:card" content="summary_large_image" />

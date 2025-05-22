@@ -1,0 +1,21 @@
+---
+import { useCart } from './react/CartContext';
+import { useState } from 'react';
+const client: 'only' = 'only';
+---
+
+<nav class="w-full px-6 py-4 flex justify-between items-center border-b border-zinc-800">
+  <h1 class="text-2xl font-bold tracking-tight text-white drop-shadow-[0_0_6px_rgba(0,240,255,0.5)]">
+    <i class="fa-solid fa-pen-nib mr-2"></i>EtchNFT
+  </h1>
+
+  <div class="flex items-center gap-4">
+    <WalletConnect />
+    <button id="theme-toggle" class="text-xl hover:text-accent transition">
+      <i class="fa-solid fa-circle-half-stroke"></i>
+    </button>
+
+    <!-- Cart Toggle Button -->
+    <CartToggle client:only={client} />
+  </div>
+</nav>

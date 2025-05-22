@@ -1,0 +1,34 @@
+---
+import WalletConnect from '../components/WalletConnect.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>EtchNFT – Bring NFTs to Life</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    <main class="hero-gradient min-h-screen flex flex-col items-center justify-center text-center px-6 fade-in-up">
+    <script src="https://kit.fontawesome.com/53a31143f8.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <main class="min-h-screen flex flex-col items-center justify-center text-center px-6 fade-in-up">
+      <div class="glass max-w-3xl w-full text-center">
+        <h1 class="text-5xl sm:text-6xl font-bold mb-6 text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.4)]">
+          <i class="fa-solid fa-pen-nib mr-3"></i>EtchNFT
+        </h1>
+
+        <p class="text-xl sm:text-2xl mb-8">
+          Turn your NFTs into beautiful, laser-etched physical art — with proof on-chain.
+        </p>
+
+        <WalletConnect />
+
+        <p class="text-sm text-gray-500 mt-6">
+          Powered by Polygon • Built for creators • Funded by culture
+        </p>
+      </div>
+    </main>
+  </body>
+</html>

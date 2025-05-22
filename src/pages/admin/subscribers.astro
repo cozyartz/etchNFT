@@ -1,0 +1,41 @@
+---
+import { auth } from '../../lib/auth';
+
+const { user } = await auth.handleRequest(Astro);
+if (!user) {
+  return Astro.redirect('/api/auth/login/github');
+}
+
+const db = Astro.locals.runtime.env.DB;
+const results = await db.prepare('SELECT * FROM subscribers ORDER BY created_at DESC').all();
+const subscribers = results.results;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Subscribers | EtchNFT</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body class="bg-zinc-950 text-white px-6 py-10">
+    <h1 class="text-3xl font-bold mb-4">EtchNFT Subscribers</h1>
+
+    <div class="mb-6">
+      <a href="/admin/subscribers.csv" class="text-accent underline">Download CSV</a>
+    </div>
+
+    <table class="min-w-full text-sm border-collapse">
+      <thead class="bg-zinc-800 text-zinc-400">
+        <tr><th class="p-3">Email</th><th class="p-3">Date</th></tr>
+      </thead>
+      <tbody>
+        {subscribers.map(sub => (
+          <tr class="border-b border-zinc-700">
+            <td class="p-3">{sub.email}</td>
+            <td class="p-3">{new Date(sub.created_at).toLocaleString()}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </body>
+</html>

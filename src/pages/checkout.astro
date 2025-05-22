@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Checkout from '../components/react/Checkout.tsx';
+const client: 'only' = 'only';
+---
+
+<BaseLayout title="Checkout – EtchNFT">
+  <section class="min-h-screen p-8 hero-gradient">
+    <Checkout client:only={client} />
+  </section>
+</BaseLayout>
