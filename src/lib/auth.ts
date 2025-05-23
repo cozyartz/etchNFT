@@ -1,30 +1,26 @@
-// src/lib/auth.ts
-import { Lucia } from 'lucia';
-import { github } from '@lucia-auth/oauth/providers';
+import type { APIContext } from 'astro';
+import { lucia } from 'lucia';
+import { github } from 'lucia/providers';
 import { astro } from 'lucia/middleware';
-import { D1Adapter } from '@lucia-auth/adapter-sqlite';
 
-export const auth = new Lucia(new D1Adapter(Bun.env.DB), {
+export const auth = lucia({
+  env: import.meta.env.MODE === 'development' ? 'DEV' : 'PROD',
   middleware: astro(),
   sessionCookie: {
-    name: 'etchnft_session',
     expires: false,
   },
-  env: import.meta.env.DEV ? 'DEV' : 'PROD',
+  getUserAttributes: (data) => ({
+    githubId: data.github_id,
+    email: data.email
+  })
 });
 
-export const githubAuth = github(auth, {
-  clientId: import.meta.env.GITHUB_CLIENT_ID,
-  clientSecret: import.meta.env.GITHUB_CLIENT_SECRET,
-  redirectUri: 'http://localhost:4321/api/auth/callback/github', // Change on deploy
-});
+export async function requireUser(context: APIContext) {
+  const session = await auth.validateSession(context);
 
-declare module 'lucia' {
-  interface Register {
-    Auth: typeof auth;
-    DatabaseUserAttributes: {
-      github_id: string;
-      email: string;
-    };
+  if (!session?.user) {
+    return context.redirect('/'); // deny access
   }
+
+  return session.user;
 }
