@@ -6,7 +6,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "setup:env": "node scripts/setup-env.js",
+    "check:env": "node scripts/setup-env.js check",
+    "deploy": "npm run build && wrangler pages deploy dist"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.5.3",
