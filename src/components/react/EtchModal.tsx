@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from './CartContext';
 import Toast from './Toast';
-import { useRouter } from 'next/router'; // if using Astro SSR, switch to window.location
 
 type NFT = {
   name: string;

@@ -1,5 +1,6 @@
 ---
 const title = 'EtchNFT – You’re In!';
+const orderId = Astro.url.searchParams.get('order');
 ---
 
 <html lang="en" class="scroll-smooth dark">
@@ -12,12 +13,28 @@ const title = 'EtchNFT – You’re In!';
 
   <body class="hero-gradient min-h-screen flex flex-col items-center justify-center text-center px-6 py-12 fade-in-up">
     <div class="glass max-w-xl w-full border-2 border-green-400 p-6">
-      <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-green-400">
-        <i class="fa-solid fa-check-circle mr-2"></i>Welcome to the Etch Era!
-      </h1>
-      <p class="text-md text-gray-300">
-        You’ve joined the early access list. Keep an eye on your inbox for special drops, launches, and surprises.
-      </p>
+      {orderId ? (
+        <>
+          <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-green-400">
+            <i class="fa-solid fa-check-circle mr-2"></i>Payment Successful!
+          </h1>
+          <p class="text-md text-gray-300 mb-4">
+            Your order #{orderId} has been confirmed. We'll start etching your NFTs and send you a confirmation email shortly.
+          </p>
+          <a href="/" class="inline-block bg-accent text-black px-6 py-2 rounded-full font-bold hover:bg-white transition">
+            Return Home
+          </a>
+        </>
+      ) : (
+        <>
+          <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-green-400">
+            <i class="fa-solid fa-check-circle mr-2"></i>Welcome to the Etch Era!
+          </h1>
+          <p class="text-md text-gray-300">
+            You've joined the early access list. Keep an eye on your inbox for special drops, launches, and surprises.
+          </p>
+        </>
+      )}
     </div>
   </body>
 </html>

@@ -1,6 +1,5 @@
 'use client';
 import { useCart } from './CartContext';
-import { useRouter } from 'next/router'; // Use if you're SSR with routing
 
 export default function CartDrawer() {
   const { cart, removeFromCart, clearCart } = useCart();

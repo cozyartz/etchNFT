@@ -26,7 +26,11 @@ export default function SquareCheckout({ form }: Props) {
 
   useEffect(() => {
     async function initialize() {
-      if (!window.Square) return;
+      if (!window.Square) {
+        setError('Square Payments SDK not loaded');
+        setIsLoading(false);
+        return;
+      }
 
       try {
         const p = window.Square.payments(
@@ -65,7 +69,8 @@ export default function SquareCheckout({ form }: Props) {
         setIsLoading(false);
       } catch (err: any) {
         console.error('Square init error:', err);
-        setError('Square Payments failed to load.');
+        setError('Payment system failed to load. Please try again.');
+        setIsLoading(false);
       }
     }
 

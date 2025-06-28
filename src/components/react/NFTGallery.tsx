@@ -22,17 +22,28 @@ export default function NFTGallery({ address }: Props) {
 
   useEffect(() => {
     async function fetchNFTs() {
-      const res = await fetch(`/api/nfts/${address}`);
-      const json = await res.json();
-      setNfts(json.nfts || []);
-      setLoading(false);
+      try {
+        const res = await fetch(`/api/nfts/${address}`);
+        const json = await res.json();
+        setNfts(json.nfts || []);
+      } catch (error) {
+        console.error('Failed to fetch NFTs:', error);
+        setNfts([]);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    fetchNFTs();
+    if (address) {
+      fetchNFTs();
+    } else {
+      setLoading(false);
+    }
   }, [address]);
 
   if (loading) return <p className="text-gray-400">Loading NFTs...</p>;
-  if (!nfts.length) return <p className="text-gray-500">No NFTs found.</p>;
+  if (!address) return <p className="text-gray-500">Connect your wallet to view NFTs.</p>;
+  if (!nfts.length) return <p className="text-gray-500">No NFTs found in this wallet.</p>;
 
   return (
     <>

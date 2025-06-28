@@ -39,6 +39,8 @@ export default function Checkout() {
   };
 
   const handleCryptoCheckout = async () => {
+    setSubmitted(true); // Show loading state
+    
     const res = await fetch('/api/crypto-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -46,13 +48,18 @@ export default function Checkout() {
     });
 
     if (!res.ok) {
+      setSubmitted(false);
       alert('Failed to launch crypto checkout.');
       return;
     }
 
-    const { checkout_url } = await res.json();
+    const { checkout_url, order_id } = await res.json();
     setCryptoUrl(checkout_url);
     setShowCrypto(true);
+    setSubmitted(false);
+    
+    // Store order ID for reference
+    localStorage.setItem('pendingOrderId', order_id);
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
