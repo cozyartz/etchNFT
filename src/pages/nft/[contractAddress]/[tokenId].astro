@@ -1,0 +1,271 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EtchModal from '../../../components/react/EtchModal';
+
+const { contractAddress, tokenId } = Astro.params;
+
+if (!contractAddress || !tokenId) {
+  return Astro.redirect('/gallery');
+}
+
+// Get wallet address from query params (passed from gallery)
+const walletAddress = Astro.url.searchParams.get('wallet') || '';
+
+let nft = null;
+let error = null;
+
+try {
+  // Fetch NFT details from SimpleHash API
+  const url = `https://api.simplehash.com/api/v0/nfts/ethereum/${contractAddress}/${tokenId}`;
+  const res = await fetch(url, {
+    headers: {
+      'X-API-KEY': import.meta.env.SIMPLEHASH_API_KEY || ''
+    }
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    nft = {
+      name: data.name || `${data.collection?.name} #${tokenId}`,
+      collection_name: data.collection?.name || 'Unknown Collection',
+      image_url: data.image_url || data.previews?.image_large_url,
+      token_id: tokenId,
+      contract_address: contractAddress,
+      description: data.description || '',
+      traits: data.extra_metadata?.attributes || [],
+      owner: data.owners?.[0]?.owner_address || '',
+      chain: data.chain || 'ethereum',
+      external_url: data.external_url,
+      animation_url: data.animation_url,
+      rarity_rank: data.rarity?.rank,
+      floor_price: data.collection?.floor_prices?.[0]?.value
+    };
+  } else {
+    error = 'NFT not found';
+  }
+} catch (err) {
+  console.error('Error fetching NFT:', err);
+  error = 'Failed to load NFT details';
+}
+
+const client: 'only' = 'only';
+---
+
+<BaseLayout title={nft ? `${nft.name} – EtchNFT` : 'NFT Details – EtchNFT'}>
+  <section class="hero-gradient min-h-screen px-6 py-12">
+    <div class="max-w-6xl mx-auto">
+      <!-- Back Button -->
+      <div class="mb-8">
+        <a href="/gallery" class="inline-flex items-center text-accent hover:text-white transition">
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Back to Gallery
+        </a>
+      </div>
+
+      {error ? (
+        <div class="glass p-8 rounded-xl text-center">
+          <h1 class="text-3xl font-bold text-red-400 mb-4">
+            <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+            {error}
+          </h1>
+          <p class="text-gray-400 mb-6">
+            We couldn't load the details for this NFT. It might not exist or there could be a network issue.
+          </p>
+          <a href="/gallery" class="bg-accent text-black px-6 py-2 rounded-full font-bold hover:bg-white transition">
+            Return to Gallery
+          </a>
+        </div>
+      ) : nft ? (
+        <div class="grid lg:grid-cols-2 gap-8">
+          <!-- NFT Image -->
+          <div class="glass p-6 rounded-xl">
+            <div class="aspect-square rounded-lg overflow-hidden bg-zinc-800 mb-4">
+              {nft.animation_url ? (
+                <video 
+                  src={nft.animation_url} 
+                  controls 
+                  class="w-full h-full object-cover"
+                  poster={nft.image_url}
+                >
+                  <img src={nft.image_url} alt={nft.name} class="w-full h-full object-cover" />
+                </video>
+              ) : nft.image_url ? (
+                <img 
+                  src={nft.image_url} 
+                  alt={nft.name} 
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div class="w-full h-full flex items-center justify-center text-gray-500">
+                  <i class="fa-solid fa-image text-6xl"></i>
+                </div>
+              )}
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="flex gap-3">
+              <button 
+                id="etch-button"
+                class="flex-1 bg-accent text-black font-bold py-3 px-4 rounded-lg hover:bg-white transition"
+              >
+                <i class="fa-solid fa-pen-nib mr-2"></i>
+                Etch This NFT
+              </button>
+              {nft.external_url && (
+                <a 
+                  href={nft.external_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="bg-zinc-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-zinc-600 transition"
+                >
+                  <i class="fa-solid fa-external-link-alt"></i>
+                </a>
+              )}
+            </div>
+          </div>
+
+          <!-- NFT Details -->
+          <div class="space-y-6">
+            <!-- Basic Info -->
+            <div class="glass p-6 rounded-xl">
+              <h1 class="text-3xl font-bold text-white mb-2">{nft.name}</h1>
+              <p class="text-accent text-lg mb-4">{nft.collection_name}</p>
+              
+              {nft.description && (
+                <p class="text-gray-300 leading-relaxed">{nft.description}</p>
+              )}
+
+              <div class="grid grid-cols-2 gap-4 mt-6 text-sm">
+                <div>
+                  <span class="text-gray-400">Token ID:</span>
+                  <p class="font-mono text-white">#{nft.token_id}</p>
+                </div>
+                <div>
+                  <span class="text-gray-400">Chain:</span>
+                  <p class="text-white capitalize">{nft.chain}</p>
+                </div>
+                {nft.rarity_rank && (
+                  <div>
+                    <span class="text-gray-400">Rarity Rank:</span>
+                    <p class="text-white">#{nft.rarity_rank}</p>
+                  </div>
+                )}
+                {nft.floor_price && (
+                  <div>
+                    <span class="text-gray-400">Floor Price:</span>
+                    <p class="text-white">{nft.floor_price} ETH</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <!-- Traits -->
+            {nft.traits && nft.traits.length > 0 && (
+              <div class="glass p-6 rounded-xl">
+                <h2 class="text-xl font-bold text-white mb-4">
+                  <i class="fa-solid fa-tags mr-2"></i>
+                  Traits
+                </h2>
+                <div class="grid grid-cols-2 gap-3">
+                  {nft.traits.map((trait: any) => (
+                    <div class="bg-zinc-800 p-3 rounded-lg">
+                      <p class="text-xs text-gray-400 uppercase tracking-wide">
+                        {trait.trait_type}
+                      </p>
+                      <p class="text-white font-semibold">{trait.value}</p>
+                      {trait.rarity && (
+                        <p class="text-xs text-accent">{trait.rarity}% rare</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- Contract Info -->
+            <div class="glass p-6 rounded-xl">
+              <h2 class="text-xl font-bold text-white mb-4">
+                <i class="fa-solid fa-file-contract mr-2"></i>
+                Contract Details
+              </h2>
+              <div class="space-y-3 text-sm">
+                <div>
+                  <span class="text-gray-400">Contract Address:</span>
+                  <p class="font-mono text-white break-all">{nft.contract_address}</p>
+                </div>
+                {nft.owner && (
+                  <div>
+                    <span class="text-gray-400">Owner:</span>
+                    <p class="font-mono text-white break-all">{nft.owner}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <!-- Etching Preview -->
+            <div class="glass p-6 rounded-xl">
+              <h2 class="text-xl font-bold text-white mb-4">
+                <i class="fa-solid fa-eye mr-2"></i>
+                Etching Preview
+              </h2>
+              <p class="text-gray-300 mb-4">
+                See how this NFT will look when laser-etched onto premium materials.
+              </p>
+              <div class="bg-zinc-800 p-4 rounded-lg border-2 border-dashed border-zinc-600">
+                <div class="text-center text-gray-400">
+                  <i class="fa-solid fa-magic text-2xl mb-2"></i>
+                  <p>Etching preview will appear here</p>
+                  <p class="text-xs">High-quality laser engraving on premium materials</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="glass p-8 rounded-xl text-center">
+          <div class="animate-spin text-4xl text-accent mb-4">
+            <i class="fa-solid fa-spinner"></i>
+          </div>
+          <p class="text-gray-400">Loading NFT details...</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Etch Modal -->
+  <div id="etch-modal-container"></div>
+
+  <script define:vars={{ nft, walletAddress }}>
+    if (nft) {
+      const etchButton = document.getElementById('etch-button');
+      const modalContainer = document.getElementById('etch-modal-container');
+
+      etchButton?.addEventListener('click', () => {
+        // Create and mount the React modal
+        import('/src/components/react/EtchModal').then(({ default: EtchModal }) => {
+          const React = window.React;
+          const ReactDOM = window.ReactDOM;
+          
+          if (React && ReactDOM) {
+            const modal = React.createElement(EtchModal, {
+              nft: nft,
+              address: walletAddress,
+              onClose: () => {
+                ReactDOM.unmountComponentAtNode(modalContainer);
+              }
+            });
+            
+            ReactDOM.render(modal, modalContainer);
+          } else {
+            // Fallback: redirect to checkout with NFT data
+            const params = new URLSearchParams({
+              nft: JSON.stringify(nft),
+              wallet: walletAddress
+            });
+            window.location.href = `/checkout?${params.toString()}`;
+          }
+        });
+      });
+    }
+  </script>
+</BaseLayout>

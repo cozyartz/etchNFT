@@ -12,7 +12,7 @@ export default function Toast({ message }: { message: string }) {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 bg-white text-black px-4 py-2 rounded shadow-md z-50 text-sm font-semibold">
+    <div className="fixed bottom-6 right-6 bg-accent text-black px-4 py-2 rounded-lg shadow-lg z-50 text-sm font-semibold animate-fadeIn">
       {message}
     </div>
   );

@@ -72,13 +72,21 @@ export default function NFTGallery({ address }: Props) {
                 {nft.name || 'Untitled'}
               </h3>
               <p className="text-sm text-gray-400">{nft.collection_name}</p>
-              <button
-                className="mt-4 bg-white text-black font-bold px-4 py-2 rounded hover:bg-gray-200 transition"
-                onClick={() => setSelected(nft)}
-              >
-                <i className="fa-solid fa-pen-nib mr-2"></i>
-                Etch This
-              </button>
+              <div className="flex gap-2 mt-4">
+                <button
+                  className="flex-1 bg-white text-black font-bold px-4 py-2 rounded hover:bg-gray-200 transition text-sm"
+                  onClick={() => setSelected(nft)}
+                >
+                  <i className="fa-solid fa-pen-nib mr-2"></i>
+                  Etch This
+                </button>
+                <a
+                  href={`/nft/${nft.contract_address}/${nft.token_id}?wallet=${address}`}
+                  className="bg-zinc-700 text-white font-bold px-3 py-2 rounded hover:bg-zinc-600 transition text-sm"
+                >
+                  <i className="fa-solid fa-eye"></i>
+                </a>
+              </div>
             </div>
           </motion.div>
         ))}

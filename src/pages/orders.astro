@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// This would typically require authentication
+// For demo purposes, we'll show a sample order tracking page
+
+const orderId = Astro.url.searchParams.get('id');
+---
+
+<BaseLayout title="Order Tracking – EtchNFT">
+  <section class="hero-gradient min-h-screen px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="glass p-8 rounded-xl">
+        <h1 class="text-3xl font-bold text-white mb-8">
+          <i class="fa-solid fa-package mr-3"></i>
+          Order Tracking
+        </h1>
+
+        {orderId ? (
+          <div class="space-y-6">
+            <!-- Order Header -->
+            <div class="border-b border-zinc-700 pb-6">
+              <h2 class="text-xl font-semibold text-accent mb-2">Order #{orderId}</h2>
+              <p class="text-gray-300">Placed on {new Date().toLocaleDateString()}</p>
+            </div>
+
+            <!-- Order Status -->
+            <div class="grid md:grid-cols-4 gap-4">
+              <div class="text-center">
+                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <i class="fa-solid fa-check text-white"></i>
+                </div>
+                <p class="text-sm font-semibold text-green-400">Order Placed</p>
+                <p class="text-xs text-gray-400">Confirmed</p>
+              </div>
+              <div class="text-center">
+                <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <i class="fa-solid fa-cog fa-spin text-white"></i>
+                </div>
+                <p class="text-sm font-semibold text-yellow-400">Processing</p>
+                <p class="text-xs text-gray-400">In Progress</p>
+              </div>
+              <div class="text-center">
+                <div class="w-12 h-12 bg-zinc-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <i class="fa-solid fa-truck text-gray-400"></i>
+                </div>
+                <p class="text-sm font-semibold text-gray-400">Shipping</p>
+                <p class="text-xs text-gray-400">Pending</p>
+              </div>
+              <div class="text-center">
+                <div class="w-12 h-12 bg-zinc-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <i class="fa-solid fa-home text-gray-400"></i>
+                </div>
+                <p class="text-sm font-semibold text-gray-400">Delivered</p>
+                <p class="text-xs text-gray-400">Pending</p>
+              </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="bg-zinc-800 p-6 rounded-lg">
+              <h3 class="text-lg font-semibold text-white mb-4">Items Being Etched</h3>
+              <div class="space-y-4">
+                <div class="flex items-center gap-4 p-4 bg-zinc-700 rounded-lg">
+                  <div class="w-16 h-16 bg-zinc-600 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-image text-gray-400"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h4 class="font-semibold text-white">Sample NFT #1234</h4>
+                    <p class="text-sm text-gray-400">Cool Collection</p>
+                    <p class="text-xs text-accent">Laser etching in progress...</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-semibold text-white">$45.00</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shipping Info -->
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-zinc-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold text-white mb-4">Shipping Address</h3>
+                <div class="text-gray-300 space-y-1">
+                  <p>John Doe</p>
+                  <p>123 Main Street</p>
+                  <p>San Francisco, CA 94102</p>
+                  <p>United States</p>
+                </div>
+              </div>
+              <div class="bg-zinc-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold text-white mb-4">Estimated Delivery</h3>
+                <p class="text-2xl font-bold text-accent">{new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                <p class="text-sm text-gray-400">7-10 business days</p>
+              </div>
+            </div>
+
+            <!-- Certificate Preview -->
+            <div class="bg-zinc-800 p-6 rounded-lg">
+              <h3 class="text-lg font-semibold text-white mb-4">
+                <i class="fa-solid fa-certificate mr-2"></i>
+                Digital Certificate
+              </h3>
+              <p class="text-gray-300 mb-4">
+                Your digital certificate of authenticity is ready! This proves your NFT was officially etched by EtchNFT.
+              </p>
+              <a 
+                href={`/cert/${orderId}`}
+                class="inline-flex items-center bg-accent text-black px-4 py-2 rounded-lg font-semibold hover:bg-white transition"
+              >
+                <i class="fa-solid fa-eye mr-2"></i>
+                View Certificate
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div class="text-center">
+            <h2 class="text-xl font-semibold text-white mb-4">Track Your Order</h2>
+            <p class="text-gray-300 mb-6">Enter your order ID to track the status of your etched NFTs.</p>
+            
+            <form class="max-w-md mx-auto">
+              <div class="flex gap-3">
+                <input
+                  type="text"
+                  name="id"
+                  placeholder="Enter Order ID"
+                  class="flex-1 px-4 py-2 rounded-lg bg-zinc-800 text-white border border-zinc-600 focus:border-accent focus:outline-none"
+                  required
+                />
+                <button
+                  type="submit"
+                  class="bg-accent text-black px-6 py-2 rounded-lg font-semibold hover:bg-white transition"
+                >
+                  Track
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
