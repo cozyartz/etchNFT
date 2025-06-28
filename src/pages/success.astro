@@ -21,9 +21,14 @@ const orderId = Astro.url.searchParams.get('order');
           <p class="text-md text-gray-300 mb-4">
             Your order #{orderId} has been confirmed. We'll start etching your NFTs and send you a confirmation email shortly.
           </p>
-          <a href="/" class="inline-block bg-accent text-black px-6 py-2 rounded-full font-bold hover:bg-white transition">
-            Return Home
-          </a>
+          <div class="flex gap-4 justify-center">
+            <a href="/my-orders" class="inline-block bg-accent text-black px-6 py-2 rounded-full font-bold hover:bg-white transition">
+              View My Orders
+            </a>
+            <a href="/gallery" class="inline-block bg-zinc-700 text-white px-6 py-2 rounded-full font-bold hover:bg-zinc-600 transition">
+              Etch More NFTs
+            </a>
+          </div>
         </>
       ) : (
         <>
@@ -33,6 +38,11 @@ const orderId = Astro.url.searchParams.get('order');
           <p class="text-md text-gray-300">
             You've joined the early access list. Keep an eye on your inbox for special drops, launches, and surprises.
           </p>
+          <div class="mt-6">
+            <a href="/gallery" class="inline-block bg-accent text-black px-6 py-2 rounded-full font-bold hover:bg-white transition">
+              Start Etching →
+            </a>
+          </div>
         </>
       )}
     </div>

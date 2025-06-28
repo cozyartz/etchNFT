@@ -72,6 +72,11 @@ export default function EtchModal({ nft, address, onClose }: Props) {
     }, 1000);
   };
 
+  const handleViewOrders = () => {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/my-orders';
+    }
+  };
   return (
     <>
       {showToast && <Toast message="Added to cart. Redirecting..." />}
@@ -153,6 +158,14 @@ export default function EtchModal({ nft, address, onClose }: Props) {
               className="w-full bg-accent text-black py-2 rounded font-bold hover:bg-white transition"
             >
               Continue to Checkout →
+            </button>
+
+            <button
+              type="button"
+              onClick={handleViewOrders}
+              className="w-full mt-2 bg-zinc-700 text-white py-2 rounded font-bold hover:bg-zinc-600 transition text-sm"
+            >
+              View My Orders
             </button>
           </form>
         </div>

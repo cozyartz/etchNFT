@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OrderHistory from '../components/react/OrderHistory';
+
+const client: 'only' = 'only';
+---
+
+<BaseLayout title="My Orders – EtchNFT">
+  <section class="hero-gradient min-h-screen px-6 py-12">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl sm:text-5xl font-bold mb-6 text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.4)]">
+          <i class="fa-solid fa-history mr-3"></i>My Orders
+        </h1>
+        <p class="text-xl text-gray-300 mb-8">
+          Track your etched NFTs and view your complete order history.
+        </p>
+      </div>
+
+      <OrderHistory client:only={client} />
+    </div>
+  </section>
+</BaseLayout>
