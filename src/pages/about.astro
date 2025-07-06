@@ -1,8 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'About EtchNFT - Transform Your NFTs into Physical Collectibles';
+const description = 'Learn how EtchNFT transforms digital NFTs into premium laser-etched physical collectibles. Supporting Ethereum, Polygon, and Solana networks. Premium quality guaranteed.';
+const keywords = 'about EtchNFT, NFT laser etching, digital to physical NFT, blockchain collectibles, NFT manufacturing, crypto art collectibles';
 ---
 
-<BaseLayout title="About – EtchNFT">
+<BaseLayout 
+  title={title}
+  description={description}
+  url="https://etchnft.com/about"
+>
   <section class="hero-gradient min-h-screen px-6 py-12">
     <div class="max-w-4xl mx-auto">
       <div class="glass p-8 rounded-xl">
@@ -10,60 +18,90 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <i class="fa-solid fa-info-circle mr-3"></i>About EtchNFT
         </h1>
 
-        <div class="space-y-8 text-gray-300">
-          <div>
-            <h2 class="text-2xl font-semibold text-accent mb-4">What We Do</h2>
-            <p class="text-lg leading-relaxed">
-              EtchNFT transforms your digital NFTs into beautiful, physical collectibles using precision laser engraving. 
-              We bridge the gap between digital ownership and tangible art, creating lasting memories of your favorite NFTs.
+        <article class="space-y-8 text-gray-300">
+          <section>
+            <h2 class="text-2xl font-semibold text-accent mb-4">Premium NFT Physical Collectibles</h2>
+            <p class="text-lg leading-relaxed mb-4">
+              EtchNFT transforms your digital NFTs into beautiful, physical collectibles using precision laser engraving technology. 
+              We bridge the gap between digital ownership and tangible art, creating lasting memories of your favorite NFTs that you can display, gift, or collect.
             </p>
-          </div>
+            <p class="text-lg leading-relaxed">
+              Our high-quality laser etching process ensures every detail of your NFT is perfectly captured on premium materials including wood, acrylic, metal, and fabric.
+            </p>
+          </section>
 
-          <div>
-            <h2 class="text-2xl font-semibold text-accent mb-4">How It Works</h2>
+          <section>
+            <h2 class="text-2xl font-semibold text-accent mb-4">How NFT Laser Etching Works</h2>
             <div class="grid sm:grid-cols-3 gap-6">
-              <div class="text-center">
+              <div class="text-center glass p-4 rounded-lg">
                 <div class="text-4xl mb-4">🔗</div>
-                <h3 class="font-semibold mb-2">Connect Wallet</h3>
-                <p class="text-sm">Link your crypto wallet to browse your NFT collection</p>
+                <h3 class="font-semibold mb-2">Connect Crypto Wallet</h3>
+                <p class="text-sm">Link your crypto wallet to browse your complete NFT collection across all supported networks</p>
               </div>
-              <div class="text-center">
+              <div class="text-center glass p-4 rounded-lg">
                 <div class="text-4xl mb-4">🎨</div>
-                <h3 class="font-semibold mb-2">Select & Customize</h3>
-                <p class="text-sm">Choose your NFTs and customize your physical collectible</p>
+                <h3 class="font-semibold mb-2">Select & Customize Design</h3>
+                <p class="text-sm">Choose your NFTs and customize your physical collectible with various materials and sizes</p>
               </div>
-              <div class="text-center">
+              <div class="text-center glass p-4 rounded-lg">
                 <div class="text-4xl mb-4">⚡</div>
-                <h3 class="font-semibold mb-2">Laser Etch</h3>
-                <p class="text-sm">We laser-etch your NFT onto premium materials and ship worldwide</p>
+                <h3 class="font-semibold mb-2">Precision Laser Etching</h3>
+                <p class="text-sm">We laser-etch your NFT onto premium materials with precision and ship worldwide</p>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div>
-            <h2 class="text-2xl font-semibold text-accent mb-4">Supported Networks</h2>
-            <div class="flex flex-wrap gap-4">
-              <span class="bg-purple-600 px-4 py-2 rounded-full text-sm font-semibold">Ethereum</span>
-              <span class="bg-purple-600 px-4 py-2 rounded-full text-sm font-semibold">Polygon</span>
-              <span class="bg-blue-600 px-4 py-2 rounded-full text-sm font-semibold">Base</span>
-              <span class="bg-red-600 px-4 py-2 rounded-full text-sm font-semibold">Optimism</span>
-            </div>
-          </div>
-
-          <div>
-            <h2 class="text-2xl font-semibold text-accent mb-4">Payment Options</h2>
-            <p class="text-lg leading-relaxed">
-              We accept both traditional payments (credit cards, Apple Pay) via Square, and cryptocurrency payments 
-              via Coinbase Commerce. Choose whatever works best for you.
+          <section>
+            <h2 class="text-2xl font-semibold text-accent mb-4">Supported Blockchain Networks</h2>
+            <p class="text-lg leading-relaxed mb-4">
+              We support NFTs from all major blockchain networks, ensuring you can transform any NFT in your collection into a physical collectible.
             </p>
-          </div>
+            <div class="flex flex-wrap gap-4">
+              <span class="bg-purple-600 px-4 py-2 rounded-full text-sm font-semibold">Ethereum NFTs</span>
+              <span class="bg-purple-600 px-4 py-2 rounded-full text-sm font-semibold">Polygon NFTs</span>
+              <span class="bg-blue-600 px-4 py-2 rounded-full text-sm font-semibold">Base NFTs</span>
+              <span class="bg-red-600 px-4 py-2 rounded-full text-sm font-semibold">Optimism NFTs</span>
+              <span class="bg-green-600 px-4 py-2 rounded-full text-sm font-semibold">Solana NFTs</span>
+            </div>
+          </section>
 
-          <div class="text-center pt-8">
-            <a href="/gallery" class="bg-accent text-black px-8 py-3 rounded-full font-bold hover:bg-white transition">
-              Start Etching →
+          <section>
+            <h2 class="text-2xl font-semibold text-accent mb-4">Flexible Payment Options</h2>
+            <p class="text-lg leading-relaxed mb-4">
+              We accept both traditional payments and cryptocurrency to make ordering as convenient as possible:
+            </p>
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div class="glass p-4 rounded-lg">
+                <h3 class="font-semibold mb-2 text-accent">Traditional Payments</h3>
+                <p class="text-sm">Credit cards, debit cards, Apple Pay, Google Pay via Square payment processing</p>
+              </div>
+              <div class="glass p-4 rounded-lg">
+                <h3 class="font-semibold mb-2 text-accent">Cryptocurrency Payments</h3>
+                <p class="text-sm">Bitcoin, Ethereum, and other cryptocurrencies via Coinbase Commerce</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="text-2xl font-semibold text-accent mb-4">Premium Quality Materials</h2>
+            <p class="text-lg leading-relaxed mb-4">
+              All our physical NFT collectibles are created using premium materials and precision laser etching for the highest quality results:
+            </p>
+            <ul class="list-disc list-inside text-lg leading-relaxed space-y-2">
+              <li>Laser-etched wood plaques with natural grain patterns</li>
+              <li>Crystal-clear acrylic displays with vibrant colors</li>
+              <li>Brushed metal engravings for luxury collectibles</li>
+              <li>Custom apparel with detailed NFT artwork</li>
+              <li>Various sizes from small keepsakes to large wall art</li>
+            </ul>
+          </section>
+
+          <section class="text-center pt-8">
+            <a href="/gallery" class="bg-accent text-black px-8 py-3 rounded-full font-bold hover:bg-white transition" aria-label="Browse NFT Gallery and Start Etching">
+              Browse Gallery & Start Etching →
             </a>
-          </div>
-        </div>
+          </section>
+        </article>
       </div>
     </div>
   </section>

@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Important pages
+Allow: /gallery
+Allow: /about
+Allow: /nft/
+Allow: /pitch
+
+# API endpoints - allow for better discovery
+Allow: /api/nfts/
+Allow: /api/cert/
+
+# Admin pages - disallow
+Disallow: /admin/
+Disallow: /api/auth/
+Disallow: /api/order
+Disallow: /api/github
+
+# Generated files
+Disallow: /*.json$
+Disallow: /*.xml$
+
+# Sitemap
+Sitemap: https://etchnft.com/sitemap.xml
+
+# Crawl delay (be respectful)
+Crawl-delay: 1
