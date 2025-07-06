@@ -1,0 +1,224 @@
+/* Custom styles for EtchNFT documentation */
+
+/* Import the EtchNFT color scheme */
+:root {
+  --sl-color-accent: #DB2777;
+  --sl-color-accent-light: #F472B6;
+  --sl-color-accent-high: #BE185D;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #f8fafc;
+  --sl-color-gray-2: #f1f5f9;
+  --sl-color-gray-3: #e2e8f0;
+  --sl-color-gray-4: #cbd5e1;
+  --sl-color-gray-5: #94a3b8;
+  --sl-color-gray-6: #64748b;
+  --sl-color-black: #1e293b;
+  
+  /* EtchNFT brand colors */
+  --etch-primary: #DB2777;
+  --etch-secondary: #7F73F7;
+  --etch-accent: #41C6BB;
+  --etch-dark: #0b0b0f;
+}
+
+/* Dark theme adjustments */
+:root[data-theme='dark'] {
+  --sl-color-accent: #F472B6;
+  --sl-color-accent-light: #FBBF24;
+  --sl-color-accent-high: #DB2777;
+  --sl-color-white: #0b0b0f;
+  --sl-color-gray-1: #1e293b;
+  --sl-color-gray-2: #334155;
+  --sl-color-gray-3: #475569;
+  --sl-color-gray-4: #64748b;
+  --sl-color-gray-5: #94a3b8;
+  --sl-color-gray-6: #cbd5e1;
+  --sl-color-black: #f8fafc;
+}
+
+/* Custom typography */
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3 {
+  background: linear-gradient(135deg, var(--etch-primary), var(--etch-accent));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Code blocks with EtchNFT styling */
+.sl-markdown-content pre {
+  background: linear-gradient(135deg, 
+    rgba(219, 39, 119, 0.1) 0%,
+    rgba(127, 115, 247, 0.1) 50%,
+    rgba(65, 198, 187, 0.1) 100%
+  );
+  border: 1px solid rgba(219, 39, 119, 0.2);
+  border-radius: 12px;
+}
+
+/* Inline code styling */
+.sl-markdown-content code:not(pre code) {
+  background: rgba(219, 39, 119, 0.1);
+  color: var(--etch-primary);
+  border: 1px solid rgba(219, 39, 119, 0.2);
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+}
+
+/* Links with hover effects */
+.sl-markdown-content a {
+  color: var(--etch-primary);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.sl-markdown-content a:hover {
+  color: var(--etch-accent);
+}
+
+.sl-markdown-content a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(90deg, var(--etch-primary), var(--etch-accent));
+  transition: width 0.3s ease;
+}
+
+.sl-markdown-content a:hover::after {
+  width: 100%;
+}
+
+/* Navigation improvements */
+.sidebar-content {
+  background: rgba(11, 11, 15, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+/* Search styling */
+.search-input {
+  background: rgba(219, 39, 119, 0.1);
+  border: 1px solid rgba(219, 39, 119, 0.3);
+  border-radius: 8px;
+}
+
+/* Table styling */
+.sl-markdown-content table {
+  border: 1px solid rgba(219, 39, 119, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.sl-markdown-content th {
+  background: linear-gradient(135deg, 
+    rgba(219, 39, 119, 0.2),
+    rgba(127, 115, 247, 0.2)
+  );
+  color: var(--etch-primary);
+  font-weight: 600;
+}
+
+/* Alert/callout styling */
+.sl-markdown-content .note,
+.sl-markdown-content .tip,
+.sl-markdown-content .warning,
+.sl-markdown-content .danger {
+  border-left: 4px solid var(--etch-primary);
+  background: rgba(219, 39, 119, 0.1);
+  border-radius: 0 8px 8px 0;
+}
+
+/* Hero section on homepage */
+.hero {
+  background: linear-gradient(135deg, 
+    var(--etch-dark) 0%,
+    rgba(219, 39, 119, 0.3) 25%,
+    rgba(127, 115, 247, 0.3) 50%,
+    rgba(65, 198, 187, 0.3) 75%,
+    var(--etch-dark) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(65, 198, 187, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 198, 187, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+/* Card grid improvements */
+.card-grid .card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(219, 39, 119, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.card-grid .card:hover {
+  transform: translateY(-4px);
+  border-color: var(--etch-accent);
+  box-shadow: 0 10px 30px rgba(219, 39, 119, 0.2);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .sl-markdown-content h1 {
+    font-size: 2rem;
+  }
+  
+  .sl-markdown-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: 2px solid var(--etch-accent);
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading {
+  background: linear-gradient(90deg, 
+    rgba(219, 39, 119, 0.1) 25%, 
+    rgba(65, 198, 187, 0.2) 50%, 
+    rgba(219, 39, 119, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 2s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

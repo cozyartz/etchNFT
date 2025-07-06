@@ -1,10 +1,13 @@
 import type { APIRoute } from 'astro';
-import { auth } from '../../../lib/auth';
+import { auth } from "../../lib/auth";
+import { getDatabase } from "../../lib/db"; // assume your DB client is exported from here
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, cookies, redirect, url, locals }) => {
-  const session = await auth.validateSession(cookies.get(auth.sessionCookieName)?.value ?? '');
+export const POST: APIRoute = async ({ request, cookies, redirect, url }) => {
+  const sessionCookie = cookies.get(auth.sessionCookieName)?.value ?? '';
+  const session = await auth.validateSession(sessionCookie);
+
   if (!session) {
     return redirect('/api/auth/login/github');
   }
@@ -14,13 +17,14 @@ export const POST: APIRoute = async ({ request, cookies, redirect, url, locals }
     return new Response('Missing order ID', { status: 400 });
   }
 
-  const db = locals.runtime.env.DB;
+  const db = getDatabase(); // your own method that returns a prepared client (e.g. D1, sqlite, better-sqlite3, etc.)
 
   try {
     await db
       .prepare(`UPDATE orders SET status = 'etched', updated_at = CURRENT_TIMESTAMP WHERE id = ?`)
       .bind(id)
       .run();
+
     console.log(`[ADMIN] Marked order ${id} as etched`);
   } catch (err) {
     console.error('[DB ERROR]', err);

@@ -1,4 +1,6 @@
--- Users (email/password or GitHub OAuth)
+-- ===========================================
+-- Users (OAuth or email/password login)
+-- ===========================================
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   github_id TEXT,
@@ -7,16 +9,20 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Sessions for Lucia Auth
+-- ===========================================
+-- Sessions (for Lucia Auth or custom tokens)
+-- ===========================================
 CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY,
   user_id TEXT NOT NULL,
   expires_at TIMESTAMP NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY(user_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- Orders (etched NFTs)
+-- ===========================================
+-- Orders (Etched NFT fulfillment tracking)
+-- ===========================================
 CREATE TABLE IF NOT EXISTS orders (
   id TEXT PRIMARY KEY,
   wallet_address TEXT NOT NULL,
@@ -42,7 +48,10 @@ CREATE TABLE IF NOT EXISTS orders (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
--- Email-only newsletter opt-ins
+
+-- ===========================================
+-- Email-only newsletter subscribers
+-- ===========================================
 CREATE TABLE IF NOT EXISTS subscribers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT NOT NULL UNIQUE,

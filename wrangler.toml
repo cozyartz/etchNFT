@@ -1,5 +1,10 @@
 name = "etchnft"
-compatibility_date = "2024-05-18"
+
+# Use the latest compatibility date for best feature support
+compatibility_date = "2024-09-23"
+
+# Enable Node.js polyfills for packages like Lucia
+compatibility_flags = ["nodejs_compat"]
 
 [[d1_databases]]
 binding = "DB"

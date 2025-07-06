@@ -1,0 +1,306 @@
+---
+import "@fontsource-variable/inter";
+import "~/styles/index.css";
+
+const { generator, site } = Astro;
+const title = "EtchNFT — Mint Your Memory";
+const description = "Create custom phygital NFTs - physical collectibles paired with digital tokens on Ethereum & Solana.";
+---
+
+<!doctype html>
+<html lang="en" class="h-full motion-safe:scroll-smooth" data-theme="dark" view-transition>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/etchlogo.png" />
+    <meta property="og:url" content="https://etchnft.com/miniapp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Farcaster Mini App Meta Tags -->
+    <meta property="fc:miniapp" content="{&quot;name&quot;:&quot;EtchNFT&quot;,&quot;version&quot;:&quot;1.0.0&quot;,&quot;iconUrl&quot;:&quot;https://etchnft.com/etchlogo.png&quot;,&quot;splashImageUrl&quot;:&quot;https://etchnft.com/etchlogo.png&quot;,&quot;splashBackgroundColor&quot;:&quot;#DB2777&quot;,&quot;homeUrl&quot;:&quot;https://etchnft.com/miniapp&quot;}" />
+  </head>
+
+  <body class="h-full bg-black text-white font-sans overflow-x-hidden selection:bg-pink-600 selection:text-white">
+    
+    <main class="min-h-screen flex flex-col">
+      <!-- Header with Chain Selector -->
+      <header class="flex items-center justify-between p-4 border-b border-gray-800">
+        <div class="flex items-center gap-2">
+          <img src="/favicon.svg" alt="EtchNFT" class="w-6 h-6" />
+          <h1 class="text-lg font-bold text-white">EtchNFT</h1>
+        </div>
+        
+        <!-- Chain Selector -->
+        <div class="flex items-center gap-2">
+          <button 
+            id="chain-ethereum"
+            class="chain-btn flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 bg-gray-800 text-gray-300 hover:bg-gray-700"
+          >
+            <span class="text-base">⟠</span>
+            <span>ETH</span>
+          </button>
+          <button 
+            id="chain-solana"
+            class="chain-btn flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 bg-gray-800 text-gray-300 hover:bg-gray-700"
+          >
+            <span class="text-base">◎</span>
+            <span>SOL</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <div class="max-w-sm mx-auto space-y-6">
+          <!-- Logo -->
+          <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
+            <img src="/favicon.svg" alt="EtchNFT" class="w-10 h-10" />
+          </div>
+
+          <!-- Title -->
+          <div class="space-y-2">
+            <h2 class="text-2xl font-bold text-white">Mint Your Memory</h2>
+            <p class="text-gray-300 text-sm leading-relaxed">
+              Create custom phygital NFTs - physical collectibles paired with digital tokens.
+            </p>
+            <div id="chain-info" class="text-xs text-gray-400 flex items-center justify-center gap-1">
+              <span id="chain-icon">⟠</span>
+              <span id="chain-name">Ethereum</span>
+              <span>•</span>
+              <span id="wallet-status">Connecting...</span>
+            </div>
+          </div>
+
+          <!-- Mint Options -->
+          <div class="space-y-3">
+            <button 
+              id="mint-plaque"
+              class="mint-btn w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
+            >
+              Mint Etched Plaque
+            </button>
+            
+            <button 
+              id="mint-tee"
+              class="mint-btn w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
+            >
+              Mint Custom Tee
+            </button>
+            
+            <button 
+              id="mint-acrylic"
+              class="mint-btn w-full bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
+            >
+              Mint Acrylic Relic
+            </button>
+          </div>
+
+          <!-- Status -->
+          <div id="status" class="text-sm text-gray-400 min-h-[20px]">
+            Ready to mint your first memory
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="p-4 border-t border-gray-800 text-center">
+        <p class="text-xs text-gray-500">
+          <span id="footer-chain">Ethereum & Solana</span> • Physical + Digital
+        </p>
+      </footer>
+    </main>
+
+    <!-- Styles -->
+    <style>
+      .chain-btn.active {
+        background: linear-gradient(135deg, #DB2777, #7F73F7);
+        color: white;
+        transform: scale(1.05);
+      }
+      
+      .mint-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    </style>
+
+    <!-- Farcaster Mini App SDK -->
+    <script type="module">
+      import { sdk } from '@farcaster/miniapp-sdk';
+      import { multiChainWallet, CHAIN_CONFIGS } from '../lib/multichain-wallet.ts';
+      
+      // Initialize the mini app
+      await sdk.actions.ready();
+      
+      // Get user context
+      const context = await sdk.context;
+      console.log('Farcaster context:', context);
+      
+      let currentChain = 'ethereum';
+      let walletStates = {};
+      
+      // DOM elements
+      const chainEthBtn = document.getElementById('chain-ethereum');
+      const chainSolBtn = document.getElementById('chain-solana');
+      const chainIcon = document.getElementById('chain-icon');
+      const chainName = document.getElementById('chain-name');
+      const walletStatus = document.getElementById('wallet-status');
+      const statusDiv = document.getElementById('status');
+      const mintButtons = document.querySelectorAll('[id^="mint-"]');
+      
+      // Initialize wallet connections
+      async function initializeWallets() {
+        try {
+          walletStatus.textContent = 'Connecting...';
+          
+          // Try to connect to both chains
+          try {
+            await multiChainWallet.connectWallet('ethereum');
+          } catch (error) {
+            console.log('Ethereum connection failed:', error);
+          }
+          
+          try {
+            await multiChainWallet.connectWallet('solana');
+          } catch (error) {
+            console.log('Solana connection failed:', error);
+          }
+          
+          walletStates = multiChainWallet.getAllWalletStates();
+          updateUI();
+          
+        } catch (error) {
+          console.error('Wallet initialization failed:', error);
+          walletStatus.textContent = 'Connection failed';
+        }
+      }
+      
+      // Update UI based on current chain and wallet states
+      function updateUI() {
+        const chainConfig = CHAIN_CONFIGS[currentChain];
+        const walletState = walletStates[currentChain];
+        
+        // Update chain selector
+        document.querySelectorAll('.chain-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`chain-${currentChain}`).classList.add('active');
+        
+        // Update chain info
+        chainIcon.textContent = chainConfig.icon;
+        chainName.textContent = chainConfig.name;
+        
+        // Update wallet status
+        if (walletState?.isConnected) {
+          walletStatus.textContent = `${walletState.address.slice(0, 6)}...${walletState.address.slice(-4)}`;
+          statusDiv.textContent = `Welcome! Ready to mint on ${chainConfig.name}`;
+          
+          // Enable mint buttons
+          mintButtons.forEach(btn => btn.disabled = false);
+        } else {
+          walletStatus.textContent = 'Not connected';
+          statusDiv.textContent = `Connect ${chainConfig.name} wallet to mint`;
+          
+          // Disable mint buttons
+          mintButtons.forEach(btn => btn.disabled = true);
+        }
+      }
+      
+      // Chain selection handlers
+      chainEthBtn.addEventListener('click', async () => {
+        currentChain = 'ethereum';
+        await multiChainWallet.switchChain('ethereum');
+        walletStates = multiChainWallet.getAllWalletStates();
+        updateUI();
+      });
+      
+      chainSolBtn.addEventListener('click', async () => {
+        currentChain = 'solana';
+        await multiChainWallet.switchChain('solana');
+        walletStates = multiChainWallet.getAllWalletStates();
+        updateUI();
+      });
+      
+      // Mint button handlers
+      document.getElementById('mint-plaque').addEventListener('click', async () => {
+        await handleMint('plaque');
+      });
+      
+      document.getElementById('mint-tee').addEventListener('click', async () => {
+        await handleMint('tee');
+      });
+      
+      document.getElementById('mint-acrylic').addEventListener('click', async () => {
+        await handleMint('acrylic');
+      });
+      
+      async function handleMint(type) {
+        try {
+          const walletState = walletStates[currentChain];
+          
+          if (!walletState?.isConnected) {
+            statusDiv.textContent = `Please connect your ${CHAIN_CONFIGS[currentChain].name} wallet first`;
+            return;
+          }
+          
+          statusDiv.textContent = `Preparing to mint ${type} on ${CHAIN_CONFIGS[currentChain].name}...`;
+          
+          // Estimate gas
+          const gasEstimate = await multiChainWallet.estimateGas({
+            type,
+            chain: currentChain,
+            recipient: walletState.address,
+            metadata: {
+              name: `EtchNFT ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+              description: `A custom ${type} from EtchNFT - your memory, etched forever.`,
+              image: `https://etchnft.com/assets/${type}.png`,
+              attributes: [
+                { trait_type: 'Type', value: type },
+                { trait_type: 'Chain', value: CHAIN_CONFIGS[currentChain].name },
+                { trait_type: 'Minted Via', value: 'Farcaster' },
+                { trait_type: 'Physical Item', value: 'Yes' }
+              ]
+            }
+          });
+          
+          statusDiv.textContent = `Minting ${type}... (Est. ${gasEstimate.gasEstimate} ${gasEstimate.currency})`;
+          
+          // Create mint parameters
+          const mintParams = {
+            type,
+            chain: currentChain,
+            recipient: walletState.address,
+            metadata: {
+              name: `EtchNFT ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+              description: `A custom ${type} from EtchNFT - your memory, etched forever.`,
+              image: `https://etchnft.com/assets/${type}.png`,
+              attributes: [
+                { trait_type: 'Type', value: type },
+                { trait_type: 'Chain', value: CHAIN_CONFIGS[currentChain].name },
+                { trait_type: 'Minted Via', value: 'Farcaster' },
+                { trait_type: 'Physical Item', value: 'Yes' }
+              ]
+            }
+          };
+          
+          // Mint the NFT
+          const signature = await multiChainWallet.mintNFT(mintParams);
+          
+          statusDiv.textContent = `${type} minted successfully on ${CHAIN_CONFIGS[currentChain].name}!`;
+          
+        } catch (error) {
+          console.error('Mint error:', error);
+          statusDiv.textContent = 'Mint failed. Please try again.';
+        }
+      }
+      
+      // Initialize everything
+      await initializeWallets();
+    </script>
+  </body>
+</html>

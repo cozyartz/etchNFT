@@ -1,4 +1,4 @@
-import { githubAuth, auth } from '../../../lib/auth';
+import { githubAuth, auth } from '/../../lib/auth';
 
 export const GET = async ({ url, cookies, redirect }) => {
   const code = url.searchParams.get('code');
