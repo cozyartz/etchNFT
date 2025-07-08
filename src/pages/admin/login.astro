@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const error = Astro.url.searchParams.get('error');
+const errorMessage = error === 'unauthorized' ? 'Access denied. Only authorized administrators can access this area.' : null;
 ---
 
 <BaseLayout title="Admin Login - EtchNFT">
@@ -17,6 +20,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
 
       <div class="space-y-6">
+        {errorMessage && (
+          <div class="bg-red-500/20 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg text-sm text-center">
+            {errorMessage}
+          </div>
+        )}
+        
         <div class="text-center">
           <p class="text-gray-400 text-sm mb-6">
             Authentication required to access the admin dashboard

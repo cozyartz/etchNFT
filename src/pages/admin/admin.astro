@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { requireUser } from '../../lib/auth.ts';
+import { requireAdmin } from '../../lib/auth.ts';
 
-const user = await requireUser(Astro);
+const user = await requireAdmin(Astro);
 
 const db = Astro.locals.runtime.env.DB as D1Database;
 

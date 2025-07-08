@@ -1,4 +1,4 @@
-import { githubAuth, createAuth } from "../../../../lib/auth";
+import { githubAuth, createAuth, isAdminUser } from "../../../../lib/auth";
 
 export const GET = async ({ url, cookies, redirect, locals }) => {
   const code = url.searchParams.get("code");
@@ -25,22 +25,32 @@ export const GET = async ({ url, cookies, redirect, locals }) => {
 
     const githubUser = await response.json();
 
+    // Check if user is admin before allowing login
+    const tempUser = {
+      email: githubUser.email,
+      githubId: githubUser.login
+    };
+    
+    const isAdmin = await isAdminUser(db, tempUser);
+    if (!isAdmin) {
+      console.log(`Non-admin user attempted login: ${githubUser.login} (${githubUser.email})`);
+      return redirect("/admin/login?error=unauthorized");
+    }
+
     // Create or update user in database
     const userId = `github_${githubUser.id}`;
 
     await db
       .prepare(
-        `
-      INSERT OR REPLACE INTO users (id, github_id, email, username, created_at, updated_at)
-      VALUES (?, ?, ?, ?, datetime('now'), datetime('now'))
-    `,
+        `INSERT OR REPLACE INTO users (id, github_id, email, created_at) 
+         VALUES (?, ?, ?, CURRENT_TIMESTAMP)`
       )
-      .bind(userId, githubUser.id, githubUser.email, githubUser.login)
+      .bind(userId, githubUser.login, githubUser.email)
       .run();
 
     // Create session
     const session = await auth.createSession(userId, {
-      github_id: githubUser.id,
+      github_id: githubUser.login,
       email: githubUser.email,
     });
 

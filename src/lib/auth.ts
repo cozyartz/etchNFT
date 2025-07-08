@@ -78,6 +78,35 @@ export const githubAuth = new GitHub(
   import.meta.env.GITHUB_CLIENT_SECRET || "",
 );
 
+// Admin user configurations
+const ADMIN_EMAILS = [
+  'cozy2963@gmail.com',
+  'andrea@cozyartzmedia.com', 
+  'cozy@etchnft.com',
+  'amy@etchnft.com'
+];
+
+const ADMIN_GITHUB_USERNAMES = [
+  'Cozyartz',
+  'grammar-nerd'
+];
+
+export async function isAdminUser(db: D1Database, user: any): Promise<boolean> {
+  if (!user) return false;
+  
+  // Check if user email is in admin list
+  if (user.email && ADMIN_EMAILS.includes(user.email)) {
+    return true;
+  }
+  
+  // Check if GitHub username is in admin list
+  if (user.githubId && ADMIN_GITHUB_USERNAMES.includes(user.githubId)) {
+    return true;
+  }
+  
+  return false;
+}
+
 export async function requireUser(context: APIContext) {
   const db = context.locals.runtime.env.DB as D1Database;
   const auth = createAuth(db);
@@ -94,5 +123,19 @@ export async function requireUser(context: APIContext) {
     return context.redirect("/admin/login");
   }
 
+  return user;
+}
+
+export async function requireAdmin(context: APIContext) {
+  const user = await requireUser(context);
+  if (user instanceof Response) return user; // Redirect response
+  
+  const db = context.locals.runtime.env.DB as D1Database;
+  const isAdmin = await isAdminUser(db, user);
+  
+  if (!isAdmin) {
+    return context.redirect("/admin/login");
+  }
+  
   return user;
 }

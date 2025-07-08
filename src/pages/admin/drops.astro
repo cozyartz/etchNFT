@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { requireUser } from '../../lib/auth';
+import { requireAdmin } from '../../lib/auth';
 import { getDrops, getDropStats } from '../../lib/drops';
 
-const user = await requireUser(Astro);
+const user = await requireAdmin(Astro);
 const db = Astro.locals.runtime.env.DB as D1Database;
 
 // Get drops and stats

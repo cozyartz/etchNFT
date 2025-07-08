@@ -1,7 +1,7 @@
 ---
-import { requireUser } from '../../lib/auth';
+import { requireAdmin } from '../../lib/auth';
 
-const user = await requireUser(Astro);
+const user = await requireAdmin(Astro);
 
 const db = Astro.locals.runtime.env.DB;
 const results = await db.prepare('SELECT * FROM subscribers ORDER BY created_at DESC').all();

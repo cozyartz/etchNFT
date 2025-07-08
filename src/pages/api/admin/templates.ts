@@ -1,12 +1,12 @@
 import type { APIRoute } from 'astro';
-import { requireUser } from '../../../lib/auth';
+import { requireAdmin } from '../../../lib/auth';
 import { getDesignTemplates } from '../../../lib/drops';
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request, cookies, locals }) => {
   // Require admin authentication
-  const user = await requireUser({ cookies, locals } as any);
+  const user = await requireAdmin({ cookies, locals } as any);
   if (!user) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
