@@ -33,7 +33,6 @@ export const GET: APIRoute = async ({ params }) => {
       description: nft.description,
       traits: nft.extra_metadata?.attributes || []
     })) || [];
-};
 
     return new Response(JSON.stringify({ nfts: transformedNFTs }), {
       headers: {
@@ -51,3 +50,4 @@ export const GET: APIRoute = async ({ params }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   }
+};

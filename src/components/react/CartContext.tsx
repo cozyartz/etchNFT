@@ -1,5 +1,6 @@
 'use client';
-import { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+type ReactNode = React.ReactNode;
 
 export type NFTItem = {
   name: string;

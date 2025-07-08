@@ -11,7 +11,8 @@ import {
 import { WagmiProvider, useAccount, createConfig } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { mainnet, polygon, base, optimism } from 'wagmi/chains';
-import { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+type ReactNode = React.ReactNode;
 
 const wagmiConfig = getDefaultConfig({
   appName: 'EtchNFT',
@@ -33,7 +34,13 @@ function ThemeSync({ children }: { children: ReactNode }) {
   return (
     <RainbowKitProvider
       modalSize="compact"
-      theme={theme === 'dark' ? darkTheme() : lightTheme()}
+      theme={darkTheme({
+        accentColor: '#FF1493',
+        accentColorForeground: 'white',
+        borderRadius: 'medium',
+        fontStack: 'system',
+        overlayBlur: 'small',
+      })}
     >
       {children}
     </RainbowKitProvider>

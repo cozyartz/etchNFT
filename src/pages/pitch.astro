@@ -1,42 +1,143 @@
 ---
-layout: ../layouts/Layout.astro
+import Layout from '../layouts/BaseLayout.astro';
+import { RocketIcon, ProblemIcon, SolutionIcon, SolanaIcon, MoneyIcon, ContactIcon } from '../components/react/PitchIcons';
+const client: 'only' = 'only';
 ---
-<section class="text-center py-24 px-6">
-  <h1 class="text-5xl font-bold text-neon drop-shadow">EtchNFT Pitch Deck</h1>
-  <p class="text-white/70 mt-6 max-w-2xl mx-auto">Turning digital NFTs into precision-etched, physical reality. Funded by community. Powered by Solana.</p>
-</section>
 
-<section class="bg-[#0d0d0d] py-12 px-6 text-center">
-  <h2 class="text-3xl font-bold text-neon mb-4">Problem</h2>
-  <p class="max-w-xl mx-auto text-white/80">NFTs live onchain — but most holders never see them in real life. EtchNFT solves this by creating beautiful, tangible, laser-etched versions of NFTs and onchain identity artifacts.</p>
-</section>
+<Layout title="EtchNFT Pitch Deck" description="Turning digital NFTs into precision-etched, physical reality. Funded by community. Powered by Solana.">
+  <div class="max-w-6xl mx-auto">
+    <!-- Hero Section -->
+    <section class="text-center py-16 mb-12">
+      <div class="glass-strong p-12 scan-lines">
+        <div class="relative mb-8">
+          <h1 class="text-5xl sm:text-7xl font-cyber font-bold text-white glitch flex items-center justify-center" data-text="PITCH DECK">
+            <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-12 h-12 sm:w-16 sm:h-16 mr-4 animate-neon-pulse" />
+            PITCH DECK
+          </h1>
+          <div class="absolute inset-0 bg-primary/10 blur-3xl animate-pulse"></div>
+        </div>
+        <p class="text-xl sm:text-2xl text-gray-300 leading-relaxed font-retro">
+          Turning digital NFTs into <span class="text-neon animate-neon-pulse">precision-etched</span>, 
+          <span class="text-secondary animate-flicker">physical reality</span>
+        </p>
+        <div class="flex items-center justify-center gap-2 text-neon-green font-cyber text-sm tracking-wider mt-6">
+          <span class="animate-pulse">●</span>
+          <span>FUNDED BY COMMUNITY • POWERED BY SOLANA</span>
+          <span class="animate-pulse">●</span>
+        </div>
+      </div>
+    </section>
 
-<section class="bg-black py-12 px-6 text-center">
-  <h2 class="text-3xl font-bold text-neon mb-4">Solution</h2>
-  <p class="max-w-xl mx-auto text-white/80">Collectors connect their wallet, choose an NFT, and receive a hand-etched plaque or artifact. Creators and DAOs can offer physical commemoratives for their drops. Every etching is permanent and optionally minted back on Solana.</p>
-</section>
+    <!-- Problem Section -->
+    <section class="mb-12">
+      <div class="card-retro p-8 group">
+        <h2 class="text-3xl font-cyber font-bold text-primary mb-6 tracking-wider flex items-center">
+          <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-spin">
+            <ProblemIcon client:only={client} />
+          </div>
+          PROBLEM
+        </h2>
+        <p class="text-lg text-gray-300 leading-relaxed">
+          NFTs live onchain — but most holders never see them in real life. EtchNFT solves this by creating beautiful, tangible, laser-etched versions of NFTs and onchain identity artifacts.
+        </p>
+      </div>
+    </section>
 
-<section class="bg-[#111] py-12 px-6 text-center">
-  <h2 class="text-3xl font-bold text-neon mb-4">Why Solana?</h2>
-  <ul class="list-none space-y-2 max-w-xl mx-auto text-white/80">
-    <li>- Fast, low-cost minting for high-volume drops</li>
-    <li>- Compressed NFTs for zine-style artifacts</li>
-    <li>- Warpcast Frame support + Backpack-native experiences</li>
-    <li>- Perfect for POAPs, DAOs, Farcaster zines, and more</li>
-  </ul>
-</section>
+    <!-- Solution Section -->
+    <section class="mb-12">
+      <div class="card-retro p-8 group">
+        <h2 class="text-3xl font-cyber font-bold text-secondary mb-6 tracking-wider flex items-center">
+          <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-pulse">
+            <SolutionIcon client:only={client} />
+          </div>
+          SOLUTION
+        </h2>
+        <p class="text-lg text-gray-300 leading-relaxed">
+          Collectors connect their wallet, choose an NFT, and receive a hand-etched plaque or artifact. Creators and DAOs can offer physical commemoratives for their drops. Every etching is permanent and optionally minted back on Solana.
+        </p>
+      </div>
+    </section>
 
-<section class="bg-[#0d0d0d] py-12 px-6 text-center">
-  <h2 class="text-3xl font-bold text-neon mb-4">Grant Request</h2>
-  <p class="max-w-xl mx-auto text-white/80">EtchNFT is requesting a $10–25K Solana Foundation grant to complete our Solana-native mint + fulfillment flow, launch our first 250 physical drops, and create open-source tools for artists and builders.</p>
-</section>
+    <!-- Why Solana Section -->
+    <section class="mb-12">
+      <div class="card-retro p-8 group">
+        <h2 class="text-3xl font-cyber font-bold text-neon-green mb-6 tracking-wider flex items-center">
+          <div class="w-12 h-12 bg-neon-green/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-float">
+            <SolanaIcon client:only={client} />
+          </div>
+          WHY SOLANA?
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="glass p-4">
+            <p class="text-gray-300">⚡ Fast, low-cost minting for high-volume drops</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-gray-300">🗜️ Compressed NFTs for zine-style artifacts</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-gray-300">🖼️ Warpcast Frame support + Backpack-native experiences</p>
+          </div>
+          <div class="glass p-4">
+            <p class="text-gray-300">🎯 Perfect for POAPs, DAOs, Farcaster zines, and more</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<section class="bg-black py-12 px-6 text-center">
-  <h2 class="text-3xl font-bold text-neon mb-4">Contact</h2>
-  <p class="max-w-xl mx-auto text-white/80">
-    Andrea Cozart-Lundin<br/>
-    Founder, EtchNFT<br/>
-    <a href="https://etchnft.com" class="text-neon underline">https://etchnft.com</a><br/>
-    Farcaster: @cozycode 
-  </p>
-</section>
+    <!-- Grant Request Section -->
+    <section class="mb-12">
+      <div class="card-retro p-8 group">
+        <h2 class="text-3xl font-cyber font-bold text-primary mb-6 tracking-wider flex items-center">
+          <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-bounce">
+            <MoneyIcon client:only={client} />
+          </div>
+          GRANT REQUEST
+        </h2>
+        <p class="text-lg text-gray-300 leading-relaxed">
+          EtchNFT is requesting a <span class="text-neon font-bold">$10–25K Solana Foundation grant</span> to complete our Solana-native mint + fulfillment flow, launch our first 250 physical drops, and create open-source tools for artists and builders.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="mb-12">
+      <div class="card-retro p-8 text-center group">
+        <h2 class="text-3xl font-cyber font-bold text-secondary mb-6 tracking-wider flex items-center justify-center">
+          <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-pulse">
+            <ContactIcon client:only={client} />
+          </div>
+          CONTACT
+        </h2>
+        <div class="glass p-6 max-w-md mx-auto">
+          <p class="text-lg text-gray-300 leading-relaxed">
+            <span class="text-white font-bold">Andrea Cozart-Lundin</span><br/>
+            <span class="text-primary">Founder, EtchNFT</span><br/>
+            <a href="https://etchnft.com" class="text-neon hover:text-secondary transition-colors duration-300 underline">https://etchnft.com</a><br/>
+            <span class="text-gray-400">Farcaster: </span><span class="text-neon-green">@cozycode</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="text-center py-12">
+      <div class="glass-strong p-8 scan-lines">
+        <h2 class="text-2xl font-cyber font-bold text-white mb-6 tracking-wider flex items-center justify-center">
+          <RocketIcon client:only={client} className="w-8 h-8 mr-3" />
+          READY TO LAUNCH
+        </h2>
+        <p class="text-gray-300 mb-8">
+          Join the revolution in phygital NFT collectibles
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="/gallery" class="btn-cyber group">
+            <span>VIEW GALLERY</span>
+          </a>
+          <a href="/whitepaper" class="btn-neon group">
+            <span>READ WHITEPAPER</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>

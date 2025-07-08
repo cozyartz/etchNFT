@@ -62,7 +62,7 @@ export default function CartToggle() {
               className="fixed top-0 right-0 w-full max-w-md h-full glass-strong border-l border-primary/30 p-6 z-50 scan-lines"
             >
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-cyber text-retro-gradient tracking-wider flex items-center gap-2">
+                <h2 className="text-2xl font-cyber text-white tracking-wider flex items-center gap-2">
                   <ShoppingCart size={24} />Your Cart
                 </h2>
                 <motion.button

@@ -1,6 +1,4 @@
 // src/lib/db.ts
-import { env } from 'astro:env';
-
 export type Database = D1Database;
 
 // This assumes you're binding D1 in `wrangler.toml` like:
@@ -9,8 +7,11 @@ export type Database = D1Database;
 // database_name = "etchnft"
 // database_id = "<your-db-id>"
 
-export function getDatabase(): D1Database {
-  if (!('DB' in env)) {
+export function getDatabase(runtime?: any): D1Database {
+  // In Cloudflare Workers, the D1 binding is available on the runtime env
+  const env = runtime?.env || globalThis;
+  
+  if (!env.DB) {
     throw new Error('D1 database binding "DB" is not available in this environment.');
   }
 
