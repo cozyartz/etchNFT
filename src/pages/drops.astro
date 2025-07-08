@@ -1,0 +1,295 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getDrops } from '../lib/drops';
+
+const db = Astro.locals.runtime.env.DB as D1Database;
+
+// Get all public drops (active and upcoming)
+const allDrops = await getDrops(db);
+const now = new Date();
+
+const publicDrops = allDrops.filter(drop => {
+  const isUpcoming = drop.launch_date && drop.launch_date > now;
+  const isLive = drop.is_active && (!drop.launch_date || drop.launch_date <= now) && (!drop.end_date || drop.end_date > now);
+  return isUpcoming || isLive;
+});
+
+const featuredDrops = publicDrops.filter(drop => drop.is_featured);
+const liveDrops = publicDrops.filter(drop => {
+  return drop.is_active && (!drop.launch_date || drop.launch_date <= now) && (!drop.end_date || drop.end_date > now);
+});
+const upcomingDrops = publicDrops.filter(drop => {
+  return drop.launch_date && drop.launch_date > now;
+});
+---
+
+<BaseLayout title="NFT Drops - EtchNFT">
+  <section class="hero-gradient min-h-screen px-6 py-12">
+    <div class="max-w-7xl mx-auto">
+      <!-- Hero Section -->
+      <div class="text-center mb-16">
+        <h1 class="text-5xl sm:text-7xl font-cyber font-bold text-white mb-6 glitch" data-text="NFT DROPS">
+          <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-16 h-16 mx-auto mb-4 animate-neon-pulse" />
+          NFT DROPS
+        </h1>
+        <p class="text-xl sm:text-2xl text-gray-300 leading-relaxed font-retro mb-8 max-w-3xl mx-auto">
+          Discover exclusive <span class="text-neon animate-neon-pulse">laser-etched</span> NFT collectibles. 
+          Limited editions, premium materials, <span class="text-secondary animate-flicker">physical ownership</span>.
+        </p>
+        <div class="flex items-center justify-center gap-2 text-neon-green font-cyber text-sm tracking-wider">
+          <span class="animate-pulse">●</span>
+          <span>LIVE DROPS AVAILABLE</span>
+          <span class="animate-pulse">●</span>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="glass-strong p-6 mb-8">
+        <div class="flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-2">
+            <label class="text-gray-300 font-cyber text-sm">Status:</label>
+            <select id="status-filter" class="bg-retro-dark border border-primary/30 text-white px-3 py-2 rounded-lg text-sm">
+              <option value="">All</option>
+              <option value="live">Live</option>
+              <option value="upcoming">Upcoming</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-gray-300 font-cyber text-sm">Product:</label>
+            <select id="product-filter" class="bg-retro-dark border border-primary/30 text-white px-3 py-2 rounded-lg text-sm">
+              <option value="">All Products</option>
+              <option value="plaque">Plaque</option>
+              <option value="keychain">Keychain</option>
+              <option value="coaster">Coaster</option>
+              <option value="pendant">Pendant</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-gray-300 font-cyber text-sm">Material:</label>
+            <select id="material-filter" class="bg-retro-dark border border-primary/30 text-white px-3 py-2 rounded-lg text-sm">
+              <option value="">All Materials</option>
+              <option value="wood">Wood</option>
+              <option value="acrylic">Acrylic</option>
+              <option value="metal">Metal</option>
+              <option value="leather">Leather</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-gray-300 font-cyber text-sm">Price:</label>
+            <input 
+              type="number" 
+              id="price-min" 
+              placeholder="Min" 
+              class="bg-retro-dark border border-primary/30 text-white px-3 py-2 rounded-lg text-sm w-20"
+            />
+            <span class="text-gray-400">-</span>
+            <input 
+              type="number" 
+              id="price-max" 
+              placeholder="Max" 
+              class="bg-retro-dark border border-primary/30 text-white px-3 py-2 rounded-lg text-sm w-20"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Drops -->
+      {featuredDrops.length > 0 && (
+        <div class="mb-12">
+          <h2 class="text-3xl font-cyber font-bold text-white mb-6 flex items-center">
+            <span class="text-primary mr-2">★</span>
+            Featured Drops
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredDrops.map(drop => (
+              <div class="card-retro p-6 group hover:scale-105 transition-all duration-300">
+                <div class="aspect-square bg-retro-darker rounded-lg mb-4 overflow-hidden">
+                  <img 
+                    src={drop.image_url || '/placeholder-nft.png'} 
+                    alt={drop.name}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                
+                <div class="mb-4">
+                  <h3 class="text-xl font-cyber font-bold text-white mb-2">{drop.name}</h3>
+                  <p class="text-gray-400 text-sm mb-3">{drop.description}</p>
+                  
+                  <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="text-gray-300 capitalize">{drop.product_type}</span>
+                    <span class="text-primary font-semibold">${drop.price_usd}</span>
+                  </div>
+                  
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-400">{drop.material} • {drop.dimensions}</span>
+                    <span class="text-gray-400">{drop.minted_supply}/{drop.total_supply}</span>
+                  </div>
+                </div>
+                
+                <a 
+                  href={`/drops/${drop.slug}`}
+                  class="block w-full text-center px-4 py-3 bg-primary text-black font-cyber font-semibold rounded-lg hover:bg-primary/80 transition-colors"
+                >
+                  View Drop
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Live Drops -->
+      {liveDrops.length > 0 && (
+        <div class="mb-12">
+          <h2 class="text-3xl font-cyber font-bold text-white mb-6 flex items-center">
+            <span class="text-green-400 mr-2 animate-pulse">●</span>
+            Live Drops
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="live-drops">
+            {liveDrops.map(drop => (
+              <div class="card-retro p-6 group hover:scale-105 transition-all duration-300">
+                <div class="aspect-square bg-retro-darker rounded-lg mb-4 overflow-hidden">
+                  <img 
+                    src={drop.image_url || '/placeholder-nft.png'} 
+                    alt={drop.name}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                
+                <div class="mb-4">
+                  <h3 class="text-xl font-cyber font-bold text-white mb-2">{drop.name}</h3>
+                  <p class="text-gray-400 text-sm mb-3">{drop.description}</p>
+                  
+                  <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="text-gray-300 capitalize">{drop.product_type}</span>
+                    <span class="text-primary font-semibold">${drop.price_usd}</span>
+                  </div>
+                  
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-400">{drop.material} • {drop.dimensions}</span>
+                    <span class="text-gray-400">{drop.minted_supply}/{drop.total_supply}</span>
+                  </div>
+                </div>
+                
+                <a 
+                  href={`/drops/${drop.slug}`}
+                  class="block w-full text-center px-4 py-3 bg-green-500 text-white font-cyber font-semibold rounded-lg hover:bg-green-600 transition-colors"
+                >
+                  Buy Now
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Upcoming Drops -->
+      {upcomingDrops.length > 0 && (
+        <div class="mb-12">
+          <h2 class="text-3xl font-cyber font-bold text-white mb-6 flex items-center">
+            <span class="text-yellow-400 mr-2">⏰</span>
+            Upcoming Drops
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="upcoming-drops">
+            {upcomingDrops.map(drop => (
+              <div class="card-retro p-6 group hover:scale-105 transition-all duration-300">
+                <div class="aspect-square bg-retro-darker rounded-lg mb-4 overflow-hidden">
+                  <img 
+                    src={drop.image_url || '/placeholder-nft.png'} 
+                    alt={drop.name}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                
+                <div class="mb-4">
+                  <h3 class="text-xl font-cyber font-bold text-white mb-2">{drop.name}</h3>
+                  <p class="text-gray-400 text-sm mb-3">{drop.description}</p>
+                  
+                  <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="text-gray-300 capitalize">{drop.product_type}</span>
+                    <span class="text-primary font-semibold">${drop.price_usd}</span>
+                  </div>
+                  
+                  <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="text-gray-400">{drop.material} • {drop.dimensions}</span>
+                    <span class="text-gray-400">{drop.total_supply} items</span>
+                  </div>
+                  
+                  {drop.launch_date && (
+                    <div class="text-yellow-400 text-sm font-cyber">
+                      Launches: {drop.launch_date.toLocaleDateString()}
+                    </div>
+                  )}
+                </div>
+                
+                <button 
+                  class="w-full px-4 py-3 bg-yellow-500 text-black font-cyber font-semibold rounded-lg hover:bg-yellow-600 transition-colors"
+                  disabled
+                >
+                  Coming Soon
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Empty State -->
+      {publicDrops.length === 0 && (
+        <div class="text-center py-16">
+          <div class="text-6xl mb-4">🎨</div>
+          <h2 class="text-2xl font-cyber font-bold text-white mb-4">No Drops Available</h2>
+          <p class="text-gray-400 mb-8">Check back soon for new NFT drops!</p>
+          <a 
+            href="/gallery"
+            class="inline-block px-6 py-3 bg-primary text-black font-cyber font-semibold rounded-lg hover:bg-primary/80 transition-colors"
+          >
+            Browse Gallery
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Filter functionality
+  const statusFilter = document.getElementById('status-filter') as HTMLSelectElement;
+  const productFilter = document.getElementById('product-filter') as HTMLSelectElement;
+  const materialFilter = document.getElementById('material-filter') as HTMLSelectElement;
+  const priceMinInput = document.getElementById('price-min') as HTMLInputElement;
+  const priceMaxInput = document.getElementById('price-max') as HTMLInputElement;
+
+  function applyFilters() {
+    const params = new URLSearchParams();
+    
+    if (statusFilter.value) params.set('status', statusFilter.value);
+    if (productFilter.value) params.set('product_type', productFilter.value);
+    if (materialFilter.value) params.set('material', materialFilter.value);
+    if (priceMinInput.value) params.set('price_min', priceMinInput.value);
+    if (priceMaxInput.value) params.set('price_max', priceMaxInput.value);
+    
+    const url = `/drops${params.toString() ? '?' + params.toString() : ''}`;
+    window.location.href = url;
+  }
+
+  [statusFilter, productFilter, materialFilter].forEach(filter => {
+    filter.addEventListener('change', applyFilters);
+  });
+
+  [priceMinInput, priceMaxInput].forEach(input => {
+    input.addEventListener('input', debounce(applyFilters, 500));
+  });
+
+  function debounce(func: Function, wait: number) {
+    let timeout: NodeJS.Timeout;
+    return function executedFunction(...args: any[]) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+</script>

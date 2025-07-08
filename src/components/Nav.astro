@@ -26,6 +26,9 @@ const client: 'only' = 'only';
         <a href="/gallery" class="nav-link">
           <GalleryIcon client:only={client} />Gallery
         </a>
+        <a href="/drops" class="nav-link">
+          <OrdersIcon client:only={client} />Drops
+        </a>
         <a href="/my-orders" class="nav-link">
           <OrdersIcon client:only={client} />My Orders
         </a>
@@ -35,7 +38,7 @@ const client: 'only' = 'only';
         <a href="/about" class="nav-link">
           <AboutIcon client:only={client} />About
         </a>
-        <a href="/admin" class="nav-link">
+        <a href="/admin/admin" class="nav-link">
           <AdminIcon client:only={client} />Admin
         </a>
       </nav>
@@ -67,6 +70,9 @@ const client: 'only' = 'only';
       <a href="/gallery" class="mobile-nav-link">
         <MobileGalleryIcon client:only={client} />Gallery
       </a>
+      <a href="/drops" class="mobile-nav-link">
+        <MobileOrdersIcon client:only={client} />Drops
+      </a>
       <a href="/my-orders" class="mobile-nav-link">
         <MobileOrdersIcon client:only={client} />My Orders
       </a>
@@ -76,7 +82,7 @@ const client: 'only' = 'only';
       <a href="/about" class="mobile-nav-link">
         <MobileAboutIcon client:only={client} />About
       </a>
-      <a href="/admin" class="mobile-nav-link">
+      <a href="/admin/admin" class="mobile-nav-link">
         <MobileAdminIcon client:only={client} />Admin
       </a>
     </div>

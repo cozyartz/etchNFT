@@ -23,8 +23,8 @@ export function generateCertSVG(nft: {
       <text x="400" y="110" class="meta">Official Certificate of Physical Etching</text>
       
       <!-- NFT Details -->
-      <text x="400" y="180" class="subtitle">${nft.name || 'Untitled NFT'}</text>
-      <text x="400" y="210" class="meta">Collection: ${nft.collection_name || 'Unknown'}</text>
+      <text x="400" y="180" class="subtitle">${nft.name || "Untitled NFT"}</text>
+      <text x="400" y="210" class="meta">Collection: ${nft.collection_name || "Unknown"}</text>
       <text x="400" y="240" class="meta">Token ID: #${nft.token_id}</text>
       
       <!-- Certificate Info -->

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Chakra+Petch:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Chakra+Petch:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -12,7 +12,9 @@
 
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -21,19 +23,19 @@
 
 /* 80's Retro Cyberpunk Theme */
 :root {
-  --primary: #FF1493;
-  --secondary: #00FFFF;
-  --accent: #FF69B4;
-  --neon-green: #39FF14;
-  --neon-purple: #9932CC;
-  --bg-dark: #0D0D0D;
+  --primary: #ff1493;
+  --secondary: #00ffff;
+  --accent: #ff69b4;
+  --neon-green: #39ff14;
+  --neon-purple: #9932cc;
+  --bg-dark: #0d0d0d;
   --bg-darker: #050505;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 body {
-  font-family: 'Chakra Petch', 'Space Grotesk', sans-serif;
+  font-family: "Chakra Petch", "Space Grotesk", sans-serif;
   background: var(--bg-dark);
   color: white;
   font-display: swap;
@@ -43,13 +45,13 @@ body {
 
 /* Retro Grid Background */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
+  background:
     linear-gradient(rgba(255, 20, 147, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 20, 147, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -59,7 +61,7 @@ body::before {
 
 /* Neon Components */
 .neon-text {
-  text-shadow: 
+  text-shadow:
     0 0 5px currentColor,
     0 0 10px currentColor,
     0 0 15px currentColor,
@@ -68,13 +70,13 @@ body::before {
 
 .neon-border {
   border: 2px solid var(--primary);
-  box-shadow: 
+  box-shadow:
     0 0 10px var(--primary),
     inset 0 0 10px rgba(255, 20, 147, 0.1);
 }
 
 .neon-glow {
-  box-shadow: 
+  box-shadow:
     0 0 20px var(--primary),
     0 0 40px var(--primary),
     0 0 60px var(--primary);
@@ -123,17 +125,26 @@ body::before {
 .card-retro {
   @apply relative p-6 bg-retro-dark border border-primary/30 rounded-lg;
   @apply backdrop-blur-sm shadow-lg;
-  background: linear-gradient(135deg, rgba(255, 20, 147, 0.1) 0%, rgba(0, 255, 255, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 20, 147, 0.1) 0%,
+    rgba(0, 255, 255, 0.05) 100%
+  );
 }
 
 .card-retro::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -1px;
   left: -1px;
   right: -1px;
   bottom: -1px;
-  background: linear-gradient(45deg, var(--primary), var(--secondary), var(--neon-purple));
+  background: linear-gradient(
+    45deg,
+    var(--primary),
+    var(--secondary),
+    var(--neon-purple)
+  );
   z-index: -1;
   border-radius: inherit;
   opacity: 0;
@@ -151,7 +162,7 @@ body::before {
 }
 
 .scan-lines::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -196,26 +207,51 @@ body::before {
 }
 
 @keyframes glitch-1 {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  100% { transform: translate(0); }
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
 }
 
 @keyframes glitch-2 {
-  0% { transform: translate(0); }
-  20% { transform: translate(2px, 2px); }
-  40% { transform: translate(2px, -2px); }
-  60% { transform: translate(-2px, 2px); }
-  80% { transform: translate(-2px, -2px); }
-  100% { transform: translate(0); }
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(2px, 2px);
+  }
+  40% {
+    transform: translate(2px, -2px);
+  }
+  60% {
+    transform: translate(-2px, 2px);
+  }
+  80% {
+    transform: translate(-2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
 }
 
 /* Holographic Effect */
 .holographic {
-  background: linear-gradient(45deg, 
+  background: linear-gradient(
+    45deg,
     var(--primary) 0%,
     var(--secondary) 25%,
     var(--neon-purple) 50%,
@@ -227,21 +263,33 @@ body::before {
 }
 
 @keyframes holographic {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Retro Text Effects */
 .text-neon {
   color: var(--primary);
-  text-shadow: 
+  text-shadow:
     0 0 5px var(--primary),
     0 0 10px var(--primary),
     0 0 15px var(--primary),
@@ -249,7 +297,7 @@ body::before {
 }
 
 .text-cyber {
-  font-family: 'Orbitron', monospace;
+  font-family: "Orbitron", monospace;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -257,9 +305,108 @@ body::before {
 
 .text-retro-gradient {
   @apply bg-clip-text text-transparent;
-  background: linear-gradient(45deg, var(--primary), var(--secondary), var(--neon-purple));
+  background: linear-gradient(
+    45deg,
+    var(--primary),
+    var(--secondary),
+    var(--neon-purple)
+  );
   background-size: 200% 200%;
   animation: gradient-shift 3s ease-in-out infinite;
+}
+
+/* Enhanced Heading Styles for Better Readability */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Orbitron", monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.3),
+    0 0 20px rgba(255, 20, 147, 0.4),
+    0 0 30px rgba(255, 20, 147, 0.2);
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  text-shadow:
+    0 0 15px rgba(255, 255, 255, 0.4),
+    0 0 25px rgba(255, 20, 147, 0.5),
+    0 0 35px rgba(255, 20, 147, 0.3);
+}
+
+h2 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  text-shadow:
+    0 0 12px rgba(255, 255, 255, 0.3),
+    0 0 22px rgba(255, 20, 147, 0.4),
+    0 0 32px rgba(255, 20, 147, 0.2);
+}
+
+h3 {
+  font-size: 2rem;
+  line-height: 1.3;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.3),
+    0 0 20px rgba(255, 20, 147, 0.4),
+    0 0 30px rgba(255, 20, 147, 0.2);
+}
+
+h4 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.3),
+    0 0 18px rgba(255, 20, 147, 0.4),
+    0 0 28px rgba(255, 20, 147, 0.2);
+}
+
+h5 {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.3),
+    0 0 16px rgba(255, 20, 147, 0.4),
+    0 0 26px rgba(255, 20, 147, 0.2);
+}
+
+h6 {
+  font-size: 1rem;
+  line-height: 1.6;
+  text-shadow:
+    0 0 4px rgba(255, 255, 255, 0.3),
+    0 0 14px rgba(255, 20, 147, 0.4),
+    0 0 24px rgba(255, 20, 147, 0.2);
+}
+
+/* Responsive heading adjustments */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    font-size: 1.75rem;
+  }
+  h4 {
+    font-size: 1.5rem;
+  }
+  h5 {
+    font-size: 1.25rem;
+  }
+  h6 {
+    font-size: 1rem;
+  }
 }
 
 /* Enhanced Scrollbar */
@@ -324,6 +471,10 @@ select:focus {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

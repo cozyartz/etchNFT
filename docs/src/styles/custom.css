@@ -2,9 +2,9 @@
 
 /* Import the EtchNFT color scheme */
 :root {
-  --sl-color-accent: #DB2777;
-  --sl-color-accent-light: #F472B6;
-  --sl-color-accent-high: #BE185D;
+  --sl-color-accent: #db2777;
+  --sl-color-accent-light: #f472b6;
+  --sl-color-accent-high: #be185d;
   --sl-color-white: #ffffff;
   --sl-color-gray-1: #f8fafc;
   --sl-color-gray-2: #f1f5f9;
@@ -13,19 +13,19 @@
   --sl-color-gray-5: #94a3b8;
   --sl-color-gray-6: #64748b;
   --sl-color-black: #1e293b;
-  
+
   /* EtchNFT brand colors */
-  --etch-primary: #DB2777;
-  --etch-secondary: #7F73F7;
-  --etch-accent: #41C6BB;
+  --etch-primary: #db2777;
+  --etch-secondary: #7f73f7;
+  --etch-accent: #41c6bb;
   --etch-dark: #0b0b0f;
 }
 
 /* Dark theme adjustments */
-:root[data-theme='dark'] {
-  --sl-color-accent: #F472B6;
-  --sl-color-accent-light: #FBBF24;
-  --sl-color-accent-high: #DB2777;
+:root[data-theme="dark"] {
+  --sl-color-accent: #f472b6;
+  --sl-color-accent-light: #fbbf24;
+  --sl-color-accent-high: #db2777;
   --sl-color-white: #0b0b0f;
   --sl-color-gray-1: #1e293b;
   --sl-color-gray-2: #334155;
@@ -49,13 +49,19 @@
 }
 
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* Code blocks with EtchNFT styling */
 .sl-markdown-content pre {
-  background: linear-gradient(135deg, 
+  background: linear-gradient(
+    135deg,
     rgba(219, 39, 119, 0.1) 0%,
     rgba(127, 115, 247, 0.1) 50%,
     rgba(65, 198, 187, 0.1) 100%
@@ -86,7 +92,7 @@
 }
 
 .sl-markdown-content a::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0;
   height: 2px;
@@ -121,7 +127,8 @@
 }
 
 .sl-markdown-content th {
-  background: linear-gradient(135deg, 
+  background: linear-gradient(
+    135deg,
     rgba(219, 39, 119, 0.2),
     rgba(127, 115, 247, 0.2)
   );
@@ -141,7 +148,8 @@
 
 /* Hero section on homepage */
 .hero {
-  background: linear-gradient(135deg, 
+  background: linear-gradient(
+    135deg,
     var(--etch-dark) 0%,
     rgba(219, 39, 119, 0.3) 25%,
     rgba(127, 115, 247, 0.3) 50%,
@@ -153,13 +161,13 @@
 }
 
 .hero::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(65, 198, 187, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(65, 198, 187, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -186,11 +194,11 @@
   .sl-markdown-content h1 {
     font-size: 2rem;
   }
-  
+
   .sl-markdown-content h2 {
     font-size: 1.5rem;
   }
-  
+
   .card-grid {
     grid-template-columns: 1fr;
   }
@@ -209,9 +217,10 @@ html {
 
 /* Loading states */
 .loading {
-  background: linear-gradient(90deg, 
-    rgba(219, 39, 119, 0.1) 25%, 
-    rgba(65, 198, 187, 0.2) 50%, 
+  background: linear-gradient(
+    90deg,
+    rgba(219, 39, 119, 0.1) 25%,
+    rgba(65, 198, 187, 0.2) 50%,
     rgba(219, 39, 119, 0.1) 75%
   );
   background-size: 200% 100%;
@@ -219,6 +228,10 @@ html {
 }
 
 @keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

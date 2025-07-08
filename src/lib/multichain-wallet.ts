@@ -1,8 +1,8 @@
 // src/lib/multichain-wallet.ts
-import { sdk } from '@farcaster/miniapp-sdk';
-import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { sdk } from "@farcaster/miniapp-sdk";
+import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 
-export type Chain = 'ethereum' | 'solana';
+export type Chain = "ethereum" | "solana";
 
 export interface ChainConfig {
   name: string;
@@ -20,7 +20,7 @@ export interface WalletState {
 }
 
 export interface MintParams {
-  type: 'plaque' | 'tee' | 'acrylic';
+  type: "plaque" | "tee" | "acrylic";
   chain: Chain;
   recipient: string;
   metadata: {
@@ -36,32 +36,32 @@ export interface MintParams {
 
 export const CHAIN_CONFIGS: Record<Chain, ChainConfig> = {
   ethereum: {
-    name: 'Ethereum',
-    symbol: 'ETH',
-    icon: '⟠',
-    color: '#627EEA',
-    rpcUrl: 'https://mainnet.infura.io/v3/YOUR_PROJECT_ID'
+    name: "Ethereum",
+    symbol: "ETH",
+    icon: "⟠",
+    color: "#627EEA",
+    rpcUrl: "https://mainnet.infura.io/v3/YOUR_PROJECT_ID",
   },
   solana: {
-    name: 'Solana',
-    symbol: 'SOL',
-    icon: '◎',
-    color: '#14F195',
-    rpcUrl: import.meta.env.HELIUS_API_KEY ? 
-      `https://mainnet.helius-rpc.com/?api-key=${import.meta.env.HELIUS_API_KEY}` : 
-      clusterApiUrl('mainnet-beta')
-  }
+    name: "Solana",
+    symbol: "SOL",
+    icon: "◎",
+    color: "#14F195",
+    rpcUrl: import.meta.env.HELIUS_API_KEY
+      ? `https://mainnet.helius-rpc.com/?api-key=${import.meta.env.HELIUS_API_KEY}`
+      : clusterApiUrl("mainnet-beta"),
+  },
 };
 
 export class MultiChainWallet {
   private ethereumProvider: any = null;
   private solanaProvider: any = null;
   private solanaConnection: Connection | null = null;
-  private currentChain: Chain = 'ethereum';
-  
+  private currentChain: Chain = "ethereum";
+
   private walletStates: Record<Chain, WalletState> = {
-    ethereum: { isConnected: false, address: null, chain: 'ethereum' },
-    solana: { isConnected: false, address: null, chain: 'solana' }
+    ethereum: { isConnected: false, address: null, chain: "ethereum" },
+    solana: { isConnected: false, address: null, chain: "solana" },
   };
 
   constructor() {
@@ -72,12 +72,12 @@ export class MultiChainWallet {
     try {
       // Initialize Solana connection
       this.solanaConnection = new Connection(CHAIN_CONFIGS.solana.rpcUrl);
-      
+
       // Get providers from SDK
       this.ethereumProvider = await sdk.wallet.getEthereumProvider();
       this.solanaProvider = await sdk.wallet.getSolanaProvider();
     } catch (error) {
-      console.error('Failed to initialize wallet connections:', error);
+      console.error("Failed to initialize wallet connections:", error);
     }
   }
 
@@ -85,47 +85,47 @@ export class MultiChainWallet {
     try {
       let address: string | null = null;
 
-      if (chain === 'ethereum') {
+      if (chain === "ethereum") {
         // Connect to Ethereum
         if (this.ethereumProvider) {
-          const accounts = await this.ethereumProvider.request({ 
-            method: 'eth_requestAccounts' 
+          const accounts = await this.ethereumProvider.request({
+            method: "eth_requestAccounts",
           });
           address = accounts[0];
-          
+
           // Get balance
           const balance = await this.ethereumProvider.request({
-            method: 'eth_getBalance',
-            params: [address, 'latest']
+            method: "eth_getBalance",
+            params: [address, "latest"],
           });
-          
+
           this.walletStates.ethereum = {
             isConnected: true,
             address,
-            chain: 'ethereum',
-            balance: (parseInt(balance, 16) / 1e18).toFixed(4)
+            chain: "ethereum",
+            balance: (parseInt(balance, 16) / 1e18).toFixed(4),
           };
         } else {
-          throw new Error('Ethereum provider not available');
+          throw new Error("Ethereum provider not available");
         }
-      } else if (chain === 'solana') {
+      } else if (chain === "solana") {
         // Connect to Solana
         if (this.solanaProvider) {
           const response = await this.solanaProvider.connect();
           address = response.publicKey.toString();
-          
+
           // Get balance
           const publicKey = new PublicKey(address);
           const balance = await this.solanaConnection?.getBalance(publicKey);
-          
+
           this.walletStates.solana = {
             isConnected: true,
             address,
-            chain: 'solana',
-            balance: balance ? (balance / 1e9).toFixed(4) : '0'
+            chain: "solana",
+            balance: balance ? (balance / 1e9).toFixed(4) : "0",
           };
         } else {
-          throw new Error('Solana provider not available');
+          throw new Error("Solana provider not available");
         }
       }
 
@@ -138,7 +138,7 @@ export class MultiChainWallet {
 
   async switchChain(chain: Chain): Promise<void> {
     this.currentChain = chain;
-    
+
     // Connect to the new chain if not already connected
     if (!this.walletStates[chain].isConnected) {
       await this.connectWallet(chain);
@@ -160,7 +160,7 @@ export class MultiChainWallet {
   async mintNFT(params: MintParams): Promise<string> {
     const { chain } = params;
     const walletState = this.walletStates[chain];
-    
+
     if (!walletState.isConnected || !walletState.address) {
       throw new Error(`${chain} wallet not connected`);
     }
@@ -168,7 +168,7 @@ export class MultiChainWallet {
     try {
       let signature: string;
 
-      if (chain === 'ethereum') {
+      if (chain === "ethereum") {
         signature = await this.mintEthereumNFT(params);
       } else {
         signature = await this.mintSolanaNFT(params);
@@ -176,7 +176,7 @@ export class MultiChainWallet {
 
       // Share to Farcaster
       await this.shareToFarcaster(params, signature);
-      
+
       return signature;
     } catch (error) {
       console.error(`Failed to mint NFT on ${chain}:`, error);
@@ -187,36 +187,39 @@ export class MultiChainWallet {
   private async mintEthereumNFT(params: MintParams): Promise<string> {
     // TODO: Implement actual Ethereum NFT minting logic
     // For now, return a mock transaction hash
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     return `eth_${params.type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async mintSolanaNFT(params: MintParams): Promise<string> {
     // TODO: Implement actual Solana NFT minting logic
     // For now, return a mock transaction signature
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     return `sol_${params.type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private async shareToFarcaster(params: MintParams, signature: string): Promise<void> {
+  private async shareToFarcaster(
+    params: MintParams,
+    signature: string,
+  ): Promise<void> {
     try {
       const chainConfig = CHAIN_CONFIGS[params.chain];
       const mintEmojis = {
-        plaque: '🏆',
-        tee: '👕',
-        acrylic: '💎'
+        plaque: "🏆",
+        tee: "👕",
+        acrylic: "💎",
       };
 
       const text = `Just minted my custom ${params.type} NFT on @etchnft! ${mintEmojis[params.type]}✨\n\n${chainConfig.icon} Minted on ${chainConfig.name}\n💝 Phygital collectible - own it physically AND digitally.\n\nTx: ${signature}`;
-      
+
       await sdk.actions.openComposer({
         text,
-        embeds: [window.location.href]
+        embeds: [window.location.href],
       });
     } catch (error) {
-      console.error('Failed to share to Farcaster:', error);
+      console.error("Failed to share to Farcaster:", error);
     }
   }
 
@@ -226,20 +229,20 @@ export class MultiChainWallet {
     currency: string;
   }> {
     const { chain } = params;
-    
-    if (chain === 'ethereum') {
+
+    if (chain === "ethereum") {
       // Mock Ethereum gas estimation
       return {
-        gasEstimate: '0.002',
-        gasPrice: '25 gwei',
-        currency: 'ETH'
+        gasEstimate: "0.002",
+        gasPrice: "25 gwei",
+        currency: "ETH",
       };
     } else {
       // Mock Solana fee estimation
       return {
-        gasEstimate: '0.00025',
-        gasPrice: '0.000005',
-        currency: 'SOL'
+        gasEstimate: "0.00025",
+        gasPrice: "0.000005",
+        currency: "SOL",
       };
     }
   }
@@ -257,13 +260,13 @@ export class MultiChainWallet {
       isConnected: false,
       address: null,
       chain,
-      balance: undefined
+      balance: undefined,
     };
   }
 
   disconnectAll(): void {
-    this.disconnect('ethereum');
-    this.disconnect('solana');
+    this.disconnect("ethereum");
+    this.disconnect("solana");
   }
 }
 

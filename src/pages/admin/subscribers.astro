@@ -1,10 +1,7 @@
 ---
-import { auth } from '../../lib/auth';
+import { requireUser } from '../../lib/auth';
 
-const { user } = await auth.handleRequest(Astro);
-if (!user) {
-  return Astro.redirect('/api/auth/login/github');
-}
+const user = await requireUser(Astro);
 
 const db = Astro.locals.runtime.env.DB;
 const results = await db.prepare('SELECT * FROM subscribers ORDER BY created_at DESC').all();

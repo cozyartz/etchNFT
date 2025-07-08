@@ -1,0 +1,438 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { requireUser } from '../../lib/auth';
+import { getDrops, getDropStats } from '../../lib/drops';
+
+const user = await requireUser(Astro);
+const db = Astro.locals.runtime.env.DB as D1Database;
+
+// Get drops and stats
+const [drops, stats] = await Promise.all([
+  getDrops(db),
+  getDropStats(db)
+]);
+
+// Helper function to determine drop status
+function getDropStatus(drop) {
+  const now = new Date();
+  const nowTime = now.getTime();
+  const launchTime = drop.launch_date ? new Date(drop.launch_date).getTime() : null;
+  const endTime = drop.end_date ? new Date(drop.end_date).getTime() : null;
+  
+  const isUpcoming = launchTime && (launchTime - nowTime) > 0;
+  const isLive = drop.is_active && (!launchTime || (launchTime - nowTime) <= 0) && (!endTime || (endTime - nowTime) > 0);
+  const isEnded = endTime && (endTime - nowTime) <= 0;
+  
+  let statusClass = 'bg-gray-400/20 text-gray-400';
+  let statusText = 'Draft';
+  
+  if (isUpcoming) {
+    statusClass = 'bg-yellow-400/20 text-yellow-400';
+    statusText = 'Upcoming';
+  } else if (isLive) {
+    statusClass = 'bg-green-400/20 text-green-400';
+    statusText = 'Live';
+  } else if (isEnded) {
+    statusClass = 'bg-red-400/20 text-red-400';
+    statusText = 'Ended';
+  }
+  
+  return { statusClass, statusText };
+}
+---
+
+<BaseLayout title="Drops Management - EtchNFT Admin">
+  <section class="hero-gradient min-h-screen px-6 py-12">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="glass-strong p-6 mb-8 scan-lines">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-10 h-10 mr-4 animate-neon-pulse" />
+            <div>
+              <h1 class="text-3xl font-cyber font-bold text-white">Drops Management</h1>
+              <p class="text-gray-400 text-sm mt-1">Create and manage NFT drops</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="/admin/admin" class="px-4 py-2 text-sm border border-secondary text-secondary hover:bg-secondary hover:text-black transition-all duration-300 rounded-lg font-cyber">
+              Back to Dashboard
+            </a>
+            <button 
+              id="create-drop-btn"
+              class="px-4 py-2 text-sm bg-primary text-black hover:bg-primary/80 transition-all duration-300 rounded-lg font-cyber font-semibold"
+            >
+              Create New Drop
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="card-retro p-6 text-center">
+          <div class="text-3xl font-cyber font-bold text-primary mb-2">{stats.total_drops}</div>
+          <div class="text-gray-400 text-sm tracking-wider">Total Drops</div>
+        </div>
+        <div class="card-retro p-6 text-center">
+          <div class="text-3xl font-cyber font-bold text-green-400 mb-2">{stats.active_drops}</div>
+          <div class="text-gray-400 text-sm tracking-wider">Active Drops</div>
+        </div>
+        <div class="card-retro p-6 text-center">
+          <div class="text-3xl font-cyber font-bold text-blue-400 mb-2">{stats.total_sales}</div>
+          <div class="text-gray-400 text-sm tracking-wider">Total Sales</div>
+        </div>
+        <div class="card-retro p-6 text-center">
+          <div class="text-3xl font-cyber font-bold text-yellow-400 mb-2">${stats.total_revenue.toFixed(2)}</div>
+          <div class="text-gray-400 text-sm tracking-wider">Total Revenue</div>
+        </div>
+      </div>
+
+      <!-- Drops Table -->
+      <div class="glass-strong p-6 mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-cyber font-bold text-white">All Drops</h2>
+          <div class="flex items-center gap-4">
+            <select id="status-filter" class="bg-retro-dark border border-primary/30 text-white px-3 py-2 rounded-lg text-sm">
+              <option value="">All Status</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="live">Live</option>
+              <option value="ended">Ended</option>
+            </select>
+            <select id="product-filter" class="bg-retro-dark border border-primary/30 text-white px-3 py-2 rounded-lg text-sm">
+              <option value="">All Products</option>
+              <option value="plaque">Plaque</option>
+              <option value="keychain">Keychain</option>
+              <option value="coaster">Coaster</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead class="text-primary border-b border-zinc-700 uppercase tracking-wider text-xs">
+              <tr>
+                <th class="py-3 pr-4">Name</th>
+                <th class="py-3 pr-4">Product</th>
+                <th class="py-3 pr-4">Price</th>
+                <th class="py-3 pr-4">Supply</th>
+                <th class="py-3 pr-4">Status</th>
+                <th class="py-3 pr-4">Created</th>
+                <th class="py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="drops-table-body">
+              {drops.map(drop => {
+                const { statusClass, statusText } = getDropStatus(drop);
+
+                return (
+                  <tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition">
+                    <td class="py-3 pr-4">
+                      <div class="text-white font-medium">{drop.name}</div>
+                      <div class="text-gray-400 text-xs">{drop.slug}</div>
+                    </td>
+                    <td class="py-3 pr-4">
+                      <div class="text-gray-300 capitalize">{drop.product_type}</div>
+                      <div class="text-gray-400 text-xs">{drop.material} - {drop.dimensions}</div>
+                    </td>
+                    <td class="py-3 pr-4 text-gray-300">${drop.price_usd}</td>
+                    <td class="py-3 pr-4">
+                      <div class="text-gray-300">{drop.minted_supply}/{drop.total_supply}</div>
+                      <div class="text-gray-400 text-xs">{drop.total_supply - drop.minted_supply} left</div>
+                    </td>
+                    <td class="py-3 pr-4">
+                      <span class={`px-2 py-1 text-xs rounded-full font-semibold ${statusClass}`}>
+                        {statusText}
+                      </span>
+                    </td>
+                    <td class="py-3 pr-4 text-gray-400 text-xs">
+                      {drop.created_at.toLocaleDateString()}
+                    </td>
+                    <td class="py-3">
+                      <div class="flex items-center gap-2">
+                        <button 
+                          class="text-xs px-3 py-1 bg-secondary text-black rounded-full font-semibold hover:bg-secondary/80 transition-colors edit-drop-btn"
+                          data-drop-id={drop.id}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          class="text-xs px-3 py-1 bg-primary text-black rounded-full font-semibold hover:bg-primary/80 transition-colors manage-items-btn"
+                          data-drop-id={drop.id}
+                        >
+                          Items
+                        </button>
+                        <button 
+                          class="text-xs px-3 py-1 bg-red-500 text-white rounded-full font-semibold hover:bg-red-600 transition-colors delete-drop-btn"
+                          data-drop-id={drop.id}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Create Drop Modal -->
+  <div id="create-drop-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="glass-strong p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-cyber font-bold text-white">Create New Drop</h2>
+          <button id="close-modal" class="text-gray-400 hover:text-white transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form id="create-drop-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Drop Name</label>
+              <input 
+                type="text" 
+                name="name" 
+                required
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+                placeholder="Enter drop name"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Price (USD)</label>
+              <input 
+                type="number" 
+                name="price_usd" 
+                step="0.01"
+                required
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
+            <textarea 
+              name="description" 
+              rows="3"
+              class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+              placeholder="Enter drop description"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Product Type</label>
+              <select 
+                name="product_type" 
+                required
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+              >
+                <option value="">Select Product</option>
+                <option value="plaque">Plaque</option>
+                <option value="keychain">Keychain</option>
+                <option value="coaster">Coaster</option>
+                <option value="pendant">Pendant</option>
+                <option value="bookmark">Bookmark</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Material</label>
+              <select 
+                name="material" 
+                required
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+              >
+                <option value="">Select Material</option>
+                <option value="wood">Wood</option>
+                <option value="acrylic">Acrylic</option>
+                <option value="metal">Metal</option>
+                <option value="leather">Leather</option>
+                <option value="bamboo">Bamboo</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Dimensions</label>
+              <input 
+                type="text" 
+                name="dimensions" 
+                required
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+                placeholder="e.g., 6x4 inches"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Total Supply</label>
+              <input 
+                type="number" 
+                name="total_supply" 
+                min="1"
+                required
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+                placeholder="100"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Max Per User</label>
+              <input 
+                type="number" 
+                name="max_per_user" 
+                min="1"
+                value="1"
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+                placeholder="1"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">Launch Date (Optional)</label>
+              <input 
+                type="datetime-local" 
+                name="launch_date" 
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">End Date (Optional)</label>
+              <input 
+                type="datetime-local" 
+                name="end_date" 
+                class="w-full px-4 py-3 bg-retro-dark border border-primary/30 text-white rounded-lg focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-4 pt-6">
+            <button 
+              type="button" 
+              id="cancel-create"
+              class="px-6 py-3 text-gray-400 hover:text-white transition-colors font-cyber"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="px-6 py-3 bg-primary text-black hover:bg-primary/80 transition-colors rounded-lg font-cyber font-semibold"
+            >
+              Create Drop
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Modal functionality
+  const createDropBtn = document.getElementById('create-drop-btn');
+  const createDropModal = document.getElementById('create-drop-modal');
+  const closeModal = document.getElementById('close-modal');
+  const cancelCreate = document.getElementById('cancel-create');
+  const createDropForm = document.getElementById('create-drop-form') as HTMLFormElement;
+
+  createDropBtn?.addEventListener('click', () => {
+    createDropModal?.classList.remove('hidden');
+  });
+
+  closeModal?.addEventListener('click', () => {
+    createDropModal?.classList.add('hidden');
+  });
+
+  cancelCreate?.addEventListener('click', () => {
+    createDropModal?.classList.add('hidden');
+  });
+
+  // Close modal when clicking outside
+  createDropModal?.addEventListener('click', (e) => {
+    if (e.target === createDropModal) {
+      createDropModal.classList.add('hidden');
+    }
+  });
+
+  // Form submission
+  createDropForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(createDropForm);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Convert numeric fields
+    data.price_usd = parseFloat(data.price_usd as string);
+    data.total_supply = parseInt(data.total_supply as string);
+    data.max_per_user = parseInt(data.max_per_user as string) || 1;
+    
+    try {
+      const response = await fetch('/api/admin/drops', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        // Success - reload page
+        window.location.reload();
+      } else {
+        const error = await response.json();
+        alert('Error creating drop: ' + error.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error creating drop');
+    }
+  });
+
+  // Edit and delete functionality
+  document.querySelectorAll('.edit-drop-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const dropId = (e.target as HTMLElement).getAttribute('data-drop-id');
+      // TODO: Implement edit functionality
+      console.log('Edit drop:', dropId);
+    });
+  });
+
+  document.querySelectorAll('.manage-items-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const dropId = (e.target as HTMLElement).getAttribute('data-drop-id');
+      window.location.href = `/admin/drops/${dropId}/items`;
+    });
+  });
+
+  document.querySelectorAll('.delete-drop-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const dropId = (e.target as HTMLElement).getAttribute('data-drop-id');
+      if (confirm('Are you sure you want to delete this drop?')) {
+        try {
+          const response = await fetch(`/api/admin/drops/${dropId}`, {
+            method: 'DELETE',
+          });
+
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            const error = await response.json();
+            alert('Error deleting drop: ' + error.error);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error deleting drop');
+        }
+      }
+    });
+  });
+</script>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap");
 
 /* ─────────────────────────────────────────────
   Root Theme
@@ -9,7 +9,7 @@
   --color-accent: #00f0ff;
   --color-muted: #999;
 
-  --font-base: 'Space Grotesk', sans-serif;
+  --font-base: "Space Grotesk", sans-serif;
   --font-size-base: 16px;
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
@@ -110,17 +110,26 @@ button:hover {
   Utility: Hero Gradient
 ────────────────────────────────────────────── */
 .hero-gradient {
-  background: radial-gradient(ellipse at center, #0f0f13 0%, #0b0b0f 60%, #000000 100%);
+  background: radial-gradient(
+    ellipse at center,
+    #0f0f13 0%,
+    #0b0b0f 60%,
+    #000000 100%
+  );
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
   z-index: 0;
 }
 .hero-gradient::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(0, 240, 255, 0.2), transparent 60%);
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 240, 255, 0.2),
+    transparent 60%
+  );
   z-index: -1;
   pointer-events: none;
   opacity: 0.8;

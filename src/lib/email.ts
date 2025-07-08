@@ -1,4 +1,4 @@
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
@@ -14,7 +14,7 @@ export async function sendConfirmationEmail(to: string, orderId: string) {
   `;
 
   await resend.emails.send({
-    from: 'EtchNFT <orders@etchnft.com>',
+    from: "EtchNFT <orders@etchnft.com>",
     to,
     subject,
     html,

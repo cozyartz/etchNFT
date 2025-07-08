@@ -1,4 +1,4 @@
-import type { APIRoute } from 'astro';
+import type { APIRoute } from "astro";
 
 export const prerender = false;
 
@@ -8,12 +8,12 @@ export const GET: APIRoute = async ({ params, locals }) => {
 
   // Fetch the order from Cloudflare D1
   const result = await db
-    .prepare('SELECT * FROM orders WHERE id = ?')
+    .prepare("SELECT * FROM orders WHERE id = ?")
     .bind(id)
     .first();
 
   if (!result) {
-    return new Response('Not Found', { status: 404 });
+    return new Response("Not Found", { status: 404 });
   }
 
   const {
@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
     nft_name,
     collection,
     wallet_address,
-    network = 'Polygon'
+    network = "Polygon",
   } = result;
 
   const svg = `
@@ -44,8 +44,8 @@ export const GET: APIRoute = async ({ params, locals }) => {
 
   return new Response(svg, {
     headers: {
-      'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, max-age=3600'
-    }
+      "Content-Type": "image/svg+xml",
+      "Cache-Control": "public, max-age=3600",
+    },
   });
 };

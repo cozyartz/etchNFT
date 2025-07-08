@@ -6,51 +6,216 @@ const user = await requireUser(Astro);
 
 const db = Astro.locals.runtime.env.DB as D1Database;
 
+// Get orders with additional details
 const orders = await db.prepare(`
-  SELECT id, nft_name, full_name, status
+  SELECT 
+    id, 
+    nft_name, 
+    full_name, 
+    status, 
+    created_at, 
+    updated_at,
+    wallet_address,
+    email,
+    total_amount
   FROM orders
   ORDER BY created_at DESC
+`).all();
+
+// Get dashboard stats
+const stats = await db.prepare(`
+  SELECT 
+    COUNT(*) as total_orders,
+    SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending_orders,
+    SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing_orders,
+    SUM(CASE WHEN status = 'etched' THEN 1 ELSE 0 END) as completed_orders,
+    SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled_orders,
+    SUM(total_amount) as total_revenue
+  FROM orders
+`).first();
+
+// Get recent activity
+const recentActivity = await db.prepare(`
+  SELECT 
+    id,
+    nft_name,
+    full_name,
+    status,
+    created_at,
+    updated_at
+  FROM orders
+  WHERE updated_at > datetime('now', '-7 days')
+  ORDER BY updated_at DESC
+  LIMIT 10
 `).all();
 ---
 
 <BaseLayout title="EtchNFT Admin">
-  <section class="hero-gradient min-h-screen flex flex-col items-center justify-start px-6 py-12 fade-in-up">
-    <div class="glass w-full max-w-5xl text-left">
-      <h2 class="text-3xl font-bold text-white mb-6 drop-shadow-[0_0_12px_rgba(0,240,255,0.4)] flex items-center">
-        <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-8 h-8 mr-3" />
-        Admin Dashboard
-      </h2>
+  <section class="hero-gradient min-h-screen px-6 py-12 fade-in-up">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="glass-strong p-6 mb-8 scan-lines">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-10 h-10 mr-4 animate-neon-pulse" />
+            <div>
+              <h1 class="text-3xl font-cyber font-bold text-white">Admin Dashboard</h1>
+              <p class="text-gray-400 text-sm mt-1">Welcome back, {user.email || 'Administrator'}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 text-neon-green font-cyber text-xs tracking-wider">
+              <span class="animate-pulse">●</span>
+              <span>ONLINE</span>
+            </div>
+            <a 
+              href="/api/auth/logout"
+              class="px-4 py-2 text-sm border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 rounded-lg font-cyber"
+            >
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-sm">
-          <thead class="text-accent border-b border-zinc-700 uppercase tracking-wider text-xs">
-            <tr>
-              <th class="py-3 pr-4">Order ID</th>
-              <th class="py-3 pr-4">Name</th>
-              <th class="py-3 pr-4">NFT</th>
-              <th class="py-3 pr-4">Status</th>
-              <th class="py-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.results.map(order => (
-              <tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition">
-                <td class="py-3 pr-4 font-mono text-gray-400">{order.id}</td>
-                <td class="py-3 pr-4">{order.full_name}</td>
-                <td class="py-3 pr-4">{order.nft_name}</td>
-                <td class="py-3 pr-4 text-yellow-400">{order.status}</td>
-                <td class="py-3">
-                  <form action="/admin/mark-etched.ts" method="POST">
-                    <input type="hidden" name="id" value={order.id} />
-                    <button class="text-xs px-3 py-1 bg-accent text-black rounded-full font-semibold">
-                      Mark Etched
-                    </button>
-                  </form>
-                </td>
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="card-retro p-6 text-center">
+          <div class="text-3xl font-cyber font-bold text-primary mb-2">{stats.total_orders}</div>
+          <div class="text-gray-400 text-sm tracking-wider">Total Orders</div>
+        </div>
+        <div class="card-retro p-6 text-center">
+          <div class="text-3xl font-cyber font-bold text-yellow-400 mb-2">{stats.pending_orders}</div>
+          <div class="text-gray-400 text-sm tracking-wider">Pending</div>
+        </div>
+        <div class="card-retro p-6 text-center">
+          <div class="text-3xl font-cyber font-bold text-blue-400 mb-2">{stats.processing_orders}</div>
+          <div class="text-gray-400 text-sm tracking-wider">Processing</div>
+        </div>
+        <div class="card-retro p-6 text-center">
+          <div class="text-3xl font-cyber font-bold text-green-400 mb-2">{stats.completed_orders}</div>
+          <div class="text-gray-400 text-sm tracking-wider">Completed</div>
+        </div>
+      </div>
+
+      <!-- Orders Table -->
+      <div class="glass-strong p-6 mb-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-cyber font-bold text-white">Recent Orders</h2>
+          <div class="flex items-center gap-4">
+            <select class="bg-retro-dark border border-primary/30 text-white px-3 py-2 rounded-lg text-sm">
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="etched">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead class="text-primary border-b border-zinc-700 uppercase tracking-wider text-xs">
+              <tr>
+                <th class="py-3 pr-4">Order ID</th>
+                <th class="py-3 pr-4">Customer</th>
+                <th class="py-3 pr-4">NFT Name</th>
+                <th class="py-3 pr-4">Status</th>
+                <th class="py-3 pr-4">Amount</th>
+                <th class="py-3 pr-4">Date</th>
+                <th class="py-3">Actions</th>
               </tr>
+            </thead>
+            <tbody>
+              {orders.results.map(order => (
+                <tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition">
+                  <td class="py-3 pr-4 font-mono text-gray-400">#{order.id}</td>
+                  <td class="py-3 pr-4">
+                    <div class="text-white font-medium">{order.full_name}</div>
+                    <div class="text-gray-400 text-xs">{order.email}</div>
+                  </td>
+                  <td class="py-3 pr-4 text-gray-300">{order.nft_name}</td>
+                  <td class="py-3 pr-4">
+                    <span class={`px-2 py-1 text-xs rounded-full font-semibold ${
+                      order.status === 'pending' ? 'bg-yellow-400/20 text-yellow-400' :
+                      order.status === 'processing' ? 'bg-blue-400/20 text-blue-400' :
+                      order.status === 'etched' ? 'bg-green-400/20 text-green-400' :
+                      'bg-red-400/20 text-red-400'
+                    }`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td class="py-3 pr-4 text-gray-300">${order.total_amount}</td>
+                  <td class="py-3 pr-4 text-gray-400 text-xs">
+                    {new Date(order.created_at).toLocaleDateString()}
+                  </td>
+                  <td class="py-3">
+                    <div class="flex items-center gap-2">
+                      {order.status !== 'etched' && (
+                        <form action="/admin/mark-etched" method="POST" class="inline">
+                          <input type="hidden" name="id" value={order.id} />
+                          <button class="text-xs px-3 py-1 bg-primary text-black rounded-full font-semibold hover:bg-primary/80 transition-colors">
+                            Mark Etched
+                          </button>
+                        </form>
+                      )}
+                      <button class="text-xs px-3 py-1 bg-secondary text-black rounded-full font-semibold hover:bg-secondary/80 transition-colors">
+                        View
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="card-retro p-6">
+          <h3 class="text-xl font-cyber font-bold text-white mb-4">Quick Actions</h3>
+          <div class="space-y-3">
+            <a href="/admin/drops" class="block p-3 bg-primary/10 border border-primary/30 rounded-lg hover:bg-primary/20 transition-colors">
+              <div class="text-primary font-semibold">Manage Drops</div>
+              <div class="text-gray-400 text-sm">Create and manage NFT drops</div>
+            </a>
+            <a href="/admin/subscribers" class="block p-3 bg-secondary/10 border border-secondary/30 rounded-lg hover:bg-secondary/20 transition-colors">
+              <div class="text-secondary font-semibold">Manage Subscribers</div>
+              <div class="text-gray-400 text-sm">View and export email subscribers</div>
+            </a>
+            <a href="/admin/orders" class="block p-3 bg-neon-green/10 border border-neon-green/30 rounded-lg hover:bg-neon-green/20 transition-colors">
+              <div class="text-neon-green font-semibold">All Orders</div>
+              <div class="text-gray-400 text-sm">View complete order history</div>
+            </a>
+          </div>
+        </div>
+
+        <div class="card-retro p-6">
+          <h3 class="text-xl font-cyber font-bold text-white mb-4">Recent Activity</h3>
+          <div class="space-y-3 max-h-64 overflow-y-auto">
+            {recentActivity.results.map(activity => (
+              <div class="flex items-center justify-between p-2 bg-zinc-900/50 rounded-lg">
+                <div>
+                  <div class="text-sm text-white">{activity.nft_name}</div>
+                  <div class="text-xs text-gray-400">{activity.full_name}</div>
+                </div>
+                <div class="text-right">
+                  <div class={`text-xs px-2 py-1 rounded-full ${
+                    activity.status === 'pending' ? 'bg-yellow-400/20 text-yellow-400' :
+                    activity.status === 'processing' ? 'bg-blue-400/20 text-blue-400' :
+                    activity.status === 'etched' ? 'bg-green-400/20 text-green-400' :
+                    'bg-red-400/20 text-red-400'
+                  }`}>
+                    {activity.status}
+                  </div>
+                  <div class="text-xs text-gray-500 mt-1">
+                    {new Date(activity.updated_at).toLocaleDateString()}
+                  </div>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     </div>
   </section>

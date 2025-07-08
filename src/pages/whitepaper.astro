@@ -16,7 +16,7 @@ import {
 
 const title = 'EtchNFT White Paper - Bridging Digital and Physical NFT Worlds';
 const description = 'Comprehensive white paper on EtchNFT: transforming digital NFTs into premium physical collectibles. Technical architecture, market analysis, and business model.';
-const client: 'only' = 'only';
+// Remove client-only directive for server-side rendering
 ---
 
 <Layout title={title} description={description}>
@@ -48,17 +48,17 @@ const client: 'only' = 'only';
       <div class="card-retro p-8 text-center">
         <h2 class="text-3xl font-cyber font-bold text-primary mb-6 tracking-wider flex items-center justify-center">
           <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4">
-            <DownloadIcon client:only={client} />
+            <DownloadIcon />
           </div>
           DOWNLOAD OPTIONS
         </h2>
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a href="/EtchNFT-WhitePaper.md" download="EtchNFT-WhitePaper.md" class="btn-cyber group">
-            <DownloadIcon client:only={client} />
+            <DownloadIcon />
             <span>DOWNLOAD WHITE PAPER</span>
           </a>
           <a href="/EtchNFT-WhitePaper.md" target="_blank" class="btn-neon group">
-            <EyeIcon client:only={client} />
+            <EyeIcon />
             <span>VIEW ONLINE</span>
           </a>
         </div>
@@ -70,19 +70,22 @@ const client: 'only' = 'only';
       <div class="card-retro p-8 group">
         <h2 class="text-3xl font-cyber font-bold text-secondary mb-6 tracking-wider flex items-center">
           <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-pulse">
-            <BookOpenIcon client:only={client} />
+            <BookOpenIcon  />
           </div>
           EXECUTIVE SUMMARY
         </h2>
         <p class="text-lg text-gray-300 mb-6 leading-relaxed">
           EtchNFT represents a groundbreaking approach to bridging the digital and physical worlds by transforming NFTs into premium laser-etched collectibles. As the NFT market evolves from speculative trading toward utility-driven applications, EtchNFT addresses the fundamental challenge of making digital ownership tangible and meaningful.
         </p>
+        <p class="text-lg text-gray-300 mb-6 leading-relaxed">
+          We're launching a <span class="text-neon animate-neon-pulse">Kickstarter campaign</span> in Q2 2025 to fund enhanced manufacturing capabilities, multi-chain expansion, and global fulfillment infrastructure. This crowdfunding initiative will enable us to scale production, reduce costs, and bring premium phygital NFT collectibles to collectors worldwide.
+        </p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="glass p-6 group">
             <h3 class="text-neon font-cyber font-bold mb-3 tracking-wider flex items-center">
               <div class="w-8 h-8 bg-neon/20 rounded-full flex items-center justify-center mr-3 group-hover:animate-spin">
-                <ChartLineIcon client:only={client} />
+                <ChartLineIcon  />
               </div>
               MARKET OPPORTUNITY
             </h3>
@@ -92,7 +95,7 @@ const client: 'only' = 'only';
           <div class="glass p-6 group">
             <h3 class="text-neon-green font-cyber font-bold mb-3 tracking-wider flex items-center">
               <div class="w-8 h-8 bg-neon-green/20 rounded-full flex items-center justify-center mr-3 group-hover:animate-float">
-                <CpuIcon client:only={client} />
+                <CpuIcon  />
               </div>
               TECHNICAL INNOVATION
             </h3>
@@ -102,7 +105,7 @@ const client: 'only' = 'only';
           <div class="glass p-6 group">
             <h3 class="text-primary font-cyber font-bold mb-3 tracking-wider flex items-center">
               <div class="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mr-3 group-hover:animate-bounce">
-                <CoinsIcon client:only={client} />
+                <CoinsIcon  />
               </div>
               BUSINESS MODEL
             </h3>
@@ -112,7 +115,7 @@ const client: 'only' = 'only';
           <div class="glass p-6 group">
             <h3 class="text-secondary font-cyber font-bold mb-3 tracking-wider flex items-center">
               <div class="w-8 h-8 bg-secondary/20 rounded-full flex items-center justify-center mr-3 group-hover:animate-pulse">
-                <ShieldCheckIcon client:only={client} />
+                <ShieldCheckIcon  />
               </div>
               SECURITY FIRST
             </h3>
@@ -127,7 +130,7 @@ const client: 'only' = 'only';
       <div class="card-retro p-8 group">
         <h2 class="text-3xl font-cyber font-bold text-neon-green mb-6 tracking-wider flex items-center">
           <div class="w-12 h-12 bg-neon-green/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-float">
-            <ListChecksIcon client:only={client} />
+            <ListChecksIcon  />
           </div>
           KEY SECTIONS
         </h2>
@@ -165,7 +168,7 @@ const client: 'only' = 'only';
       <div class="card-retro p-8 group">
         <h2 class="text-3xl font-cyber font-bold text-primary mb-6 tracking-wider flex items-center">
           <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-spin">
-            <InfoIconComponent client:only={client} />
+            <InfoIconComponent  />
           </div>
           DOCUMENT INFO
         </h2>
@@ -190,12 +193,101 @@ const client: 'only' = 'only';
       </div>
     </section>
 
+    <!-- Kickstarter Campaign -->
+    <section class="mb-12">
+      <div class="card-retro p-8 group">
+        <h2 class="text-3xl font-cyber font-bold text-neon mb-6 tracking-wider flex items-center">
+          <div class="w-12 h-12 bg-neon/20 rounded-full flex items-center justify-center mr-4 group-hover:animate-pulse">
+            <RocketIcon  />
+          </div>
+          KICKSTARTER CAMPAIGN
+        </h2>
+        <div class="glass p-6 mb-6">
+          <p class="text-lg text-gray-300 mb-4 leading-relaxed">
+            We're launching a <span class="text-neon animate-neon-pulse">Kickstarter campaign</span> to fund the next phase of EtchNFT development and bring premium phygital NFT collectibles to the masses.
+          </p>
+          <p class="text-gray-400 mb-6">
+            Our campaign will offer exclusive early bird pricing, limited edition materials, and special rewards for backers who help us revolutionize the NFT collectibles space.
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass p-6 group">
+            <h3 class="text-neon-green font-cyber font-bold mb-3 tracking-wider flex items-center">
+              <div class="w-8 h-8 bg-neon-green/20 rounded-full flex items-center justify-center mr-3 group-hover:animate-spin">
+                <CoinsIcon  />
+              </div>
+              FUNDING GOALS
+            </h3>
+            <ul class="text-sm text-gray-400 space-y-2">
+              <li>• <span class="text-neon-green">$50,000</span> - Enhanced manufacturing equipment</li>
+              <li>• <span class="text-neon-green">$100,000</span> - Multi-chain expansion and AI optimization</li>
+              <li>• <span class="text-neon-green">$250,000</span> - Global fulfillment centers</li>
+            </ul>
+          </div>
+          
+          <div class="glass p-6 group">
+            <h3 class="text-primary font-cyber font-bold mb-3 tracking-wider flex items-center">
+              <div class="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mr-3 group-hover:animate-bounce">
+                <ShieldCheckIcon  />
+              </div>
+              BACKER REWARDS
+            </h3>
+            <ul class="text-sm text-gray-400 space-y-2">
+              <li>• <span class="text-primary">Early Bird</span> - 30% off first order</li>
+              <li>• <span class="text-primary">Premium</span> - Exclusive materials access</li>
+              <li>• <span class="text-primary">Founder</span> - Custom design consultation</li>
+            </ul>
+          </div>
+          
+          <div class="glass p-6 group">
+            <h3 class="text-secondary font-cyber font-bold mb-3 tracking-wider flex items-center">
+              <div class="w-8 h-8 bg-secondary/20 rounded-full flex items-center justify-center mr-3 group-hover:animate-pulse">
+                <ChartLineIcon  />
+              </div>
+              CAMPAIGN TIMELINE
+            </h3>
+            <ul class="text-sm text-gray-400 space-y-2">
+              <li>• <span class="text-secondary">Q1 2025</span> - Pre-launch marketing</li>
+              <li>• <span class="text-secondary">Q2 2025</span> - Campaign launch</li>
+              <li>• <span class="text-secondary">Q3 2025</span> - Fulfillment begins</li>
+            </ul>
+          </div>
+          
+          <div class="glass p-6 group">
+            <h3 class="text-neon font-cyber font-bold mb-3 tracking-wider flex items-center">
+              <div class="w-8 h-8 bg-neon/20 rounded-full flex items-center justify-center mr-3 group-hover:animate-float">
+                <CpuIcon  />
+              </div>
+              STRETCH GOALS
+            </h3>
+            <ul class="text-sm text-gray-400 space-y-2">
+              <li>• <span class="text-neon">AR Previews</span> - Augmented reality features</li>
+              <li>• <span class="text-neon">Mobile App</span> - iOS and Android applications</li>
+              <li>• <span class="text-neon">DAO Integration</span> - Community governance</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+          <div class="glass-strong p-6 inline-block">
+            <p class="text-lg text-gray-300 mb-4 font-retro">
+              Be notified when our <span class="text-neon animate-neon-pulse">Kickstarter</span> goes live!
+            </p>
+            <a href="/subscribe" class="btn-cyber group">
+              <span>NOTIFY ME</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Call to Action -->
     <section class="text-center py-12">
       <div class="glass-strong p-8 scan-lines">
         <h2 class="text-3xl font-cyber font-bold text-white mb-6 tracking-wider flex items-center justify-center">
           <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
-            <RocketIcon client:only={client} />
+            <RocketIcon  />
           </div>
           READY TO GET STARTED?
         </h2>
@@ -203,12 +295,16 @@ const client: 'only' = 'only';
           Join the revolution in <span class="text-neon animate-neon-pulse">phygital</span> NFT collectibles
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a href="/gallery" class="btn-cyber group">
-            <ImagesIcon client:only={client} />
+          <a href="/subscribe" class="btn-cyber group">
+            <RocketIcon  />
+            <span>SUPPORT ON KICKSTARTER</span>
+          </a>
+          <a href="/gallery" class="btn-neon group">
+            <ImagesIcon  />
             <span>BROWSE GALLERY</span>
           </a>
-          <a href="/EtchNFT-WhitePaper.md" download="EtchNFT-WhitePaper.md" class="btn-neon group">
-            <DownloadIcon client:only={client} />
+          <a href="/EtchNFT-WhitePaper.md" download="EtchNFT-WhitePaper.md" class="btn-secondary group">
+            <DownloadIcon />
             <span>DOWNLOAD WHITE PAPER</span>
           </a>
         </div>
