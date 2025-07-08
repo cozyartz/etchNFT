@@ -1,6 +1,6 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { requireUser } from '../lib/auth.ts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { requireUser } from '../../lib/auth.ts';
 
 const user = await requireUser(Astro);
 
@@ -16,8 +16,9 @@ const orders = await db.prepare(`
 <BaseLayout title="EtchNFT Admin">
   <section class="hero-gradient min-h-screen flex flex-col items-center justify-start px-6 py-12 fade-in-up">
     <div class="glass w-full max-w-5xl text-left">
-      <h2 class="text-3xl font-bold text-white mb-6 drop-shadow-[0_0_12px_rgba(0,240,255,0.4)]">
-        <i class="fa-solid fa-screwdriver-wrench mr-2"></i>Admin Dashboard
+      <h2 class="text-3xl font-bold text-white mb-6 drop-shadow-[0_0_12px_rgba(0,240,255,0.4)] flex items-center">
+        <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-8 h-8 mr-3" />
+        Admin Dashboard
       </h2>
 
       <div class="overflow-x-auto">

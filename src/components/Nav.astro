@@ -1,30 +1,136 @@
 ---
 import CartToggle from './react/CartToggle';
 import WalletConnectButton from './react/WalletConnectButton';
+import { LogoIcon, GalleryIcon, OrdersIcon, WhitepaperIcon, AboutIcon, AdminIcon, ThemeToggleIcon, MobileMenuIcon, MobileGalleryIcon, MobileOrdersIcon, MobileWhitepaperIcon, MobileAboutIcon, MobileAdminIcon } from './react/NavIcons';
 const client: 'only' = 'only';
 ---
 
-<nav class="w-full px-6 py-4 flex justify-between items-center border-b border-zinc-800">
-  <div class="flex items-center gap-8">
-    <a href="/" class="text-2xl font-bold tracking-tight text-white drop-shadow-[0_0_6px_rgba(0,240,255,0.5)] hover:text-accent transition">
-      <i class="fa-solid fa-pen-nib mr-2"></i>EtchNFT
-    </a>
-    
-    <nav class="hidden md:flex items-center gap-6 text-sm">
-      <a href="/gallery" class="text-gray-300 hover:text-accent transition">Gallery</a>
-      <a href="/my-orders" class="text-gray-300 hover:text-accent transition">My Orders</a>
-      <a href="/about" class="text-gray-300 hover:text-accent transition">About</a>
-      <a href="/admin" class="text-gray-300 hover:text-accent transition">Admin</a>
-    </nav>
+<nav class="relative w-full px-6 py-4 glass-strong border-b border-primary/20 backdrop-blur-xl">
+  <!-- Scan line effect -->
+  <div class="absolute inset-0 scan-lines pointer-events-none"></div>
+  
+  <div class="relative flex justify-between items-center">
+    <div class="flex items-center gap-8">
+      <!-- Logo with retro styling -->
+      <a href="/" class="group relative">
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-8 h-8 animate-neon-pulse" />
+            <div class="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse"></div>
+          </div>
+          <span class="text-2xl font-cyber text-retro-gradient font-bold tracking-wider">
+            EtchNFT
+          </span>
+        </div>
+        <!-- Hover glow effect -->
+        <div class="absolute inset-0 bg-primary/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></div>
+      </a>
+      
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-1">
+        <a href="/gallery" class="nav-link">
+          <GalleryIcon client:only={client} />Gallery
+        </a>
+        <a href="/my-orders" class="nav-link">
+          <OrdersIcon client:only={client} />My Orders
+        </a>
+        <a href="/whitepaper" class="nav-link">
+          <WhitepaperIcon client:only={client} />White Paper
+        </a>
+        <a href="/about" class="nav-link">
+          <AboutIcon client:only={client} />About
+        </a>
+        <a href="/admin" class="nav-link">
+          <AdminIcon client:only={client} />Admin
+        </a>
+      </nav>
+    </div>
+
+    <!-- Right side actions -->
+    <div class="flex items-center gap-4">
+      <WalletConnectButton client:only={client} />
+      
+      <!-- Theme toggle with retro styling -->
+      <button id="theme-toggle" class="relative p-2 rounded-lg border border-secondary/30 bg-retro-dark hover:bg-secondary/10 transition-all duration-300 group">
+        <ThemeToggleIcon client:only={client} />
+        <div class="absolute inset-0 bg-secondary/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg"></div>
+      </button>
+
+      <!-- Cart Toggle with enhanced styling -->
+      <CartToggle client:only={client} />
+    </div>
   </div>
 
-  <div class="flex items-center gap-4">
-    <WalletConnectButton client:only={client} />
-    <button id="theme-toggle" class="text-xl hover:text-accent transition">
-      <i class="fa-solid fa-circle-half-stroke"></i>
-    </button>
+  <!-- Mobile menu button -->
+  <button id="mobile-menu-toggle" class="md:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-retro-dark border border-primary/30 hover:bg-primary/10 transition-all duration-300">
+    <MobileMenuIcon client:only={client} />
+  </button>
 
-    <!-- Cart Toggle Button -->
-    <CartToggle client:only={client} />
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 bg-retro-dark/95 backdrop-blur-xl transform translate-x-full transition-transform duration-300 md:hidden">
+    <div class="flex flex-col items-center justify-center h-full gap-8">
+      <a href="/gallery" class="mobile-nav-link">
+        <MobileGalleryIcon client:only={client} />Gallery
+      </a>
+      <a href="/my-orders" class="mobile-nav-link">
+        <MobileOrdersIcon client:only={client} />My Orders
+      </a>
+      <a href="/whitepaper" class="mobile-nav-link">
+        <MobileWhitepaperIcon client:only={client} />White Paper
+      </a>
+      <a href="/about" class="mobile-nav-link">
+        <MobileAboutIcon client:only={client} />About
+      </a>
+      <a href="/admin" class="mobile-nav-link">
+        <MobileAdminIcon client:only={client} />Admin
+      </a>
+    </div>
   </div>
 </nav>
+
+<style>
+  .nav-link {
+    @apply px-4 py-2 rounded-lg text-gray-300 hover:text-primary transition-all duration-300;
+    @apply relative overflow-hidden;
+    @apply before:absolute before:inset-0 before:bg-primary/10 before:rounded-lg;
+    @apply before:scale-0 before:transition-transform before:duration-300;
+    @apply hover:before:scale-100;
+    @apply font-cyber text-sm tracking-wider;
+  }
+  
+  .nav-link:hover {
+    text-shadow: 0 0 10px currentColor;
+  }
+  
+  .mobile-nav-link {
+    @apply text-2xl font-cyber text-gray-300 hover:text-primary transition-all duration-300;
+    @apply hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(255,20,147,0.5)];
+    @apply tracking-wider;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuToggle?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('translate-x-full');
+    });
+    
+    // Close mobile menu when clicking on a link
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu?.classList.add('translate-x-full');
+      });
+    });
+    
+    // Close mobile menu when clicking outside
+    mobileMenu?.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) {
+        mobileMenu.classList.add('translate-x-full');
+      }
+    });
+  });
+</script>

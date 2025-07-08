@@ -1,8 +1,129 @@
-<footer class="w-full px-6 py-8 text-center text-sm text-gray-500 border-t border-zinc-800">
-  <p>
-    Built with ❤️ for NFT collectors. &copy; {new Date().getFullYear()} EtchNFT.
-  </p>
-  <p class="mt-2 text-xs text-gray-600">
-    Powered by Polygon • Designed by humans • Deployed on Cloudflare
-  </p>
+---
+import { FooterLogoIcon, FooterWhitepaperIcon, FooterDownloadIcon, FooterBookIcon, FooterCloudIcon, FooterRocketIcon, EthereumIcon } from './react/FooterIcons';
+const client: 'only' = 'only';
+---
+
+<footer class="relative w-full px-6 py-12 glass-strong border-t border-primary/20 backdrop-blur-xl">
+  <!-- Scan line effect -->
+  <div class="absolute inset-0 scan-lines pointer-events-none"></div>
+  
+  <!-- Animated grid background -->
+  <div class="absolute inset-0 bg-retro-grid bg-grid opacity-30 animate-pulse"></div>
+  
+  <div class="relative max-w-6xl mx-auto">
+    <!-- Main footer content -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <!-- Brand section -->
+      <div class="text-center md:text-left">
+        <div class="flex items-center justify-center md:justify-start gap-2 mb-4">
+          <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-6 h-6 animate-neon-pulse" />
+          <span class="text-2xl font-cyber text-retro-gradient font-bold tracking-wider">EtchNFT</span>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          Bridging digital NFTs with physical reality through laser engraving technology.
+        </p>
+      </div>
+      
+      <!-- Quick Links -->
+      <div class="text-center">
+        <h3 class="text-lg font-cyber text-secondary mb-4 tracking-wider">Quick Links</h3>
+        <div class="flex flex-col gap-2">
+          <a href="/whitepaper" class="footer-link">
+            <FooterWhitepaperIcon client:only={client} />White Paper
+          </a>
+          <a href="/EtchNFT-WhitePaper.md" download="EtchNFT-WhitePaper.md" class="footer-link">
+            <FooterDownloadIcon client:only={client} />Download PDF
+          </a>
+          <a href="https://docs.etchnft.com" class="footer-link">
+            <FooterBookIcon client:only={client} />Documentation
+          </a>
+        </div>
+      </div>
+      
+      <!-- Tech Stack -->
+      <div class="text-center md:text-right">
+        <h3 class="text-lg font-cyber text-secondary mb-4 tracking-wider">Powered By</h3>
+        <div class="flex flex-col gap-2 items-center md:items-end">
+          <div class="flex items-center gap-2 text-sm text-gray-300">
+            <EthereumIcon client:only={client} />
+            <span>Polygon Network</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-gray-300">
+            <FooterCloudIcon client:only={client} />
+            <span>Cloudflare</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-gray-300">
+            <FooterRocketIcon client:only={client} />
+            <span>Astro Framework</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Divider with glow effect -->
+    <div class="relative mb-6">
+      <div class="w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent via-primary to-transparent blur-sm"></div>
+    </div>
+    
+    <!-- Bottom section -->
+    <div class="text-center">
+      <p class="text-gray-300 mb-2 font-cyber tracking-wider">
+        Built with <span class="text-primary animate-pulse">❤️</span> for NFT collectors
+      </p>
+      <p class="text-sm text-gray-400">
+        &copy; {new Date().getFullYear()} EtchNFT. All rights reserved.
+      </p>
+      <p class="text-xs text-gray-500 mt-2">
+        Designed by humans • Enhanced by AI • Deployed on the edge
+      </p>
+    </div>
+    
+    <!-- Floating particles effect -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="particle particle-1"></div>
+      <div class="particle particle-2"></div>
+      <div class="particle particle-3"></div>
+    </div>
+  </div>
 </footer>
+
+<style>
+  .footer-link {
+    @apply text-gray-400 hover:text-primary transition-all duration-300;
+    @apply relative inline-block;
+    @apply hover:scale-105 hover:drop-shadow-[0_0_8px_rgba(255,20,147,0.5)];
+    @apply font-cyber text-sm tracking-wider;
+  }
+  
+  .footer-link:hover {
+    text-shadow: 0 0 10px currentColor;
+  }
+  
+  .particle {
+    @apply absolute w-1 h-1 bg-primary rounded-full opacity-30;
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  .particle-1 {
+    @apply top-1/4 left-1/4;
+    animation-delay: 0s;
+  }
+  
+  .particle-2 {
+    @apply top-3/4 right-1/4;
+    animation-delay: 2s;
+  }
+  
+  .particle-3 {
+    @apply top-1/2 right-1/2;
+    animation-delay: 4s;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-20px) rotate(90deg); }
+    50% { transform: translateY(-10px) rotate(180deg); }
+    75% { transform: translateY(-15px) rotate(270deg); }
+  }
+</style>

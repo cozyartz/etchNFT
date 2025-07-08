@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import EtchModal from './EtchModal';
+import { PenTool, Eye } from 'lucide-react';
 
 type NFT = {
   name: string;
@@ -77,14 +78,14 @@ export default function NFTGallery({ address }: Props) {
                   className="flex-1 bg-white text-black font-bold px-4 py-2 rounded hover:bg-gray-200 transition text-sm"
                   onClick={() => setSelected(nft)}
                 >
-                  <i className="fa-solid fa-pen-nib mr-2"></i>
+                  <PenTool size={16} className="mr-2" />
                   Etch This
                 </button>
                 <a
                   href={`/nft/${nft.contract_address}/${nft.token_id}?wallet=${address}`}
                   className="bg-zinc-700 text-white font-bold px-3 py-2 rounded hover:bg-zinc-600 transition text-sm"
                 >
-                  <i className="fa-solid fa-eye"></i>
+                  <Eye size={16} />
                 </a>
               </div>
             </div>

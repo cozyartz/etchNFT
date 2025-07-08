@@ -348,7 +348,7 @@ export default function OrderHistory({ userEmail }: Props) {
                       className="flex-1 bg-accent text-black text-center py-2 px-4 rounded-lg font-semibold hover:bg-white transition"
                     >
                       <i className="fa-solid fa-certificate mr-2"></i>
-                      View Certificate
+                      View Award
                     </a>
                   )}
                   <a

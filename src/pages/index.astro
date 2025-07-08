@@ -4,6 +4,8 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import WalletConnect from '../components/WalletConnect.astro';
 import { CartProvider } from '../components/react/CartContext';
+import { HeroLogoIcon, MultiChainIcon, FastProcessingIcon, PremiumQualityIcon, GalleryButtonIcon, OrdersButtonIcon, WalletConnectIcon } from '../components/react/IndexPageIcons';
+const client: 'only' = 'only';
 
 const title = 'EtchNFT – Transform Your Digital NFTs into Physical Collectibles';
 const description = 'Turn your NFTs into laser-etched physical collectibles. Premium quality plaques, custom apparel, and displays. Ethereum, Polygon, and Solana supported. Order with crypto or card.';
@@ -60,181 +62,164 @@ const structuredData = {
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
     
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/etchlogo.png" />
+    <link rel="apple-touch-icon" href="/etchlogo.png" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/53a31143f8.js" crossorigin="anonymous"></script>
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      :root {
-        --primary: #DB2777;
-        --secondary: #7F73F7;
-        --accent: #41C6BB;
-        --bg-dark: #0b0b0f;
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --glass-border: rgba(255, 255, 255, 0.1);
-      }
-
-      body {
-        font-family: 'Space Grotesk', sans-serif;
-        background: var(--bg-dark);
-        color: white;
-        min-height: 100vh;
-        position: relative;
-        overflow-x: hidden;
-      }
-
-      .hero-gradient {
-        background: linear-gradient(135deg, 
-          var(--bg-dark) 0%,
-          rgba(123, 31, 162, 0.3) 25%,
-          rgba(219, 39, 119, 0.3) 50%,
-          rgba(65, 198, 187, 0.3) 75%,
-          var(--bg-dark) 100%
-        );
-      }
-
-      .glass {
-        background: var(--glass-bg);
-        backdrop-filter: blur(10px);
-        border: 1px solid var(--glass-border);
-        border-radius: 16px;
-      }
-
-      .neon-text {
-        text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 30px var(--accent);
-      }
-
-      .btn-gradient {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        transition: all 0.3s ease;
-      }
-
-      .btn-gradient:hover {
-        background: linear-gradient(135deg, var(--secondary), var(--accent));
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(219, 39, 119, 0.3);
-      }
-
-      .fade-in-up {
-        animation: fadeInUp 1s ease-out;
-      }
-
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(50px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* Retro grid background */
-      .retro-grid {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: 
-          linear-gradient(cyan 1px, transparent 1px),
-          linear-gradient(90deg, cyan 1px, transparent 1px);
-        background-size: 50px 50px;
-        opacity: 0.1;
-        z-index: -1;
-      }
-    </style>
   </head>
 
-  <body class="hero-gradient">
-    <div class="retro-grid"></div>
-    
+  <body class="bg-retro-dark">
     <CartProvider client:load>
       <Nav />
       
-      <main class="min-h-screen flex flex-col justify-center items-center text-center px-6 py-20 fade-in-up">
-        <article class="glass max-w-4xl w-full p-8 mb-8">
-          <header>
-            <h1 class="text-5xl sm:text-7xl font-bold mb-6 neon-text">
-              <i class="fa-solid fa-pen-nib mr-4"></i>EtchNFT
-            </h1>
+      <main class="relative min-h-screen flex flex-col justify-center items-center text-center px-6 py-20">
+        <!-- Dynamic background effects -->
+        <div class="fixed inset-0 pointer-events-none">
+          <div class="absolute inset-0 bg-cyber-gradient opacity-20 animate-gradient-shift"></div>
+          <div class="absolute inset-0 bg-retro-scan bg-scan animate-scan"></div>
+        </div>
+        
+        <!-- Hero Section -->
+        <article class="relative z-10 glass-strong max-w-5xl w-full p-12 mb-12 scan-lines">
+          <header class="mb-12">
+            <!-- Glitch effect logo -->
+            <div class="relative mb-8">
+              <h1 class="text-6xl sm:text-8xl font-cyber font-bold text-retro-gradient glitch flex items-center justify-center" data-text="EtchNFT">
+                <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-12 h-12 sm:w-16 sm:h-16 mr-4 animate-neon-pulse" />
+                EtchNFT
+              </h1>
+              <div class="absolute inset-0 bg-primary/10 blur-3xl animate-pulse"></div>
+            </div>
             
-            <p class="text-xl sm:text-2xl text-gray-300 mb-8 leading-relaxed">
-              Transform your <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">digital NFTs</span> into premium physical collectibles.
+            <p class="text-xl sm:text-3xl text-gray-300 mb-8 leading-relaxed font-retro">
+              Transform your <span class="text-neon animate-neon-pulse">digital NFTs</span> into premium 
+              <span class="text-secondary animate-flicker">physical collectibles</span>
             </p>
+            
+            <div class="flex items-center justify-center gap-2 text-neon-green font-cyber text-sm tracking-wider">
+              <span class="animate-pulse">●</span>
+              <span>SYSTEM ONLINE</span>
+              <span class="animate-pulse">●</span>
+            </div>
           </header>
           
-          <section class="mb-10">
-            <h2 class="text-lg text-gray-400 mb-4">Premium Laser-Etched NFT Collectibles</h2>
-            <p class="text-lg text-gray-400 mb-6">
+          <section class="mb-12">
+            <h2 class="text-2xl font-cyber text-secondary mb-6 tracking-wider">
+              PREMIUM LASER-ETCHED NFT COLLECTIBLES
+            </h2>
+            <p class="text-lg text-gray-400 mb-8 leading-relaxed">
               High-quality laser-etched plaques, custom apparel, and acrylic displays.<br />
-              Support for Ethereum, Polygon, and Solana NFTs. Pay with crypto or card.
+              Multi-chain support: Ethereum • Polygon • Solana • Pay with crypto or card
             </p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-left">
-              <div class="glass p-4">
-                <h3 class="text-accent font-bold mb-2">🔗 Multi-Chain Support</h3>
-                <p class="text-sm text-gray-400">Ethereum, Polygon, Solana, and more blockchain networks supported.</p>
+            <!-- Feature Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div class="card-retro group">
+                <div class="text-center">
+                  <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-spin">
+                    <MultiChainIcon client:only={client} />
+                  </div>
+                  <h3 class="text-primary font-cyber font-bold mb-2 tracking-wider">MULTI-CHAIN</h3>
+                  <p class="text-sm text-gray-400">Ethereum, Polygon, Solana, and more blockchain networks supported</p>
+                </div>
               </div>
-              <div class="glass p-4">
-                <h3 class="text-accent font-bold mb-2">⚡ Fast Processing</h3>
-                <p class="text-sm text-gray-400">Quick order processing and worldwide shipping available.</p>
+              
+              <div class="card-retro group">
+                <div class="text-center">
+                  <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse">
+                    <FastProcessingIcon client:only={client} />
+                  </div>
+                  <h3 class="text-secondary font-cyber font-bold mb-2 tracking-wider">FAST PROCESSING</h3>
+                  <p class="text-sm text-gray-400">Quick order processing and worldwide shipping available</p>
+                </div>
               </div>
-              <div class="glass p-4">
-                <h3 class="text-accent font-bold mb-2">💎 Premium Quality</h3>
-                <p class="text-sm text-gray-400">Laser-etched with precision on premium materials.</p>
+              
+              <div class="card-retro group">
+                <div class="text-center">
+                  <div class="w-16 h-16 bg-neon-green/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-float">
+                    <PremiumQualityIcon client:only={client} />
+                  </div>
+                  <h3 class="text-neon-green font-cyber font-bold mb-2 tracking-wider">PREMIUM QUALITY</h3>
+                  <p class="text-sm text-gray-400">Laser-etched with precision on premium materials</p>
+                </div>
               </div>
             </div>
           </section>
           
-          <nav class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <a href="/gallery" class="btn-gradient text-white font-bold py-4 px-8 rounded-full text-lg no-underline" aria-label="Browse NFT Gallery">
-              <i class="fa-solid fa-images mr-2"></i>Browse Gallery
+          <!-- Action Buttons -->
+          <nav class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+            <a href="/gallery" class="btn-cyber group" aria-label="Browse NFT Gallery">
+              <GalleryButtonIcon client:only={client} />
+              <span>BROWSE GALLERY</span>
             </a>
-            <a href="/my-orders" class="glass border-2 border-accent text-accent font-bold py-4 px-8 rounded-full text-lg no-underline hover:bg-accent hover:text-black transition" aria-label="View My Orders">
-              <i class="fa-solid fa-box mr-2"></i>My Orders
+            <a href="/my-orders" class="btn-neon group" aria-label="View My Orders">
+              <OrdersButtonIcon client:only={client} />
+              <span>MY ORDERS</span>
             </a>
           </nav>
         </article>
         
-        <section class="glass max-w-2xl w-full p-6">
-          <h2 class="text-2xl font-bold mb-4 text-accent">
-            <i class="fa-solid fa-wallet mr-2"></i>Connect Your Wallet
-          </h2>
-          <p class="text-gray-400 mb-6">Connect your crypto wallet to view your NFT collection and start creating physical collectibles.</p>
-          <WalletConnect />
+        <!-- Wallet Connection Section -->
+        <section class="relative z-10 glass-strong max-w-3xl w-full p-8 scan-lines">
+          <div class="text-center">
+            <h2 class="text-3xl font-cyber font-bold mb-4 text-retro-gradient tracking-wider flex items-center justify-center">
+              <WalletConnectIcon client:only={client} />
+              CONNECT WALLET
+            </h2>
+            <p class="text-gray-400 mb-8 font-retro">
+              Connect your crypto wallet to view your NFT collection and start creating physical collectibles
+            </p>
+            <div class="flex justify-center">
+              <WalletConnect />
+            </div>
+          </div>
         </section>
+        
+        <!-- Floating Elements -->
+        <div class="fixed inset-0 pointer-events-none">
+          <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full animate-float opacity-60"></div>
+          <div class="absolute top-3/4 right-1/4 w-1 h-1 bg-secondary rounded-full animate-float opacity-40" style="animation-delay: 2s;"></div>
+          <div class="absolute top-1/2 left-3/4 w-1.5 h-1.5 bg-neon-green rounded-full animate-float opacity-50" style="animation-delay: 4s;"></div>
+        </div>
       </main>
       
       <Footer />
     </CartProvider>
 
     <script>
-      // Add some interactive effects
+      // Cyberpunk mouse trail effect
       document.addEventListener('mousemove', (e) => {
+        const colors = ['#FF1493', '#00FFFF', '#9932CC', '#39FF14'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
         const cursor = document.createElement('div');
-        cursor.className = 'fixed w-2 h-2 bg-accent rounded-full pointer-events-none z-50 opacity-50';
+        cursor.className = 'fixed w-1 h-1 rounded-full pointer-events-none z-50';
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
-        cursor.style.animation = 'fade-out 0.5s ease-out forwards';
+        cursor.style.background = color;
+        cursor.style.boxShadow = `0 0 10px ${color}`;
+        cursor.style.animation = 'cyber-fade 1s ease-out forwards';
         document.body.appendChild(cursor);
-        setTimeout(() => cursor.remove(), 500);
+        setTimeout(() => cursor.remove(), 1000);
       });
 
-      // Add fade-out animation
+      // Glitch effect on hover for interactive elements
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          el.style.animation = 'glitch-1 0.3s ease-in-out';
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.animation = '';
+        });
+      });
+
+      // Add cyber animations
       const style = document.createElement('style');
       style.textContent = `
-        @keyframes fade-out {
-          to {
-            opacity: 0;
-            transform: scale(2);
-          }
+        @keyframes cyber-fade {
+          0% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.5); }
+          100% { opacity: 0; transform: scale(0.5); }
         }
       `;
       document.head.appendChild(style);
