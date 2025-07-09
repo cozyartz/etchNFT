@@ -1,0 +1,363 @@
+---
+import Layout from '../layouts/BaseLayout.astro';
+import { HelpIcon, SearchIcon, BookIcon, WalletIcon, ShoppingCartIcon, ShippingIcon, SettingsIcon, BotIcon } from '../components/react/HelpCenterIcons';
+import HelpCenterWidget from '../components/react/HelpCenterWidget';
+
+const title = 'Help Center - EtchNFT Support & NFT Troubleshooting Guide';
+const description = 'Complete support for EtchNFT users: wallet connections, NFT viewing, laser etching orders, shipping guides, and AI-powered troubleshooting. Get help with blockchain collectibles.';
+const keywords = 'EtchNFT help center, NFT support, wallet connection help, laser etching guide, NFT orders support, blockchain troubleshooting, crypto collectibles help, NFT manufacturing support';
+---
+
+<Layout 
+  title={title} 
+  description={description}
+  keywords={keywords}
+  url="https://etchnft.com/help"
+>
+  <div class="max-w-7xl mx-auto">
+    <!-- Hero Section -->
+    <section class="text-center py-16 mb-12">
+      <div class="glass-strong p-12 scan-lines">
+        <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 animate-neon-pulse" />
+        <div class="relative mb-8">
+          <h1 class="text-5xl sm:text-7xl font-cyber font-bold text-white glitch" data-text="HELP CENTER">
+            HELP CENTER
+          </h1>
+          <div class="absolute inset-0 bg-primary/10 blur-3xl animate-pulse"></div>
+        </div>
+        <p class="text-xl sm:text-2xl text-gray-300 leading-relaxed font-retro mb-8">
+          Get <span class="text-neon animate-neon-pulse">instant help</span> with 
+          <span class="text-secondary animate-flicker">AI support</span> and comprehensive guides
+        </p>
+        <div class="flex items-center justify-center gap-2 text-neon-green font-cyber text-sm tracking-wider">
+          <span class="animate-pulse">●</span>
+          <span>AI ASSISTANT ONLINE</span>
+          <span class="animate-pulse">●</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Search Section -->
+    <section class="mb-12">
+      <div class="card-retro p-8">
+        <div class="text-center mb-6">
+          <h2 class="text-3xl font-cyber font-bold text-secondary mb-4 tracking-wider flex items-center justify-center">
+            <div class="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mr-4">
+              <SearchIcon />
+            </div>
+            SEARCH HELP ARTICLES
+          </h2>
+        </div>
+        <div class="relative max-w-2xl mx-auto">
+          <input 
+            type="text" 
+            id="helpSearch"
+            placeholder="Search for help articles... (e.g., 'wallet connection', 'order tracking')"
+            class="w-full px-6 py-4 pl-14 bg-retro-dark border-2 border-primary/30 rounded-lg text-white placeholder-gray-400 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/50 font-cyber tracking-wider"
+          />
+          <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary">
+            <SearchIcon />
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <div id="searchStats" class="text-sm text-gray-400 font-cyber tracking-wider">
+            <span class="animate-pulse">●</span> Type to search help articles
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Help Categories -->
+    <section class="mb-12">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-cyber font-bold text-primary mb-4 tracking-wider">QUICK HELP</h2>
+        <p class="text-gray-400 font-retro">Find answers to common questions</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Wallet Connection -->
+        <div class="card-retro group hover:border-primary/50 transition-all duration-300">
+          <div class="p-6">
+            <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse">
+              <WalletIcon />
+            </div>
+            <h3 class="text-xl font-cyber font-bold text-primary mb-3 tracking-wider text-center">WALLET CONNECTION</h3>
+            <p class="text-gray-400 text-center mb-4">Connect MetaMask, Rainbow, Coinbase Wallet, and more</p>
+            <div class="space-y-2">
+              <a href="#wallet-setup" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Wallet Setup Guide</a>
+              <a href="#wallet-troubleshooting" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Connection Issues</a>
+              <a href="#supported-wallets" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Supported Wallets</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- NFT Viewing -->
+        <div class="card-retro group hover:border-secondary/50 transition-all duration-300">
+          <div class="p-6">
+            <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-spin">
+              <BookIcon />
+            </div>
+            <h3 class="text-xl font-cyber font-bold text-secondary mb-3 tracking-wider text-center">NFT GALLERY</h3>
+            <p class="text-gray-400 text-center mb-4">Browse and select your NFTs for etching</p>
+            <div class="space-y-2">
+              <a href="#nft-viewing" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ View Your NFTs</a>
+              <a href="#supported-networks" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Supported Networks</a>
+              <a href="#nft-troubleshooting" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ NFT Not Showing</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="card-retro group hover:border-neon-green/50 transition-all duration-300">
+          <div class="p-6">
+            <div class="w-16 h-16 bg-neon-green/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-bounce">
+              <ShoppingCartIcon />
+            </div>
+            <h3 class="text-xl font-cyber font-bold text-neon-green mb-3 tracking-wider text-center">ORDERS</h3>
+            <p class="text-gray-400 text-center mb-4">Place orders and track your etched collectibles</p>
+            <div class="space-y-2">
+              <a href="#placing-orders" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ How to Order</a>
+              <a href="#order-tracking" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Track Your Order</a>
+              <a href="#payment-methods" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Payment Options</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping -->
+        <div class="card-retro group hover:border-neon-purple/50 transition-all duration-300">
+          <div class="p-6">
+            <div class="w-16 h-16 bg-neon-purple/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-float">
+              <ShippingIcon />
+            </div>
+            <h3 class="text-xl font-cyber font-bold text-neon-purple mb-3 tracking-wider text-center">SHIPPING</h3>
+            <p class="text-gray-400 text-center mb-4">Delivery times, costs, and tracking information</p>
+            <div class="space-y-2">
+              <a href="#shipping-info" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Shipping Times</a>
+              <a href="#shipping-costs" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Shipping Costs</a>
+              <a href="#international-shipping" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ International Orders</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account -->
+        <div class="card-retro group hover:border-neon-yellow/50 transition-all duration-300">
+          <div class="p-6">
+            <div class="w-16 h-16 bg-neon-yellow/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse">
+              <SettingsIcon />
+            </div>
+            <h3 class="text-xl font-cyber font-bold text-neon-yellow mb-3 tracking-wider text-center">ACCOUNT</h3>
+            <p class="text-gray-400 text-center mb-4">Manage your account and preferences</p>
+            <div class="space-y-2">
+              <a href="#account-setup" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Account Setup</a>
+              <a href="#order-history" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Order History</a>
+              <a href="#privacy-security" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Privacy & Security</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technical Support -->
+        <div class="card-retro group hover:border-neon-orange/50 transition-all duration-300">
+          <div class="p-6">
+            <div class="w-16 h-16 bg-neon-orange/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:animate-spin">
+              <HelpIcon />
+            </div>
+            <h3 class="text-xl font-cyber font-bold text-neon-orange mb-3 tracking-wider text-center">TECHNICAL</h3>
+            <p class="text-gray-400 text-center mb-4">Technical issues and troubleshooting</p>
+            <div class="space-y-2">
+              <a href="#technical-requirements" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ System Requirements</a>
+              <a href="#browser-support" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Browser Support</a>
+              <a href="#troubleshooting" class="block text-sm text-secondary hover:text-white transition-colors duration-200">→ Common Issues</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-12" id="faq-section">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-cyber font-bold text-secondary mb-4 tracking-wider">FREQUENTLY ASKED QUESTIONS</h2>
+        <p class="text-gray-400 font-retro">Quick answers to common questions</p>
+      </div>
+
+      <div class="space-y-6" id="faq-container">
+        <!-- FAQ items will be populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="text-center py-12">
+      <div class="glass-strong p-8 scan-lines">
+        <h2 class="text-3xl font-cyber font-bold text-white mb-6 tracking-wider">STILL NEED HELP?</h2>
+        <p class="text-lg text-gray-300 mb-8 font-retro">
+          Our AI assistant is available 24/7, or browse our comprehensive guides
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="/glossary" class="btn-neon group">
+            <BookIcon />
+            <span>BROWSE GLOSSARY</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- AI Chat Component -->
+  <HelpCenterWidget client:load />
+
+  <script>
+    // FAQ data
+    const faqData = [
+      {
+        category: "wallet-setup",
+        question: "How do I connect my wallet to EtchNFT?",
+        answer: "Click the 'Connect Wallet' button in the navigation or on the homepage. Select your wallet type (MetaMask, Rainbow, Coinbase Wallet, etc.) and follow the prompts. Make sure your wallet extension is installed and unlocked."
+      },
+      {
+        category: "supported-wallets",
+        question: "Which wallets are supported?",
+        answer: "EtchNFT supports MetaMask, Rainbow Wallet, Coinbase Wallet, WalletConnect, and most Ethereum-compatible wallets. We also support Solana wallets like Phantom and Solflare for Solana NFTs."
+      },
+      {
+        category: "nft-viewing",
+        question: "Why can't I see my NFTs?",
+        answer: "Make sure your wallet is connected and you're on the correct network. We support Ethereum, Polygon, and Solana. If your NFTs still don't appear, try refreshing the page or switching networks in your wallet."
+      },
+      {
+        category: "placing-orders",
+        question: "How do I place an order for a physical NFT?",
+        answer: "1. Connect your wallet 2. Browse your NFTs in the Gallery 3. Select the NFT you want to etch 4. Choose your material and size 5. Add to cart and proceed to checkout 6. Pay with crypto or card"
+      },
+      {
+        category: "payment-methods",
+        question: "What payment methods do you accept?",
+        answer: "We accept cryptocurrency payments (ETH, MATIC, SOL, USDC) and traditional payment methods including credit cards, debit cards, and PayPal through our secure payment processors."
+      },
+      {
+        category: "shipping-info",
+        question: "How long does shipping take?",
+        answer: "Processing time is 3-5 business days for laser etching. Shipping times vary by location: US (3-7 days), Canada (5-10 days), International (7-21 days). You'll receive tracking information once your order ships."
+      },
+      {
+        category: "order-tracking",
+        question: "How can I track my order?",
+        answer: "Visit the 'My Orders' page after connecting your wallet, or use the order tracking link sent to your email. You can also check your order status in the account dashboard."
+      },
+      {
+        category: "international-shipping",
+        question: "Do you ship internationally?",
+        answer: "Yes! We ship worldwide. International orders may be subject to customs duties and taxes, which are the responsibility of the buyer. Delivery times vary by destination."
+      },
+      {
+        category: "technical-requirements",
+        question: "What are the system requirements?",
+        answer: "You need a modern web browser (Chrome, Firefox, Safari, Edge) with JavaScript enabled and a crypto wallet extension installed. Mobile browsers are supported for viewing but desktop is recommended for orders."
+      },
+      {
+        category: "browser-support",
+        question: "Which browsers work best with EtchNFT?",
+        answer: "Chrome, Firefox, Safari, and Edge all work well. We recommend using the latest version of your browser for the best experience. Mobile browsers are supported but some wallet features may be limited."
+      },
+      {
+        category: "troubleshooting",
+        question: "What should I do if the site isn't working?",
+        answer: "Try refreshing the page, clearing your browser cache, or disabling browser extensions. Make sure your wallet is unlocked and connected. If problems persist, contact our support team."
+      },
+      {
+        category: "account-setup",
+        question: "Do I need to create an account?",
+        answer: "No traditional account is required! Your wallet serves as your account. Simply connect your wallet to access your NFTs and view your order history. Your data is stored securely and associated with your wallet address."
+      }
+    ];
+
+    // Search functionality
+    const searchInput = document.getElementById('helpSearch');
+    const searchStats = document.getElementById('searchStats');
+    const faqContainer = document.getElementById('faq-container');
+
+    let currentFaqs = [...faqData];
+
+    function renderFAQs(faqs) {
+      if (faqs.length === 0) {
+        faqContainer.innerHTML = `
+          <div class="text-center py-8">
+            <div class="glass-strong p-8">
+              <h3 class="text-xl font-cyber font-bold text-primary mb-4">NO RESULTS FOUND</h3>
+              <p class="text-gray-400">Try different search terms or browse all categories</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      faqContainer.innerHTML = faqs.map((faq, index) => `
+        <div class="card-retro group">
+          <div class="p-6">
+            <button class="w-full text-left faq-toggle" data-index="${index}">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-cyber font-bold text-primary group-hover:text-white transition-colors duration-300">
+                  ${faq.question}
+                </h3>
+                <div class="text-secondary transform transition-transform duration-300 faq-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content hidden mt-4 pt-4 border-t border-primary/20">
+              <p class="text-gray-300 leading-relaxed font-retro">${faq.answer}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Add event listeners to FAQ toggles
+      document.querySelectorAll('.faq-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+          const content = button.nextElementSibling;
+          const arrow = button.querySelector('.faq-arrow');
+          
+          if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+          } else {
+            content.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+          }
+        });
+      });
+    }
+
+    function filterFAQs() {
+      const searchTerm = searchInput.value.toLowerCase();
+      
+      currentFaqs = faqData.filter(faq => 
+        faq.question.toLowerCase().includes(searchTerm) ||
+        faq.answer.toLowerCase().includes(searchTerm) ||
+        faq.category.toLowerCase().includes(searchTerm)
+      );
+
+      renderFAQs(currentFaqs);
+      searchStats.innerHTML = `<span class="animate-pulse">●</span> ${currentFaqs.length} articles found`;
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', filterFAQs);
+
+    // Category link handlers
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const category = link.getAttribute('href').substring(1);
+        searchInput.value = category.replace('-', ' ');
+        filterFAQs();
+        document.getElementById('faq-section').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Initialize
+    renderFAQs(faqData);
+  </script>
+</Layout>

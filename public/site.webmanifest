@@ -1,21 +1,82 @@
 {
   "name": "EtchNFT - Transform NFTs into Physical Collectibles",
   "short_name": "EtchNFT",
-  "description": "Turn your NFTs into laser-etched physical collectibles. Premium quality plaques, custom apparel, and displays. Ethereum, Polygon, and Solana supported.",
+  "description": "Premium laser-etched NFT collectibles on wood, acrylic, and metal. Multi-chain support for Ethereum, Polygon, and Solana. Transform your digital NFTs into physical reality.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0b0b0f",
   "theme_color": "#DB2777",
   "orientation": "portrait-primary",
-  "categories": ["lifestyle", "productivity", "business"],
+  "categories": ["lifestyle", "productivity", "business", "shopping", "utilities"],
   "lang": "en",
   "dir": "ltr",
   "scope": "/",
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-narrow.png", 
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Gallery",
+      "short_name": "Gallery",
+      "description": "View your NFT collection and upload custom art",
+      "url": "/gallery",
+      "icons": [
+        {
+          "src": "/etchlogo.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "NFT Drops",
+      "short_name": "Drops",
+      "description": "Browse exclusive NFT drops and collections",
+      "url": "/drops",
+      "icons": [
+        {
+          "src": "/etchlogo.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "My Orders",
+      "short_name": "Orders",
+      "description": "Track your NFT etching orders",
+      "url": "/my-orders",
+      "icons": [
+        {
+          "src": "/etchlogo.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
   "icons": [
     {
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/etchlogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {

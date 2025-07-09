@@ -1,28 +1,73 @@
 User-agent: *
 Allow: /
 
-# Important pages
+# Important pages for SEO
 Allow: /gallery
 Allow: /about
+Allow: /drops
+Allow: /drops/
 Allow: /nft/
 Allow: /pitch
+Allow: /whitepaper
+Allow: /help
+Allow: /glossary
+Allow: /upload
 
 # API endpoints - allow for better discovery
 Allow: /api/nfts/
 Allow: /api/cert/
+Allow: /api/drops
 
 # Admin pages - disallow
 Disallow: /admin/
 Disallow: /api/auth/
 Disallow: /api/order
 Disallow: /api/github
+Disallow: /api/ai-chat
+Disallow: /api/web3-order
+Disallow: /api/upload-art
+Disallow: /api/mint-upload
+Disallow: /api/custom-order
 
-# Generated files
+# User-specific pages
+Disallow: /my-orders
+Disallow: /orders
+Disallow: /checkout
+Disallow: /success
+
+# Generated files and temporary paths
 Disallow: /*.json$
 Disallow: /*.xml$
+Disallow: /dist/
+Disallow: /.astro/
+Disallow: /.wrangler/
+Disallow: /node_modules/
+
+# Development files
+Disallow: /src/
+Disallow: /scripts/
+Disallow: /migrations/
 
 # Sitemap
 Sitemap: https://etchnft.com/sitemap.xml
 
 # Crawl delay (be respectful)
+Crawl-delay: 1
+
+# Google-specific optimizations
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /my-orders
+Disallow: /orders
+Disallow: /checkout
+Crawl-delay: 1
+
+# Bing-specific optimizations
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /my-orders
+Disallow: /orders
+Disallow: /checkout
 Crawl-delay: 1

@@ -1,24 +1,179 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WalletConnect from '../components/WalletConnect.astro';
+import ArtUpload from '../components/react/ArtUpload';
+
+const client: 'only' = 'only';
 ---
 
-<BaseLayout title="NFT Gallery – EtchNFT">
+<BaseLayout 
+  title="NFT Gallery & Art Upload - Transform Your Digital Art into Physical NFTs | EtchNFT"
+  description="Browse your NFT collection or upload custom artwork to create laser-etched physical collectibles. Connect your wallet to view Ethereum, Polygon, and Solana NFTs. Premium laser engraving services."
+  keywords="NFT gallery, upload NFT art, custom NFT etching, digital art to physical, NFT laser engraving, blockchain art gallery, crypto art upload, NFT manufacturing, custom collectibles"
+  url="https://etchnft.com/gallery"
+>
   <section class="hero-gradient min-h-screen px-6 py-12">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-12">
-        <h1 class="text-4xl sm:text-5xl font-bold mb-6 text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.4)] flex items-center justify-center">
-          <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-10 h-10 mr-3" />
-          Your NFT Gallery
+        <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-12 h-12 mx-auto mb-4 animate-neon-pulse" />
+        <h1 class="text-4xl sm:text-5xl font-cyber font-bold mb-6 text-white glitch" data-text="ART GALLERY">
+          <span class="text-neon-pink animate-neon-pulse">ART</span> <span class="text-secondary animate-flicker">GALLERY</span>
         </h1>
         <p class="text-xl text-gray-300 mb-8">
-          Connect your wallet to browse your NFTs and select which ones to etch into reality.
+          Browse your NFTs or upload custom artwork to etch into reality.
         </p>
       </div>
 
-      <div class="glass p-8 rounded-xl">
-        <WalletConnect />
+      <!-- Tab Navigation -->
+      <div class="flex justify-center mb-8">
+        <div class="glass p-2 rounded-lg">
+          <div class="flex gap-2">
+            <button
+              id="nft-tab"
+              class="tab-button active px-6 py-3 rounded-lg font-cyber font-semibold transition-all duration-300"
+            >
+              <i class="fa-solid fa-wallet mr-2"></i>
+              My NFTs
+            </button>
+            <button
+              id="upload-tab"
+              class="tab-button px-6 py-3 rounded-lg font-cyber font-semibold transition-all duration-300"
+            >
+              <i class="fa-solid fa-upload mr-2"></i>
+              Upload Art
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- NFT Gallery Tab -->
+      <div id="nft-content" class="tab-content">
+        <div class="glass p-8 rounded-xl">
+          <WalletConnect />
+        </div>
+      </div>
+
+      <!-- Upload Tab -->
+      <div id="upload-content" class="tab-content hidden">
+        <div id="upload-section">
+          <ArtUpload 
+            client:only={client} 
+            userEmail=""
+          />
+        </div>
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const nftTab = document.getElementById('nft-tab');
+    const uploadTab = document.getElementById('upload-tab');
+    const nftContent = document.getElementById('nft-content');
+    const uploadContent = document.getElementById('upload-content');
+
+    function switchTab(activeTab: HTMLElement, activeContent: HTMLElement, inactiveTab: HTMLElement, inactiveContent: HTMLElement) {
+      // Update tab buttons
+      activeTab.classList.add('active');
+      inactiveTab.classList.remove('active');
+      
+      // Update content visibility
+      activeContent.classList.remove('hidden');
+      inactiveContent.classList.add('hidden');
+    }
+
+    nftTab?.addEventListener('click', () => {
+      switchTab(nftTab, nftContent!, uploadTab!, uploadContent!);
+    });
+
+    uploadTab?.addEventListener('click', () => {
+      switchTab(uploadTab, uploadContent!, nftTab!, nftContent!);
+      initializeUploadTab();
+    });
+
+    function initializeUploadTab() {
+      const uploadSection = document.getElementById('upload-section');
+      if (uploadSection) {
+        // Get user email from localStorage or session
+        const userEmail = localStorage.getItem('userEmail') || '';
+        
+        // If no email, show email input first
+        if (!userEmail) {
+          showEmailInput();
+        } else {
+          // Update the component with user email
+          updateUploadComponent(userEmail);
+        }
+      }
+    }
+
+    function showEmailInput() {
+      const uploadSection = document.getElementById('upload-section');
+      if (uploadSection) {
+        uploadSection.innerHTML = `
+          <div class="glass p-8 rounded-xl">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">
+              <i class="fa-solid fa-envelope mr-2 text-accent"></i>
+              Enter Your Email
+            </h2>
+            <p class="text-gray-400 text-center mb-6">
+              We need your email to save your uploads and send order confirmations.
+            </p>
+            <form id="email-form" class="max-w-md mx-auto">
+              <div class="flex gap-3">
+                <input
+                  type="email"
+                  id="user-email"
+                  placeholder="your@email.com"
+                  class="flex-1 px-4 py-2 rounded-lg bg-zinc-800 text-white border border-zinc-600 focus:border-accent focus:outline-none"
+                  required
+                />
+                <button
+                  type="submit"
+                  class="bg-accent text-black px-6 py-2 rounded-lg font-semibold hover:bg-white transition"
+                >
+                  Continue
+                </button>
+              </div>
+            </form>
+          </div>
+        `;
+
+        const emailForm = document.getElementById('email-form');
+        emailForm?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const emailInput = document.getElementById('user-email') as HTMLInputElement;
+          const email = emailInput.value.trim();
+          
+          if (email) {
+            localStorage.setItem('userEmail', email);
+            updateUploadComponent(email);
+          }
+        });
+      }
+    }
+
+    function updateUploadComponent(email: string) {
+      // This would normally trigger a re-render of the React component
+      // For now, we'll reload the page with the email parameter
+      const url = new URL(window.location.href);
+      url.searchParams.set('email', email);
+      window.location.href = url.toString();
+    }
+  });
+</script>
+
+<style>
+  .tab-button {
+    @apply text-gray-400 hover:text-white;
+  }
+  
+  .tab-button.active {
+    @apply bg-accent text-black;
+  }
+  
+  .tab-button:not(.active):hover {
+    @apply bg-zinc-700;
+  }
+</style>

@@ -4,13 +4,74 @@ const {
   description = 'Turn your NFTs into laser-etched physical collectibles. Premium quality plaques, custom apparel, and displays. Ethereum, Polygon, and Solana supported. Order with crypto or card.',
   image = '/og-image.png',
   url = 'https://etchnft.com',
-  keywords = 'NFT, physical NFT, laser etching, blockchain collectibles, crypto art, digital to physical, NFT marketplace, ethereum NFT, polygon NFT, solana NFT',
+  keywords = 'NFT physical collectibles, laser etched NFT, blockchain art, crypto collectibles, digital to physical NFT, NFT marketplace, ethereum NFT, polygon NFT, solana NFT, NFT laser engraving, custom NFT products, NFT manufacturing',
   type = 'website',
   author = 'EtchNFT',
-  canonical = url
+  canonical = url,
+  publishedTime,
+  modifiedTime,
+  section,
+  tags = [],
+  schemaType = 'WebSite'
 } = Astro.props;
 
 const fullImageUrl = image.startsWith('http') ? image : `${url}${image}`;
+const currentDate = new Date().toISOString();
+
+// Enhanced structured data
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": schemaType,
+  "name": title,
+  "description": description,
+  "url": url,
+  "image": fullImageUrl,
+  "author": {
+    "@type": "Organization",
+    "name": "EtchNFT",
+    "url": "https://etchnft.com"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "EtchNFT",
+    "url": "https://etchnft.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://etchnft.com/etchlogo.png"
+    }
+  },
+  "datePublished": publishedTime || currentDate,
+  "dateModified": modifiedTime || currentDate,
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": url
+  },
+  "keywords": keywords,
+  "inLanguage": "en-US",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://etchnft.com/gallery?search={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  },
+  "sameAs": [
+    "https://twitter.com/EtchNFT",
+    "https://discord.gg/etchnft",
+    "https://github.com/etchnft"
+  ]
+};
+
+// Add article-specific properties if it's an article
+if (schemaType === 'Article') {
+  structuredData["@type"] = "Article";
+  structuredData["articleSection"] = section;
+  structuredData["articleBody"] = description;
+  if (tags.length > 0) {
+    structuredData["keywords"] = tags.join(", ");
+  }
+}
 ---
 
 <!-- Primary Meta Tags -->
@@ -19,9 +80,12 @@ const fullImageUrl = image.startsWith('http') ? image : `${url}${image}`;
 <meta name="description" content={description} />
 <meta name="keywords" content={keywords} />
 <meta name="author" content={author} />
-<meta name="robots" content="index, follow" />
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 <meta name="language" content="EN" />
 <meta name="revisit-after" content="7 days" />
+<meta name="rating" content="general" />
+<meta name="distribution" content="global" />
+<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonical} />
@@ -33,8 +97,14 @@ const fullImageUrl = image.startsWith('http') ? image : `${url}${image}`;
 <meta property="og:description" content={description} />
 <meta property="og:image" content={fullImageUrl} />
 <meta property="og:image:alt" content={title} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 <meta property="og:site_name" content="EtchNFT" />
 <meta property="og:locale" content="en_US" />
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+{section && <meta property="article:section" content={section} />}
+{tags.map((tag) => <meta property="article:tag" content={tag} />)}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -52,8 +122,23 @@ const fullImageUrl = image.startsWith('http') ? image : `${url}${image}`;
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
+<!-- Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" href="/etchlogo.png" />
 <link rel="apple-touch-icon" href="/etchlogo.png" />
 <link rel="manifest" href="/site.webmanifest" />
+
+<!-- Preconnect to external domains for performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="dns-prefetch" href="https://api.simplehash.com" />
+<link rel="dns-prefetch" href="https://commerce.coinbase.com" />
+
+<!-- Security headers -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta http-equiv="X-Frame-Options" content="DENY" />
+<meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />

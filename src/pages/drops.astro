@@ -1,11 +1,67 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getDrops } from '../lib/drops';
+import WalletConnectButton from '../components/react/WalletConnectButton';
 
-const db = Astro.locals.runtime.env.DB as D1Database;
+// Safely get database connection
+let db: D1Database;
+let allDrops: any[] = [];
 
-// Get all public drops (active and upcoming)
-const allDrops = await getDrops(db);
+try {
+  db = Astro.locals.runtime?.env?.DB as D1Database;
+  
+  if (!db) {
+    console.warn('D1 database not available in local development');
+    // Use mock data for development
+    allDrops = [
+      {
+        id: '1',
+        name: 'EtchNFT Genesis Collection',
+        description: 'First collection of laser-etched NFTs featuring popular crypto art.',
+        slug: 'genesis-collection',
+        image_url: '/placeholder-nft.svg',
+        price_usd: 29.99,
+        is_active: true,
+        is_featured: true,
+        launch_date: new Date('2024-01-15'),
+        end_date: null,
+        total_supply: 100,
+        minted_supply: 23,
+        product_type: 'plaque',
+        material: 'wood',
+        dimensions: '6x4 inches',
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        id: '2',
+        name: 'Retro Gaming NFTs',
+        description: 'Classic gaming-inspired NFTs etched on premium materials.',
+        slug: 'retro-gaming',
+        image_url: '/placeholder-nft.svg',
+        price_usd: 19.99,
+        is_active: false,
+        is_featured: false,
+        launch_date: new Date('2024-02-01'),
+        end_date: null,
+        total_supply: 50,
+        minted_supply: 0,
+        product_type: 'keychain',
+        material: 'acrylic',
+        dimensions: '2x2 inches',
+        created_at: new Date(),
+        updated_at: new Date()
+      }
+    ];
+  } else {
+    // Get all public drops (active and upcoming)
+    allDrops = await getDrops(db);
+  }
+} catch (error) {
+  console.error('Error accessing drops database:', error);
+  allDrops = [];
+}
+
 const now = new Date();
 
 const publicDrops = allDrops.filter(drop => {
@@ -23,23 +79,34 @@ const upcomingDrops = publicDrops.filter(drop => {
 });
 ---
 
-<BaseLayout title="NFT Drops - EtchNFT">
+<BaseLayout 
+  title="Exclusive NFT Drops - Limited Edition Laser-Etched Collectibles | EtchNFT"
+  description="Discover exclusive NFT drops featuring limited edition laser-etched collectibles on premium materials. Live drops, upcoming releases, and featured collections. Premium quality guaranteed."
+  keywords="NFT drops, limited edition NFTs, exclusive NFT collectibles, laser etched drops, premium NFT materials, NFT marketplace drops, blockchain collectibles, crypto art drops"
+  url="https://etchnft.com/drops"
+>
   <section class="hero-gradient min-h-screen px-6 py-12">
     <div class="max-w-7xl mx-auto">
       <!-- Hero Section -->
       <div class="text-center mb-16">
+        <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-16 h-16 mx-auto mb-4 animate-neon-pulse" />
         <h1 class="text-5xl sm:text-7xl font-cyber font-bold text-white mb-6 glitch" data-text="NFT DROPS">
-          <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-16 h-16 mx-auto mb-4 animate-neon-pulse" />
-          NFT DROPS
+          <span class="text-neon-pink animate-neon-pulse">NFT</span> <span class="text-secondary animate-flicker">DROPS</span>
         </h1>
         <p class="text-xl sm:text-2xl text-gray-300 leading-relaxed font-retro mb-8 max-w-3xl mx-auto">
           Discover exclusive <span class="text-neon animate-neon-pulse">laser-etched</span> NFT collectibles. 
           Limited editions, premium materials, <span class="text-secondary animate-flicker">physical ownership</span>.
         </p>
-        <div class="flex items-center justify-center gap-2 text-neon-green font-cyber text-sm tracking-wider">
+        <div class="flex items-center justify-center gap-2 text-neon-green font-cyber text-sm tracking-wider mb-6">
           <span class="animate-pulse">●</span>
           <span>LIVE DROPS AVAILABLE</span>
           <span class="animate-pulse">●</span>
+        </div>
+        
+        <!-- Wallet Connection -->
+        <div class="flex flex-col items-center gap-4">
+          <p class="text-gray-400 text-sm">Connect your wallet to participate in drops</p>
+          <WalletConnectButton client:only="react" />
         </div>
       </div>
 
@@ -105,7 +172,7 @@ const upcomingDrops = publicDrops.filter(drop => {
               <div class="card-retro p-6 group hover:scale-105 transition-all duration-300">
                 <div class="aspect-square bg-retro-darker rounded-lg mb-4 overflow-hidden">
                   <img 
-                    src={drop.image_url || '/placeholder-nft.png'} 
+                    src={drop.image_url || '/placeholder-nft.svg'} 
                     alt={drop.name}
                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -150,7 +217,7 @@ const upcomingDrops = publicDrops.filter(drop => {
               <div class="card-retro p-6 group hover:scale-105 transition-all duration-300">
                 <div class="aspect-square bg-retro-darker rounded-lg mb-4 overflow-hidden">
                   <img 
-                    src={drop.image_url || '/placeholder-nft.png'} 
+                    src={drop.image_url || '/placeholder-nft.svg'} 
                     alt={drop.name}
                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -195,7 +262,7 @@ const upcomingDrops = publicDrops.filter(drop => {
               <div class="card-retro p-6 group hover:scale-105 transition-all duration-300">
                 <div class="aspect-square bg-retro-darker rounded-lg mb-4 overflow-hidden">
                   <img 
-                    src={drop.image_url || '/placeholder-nft.png'} 
+                    src={drop.image_url || '/placeholder-nft.svg'} 
                     alt={drop.name}
                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />

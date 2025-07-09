@@ -6,10 +6,11 @@ import PageTransition from '../components/PageTransition.astro';
 import { CartProvider } from '../components/react/CartContext';
 
 const {
-  title = 'EtchNFT – Bring NFTs to Life',
-  description = 'Order laser-etched physical plaques of your NFTs, with crypto or card. Powered by Polygon.',
+  title = 'EtchNFT – Transform Your Digital NFTs into Physical Collectibles',
+  description = 'Premium laser-etched NFT collectibles on wood, acrylic, and metal. Multi-chain support for Ethereum, Polygon, and Solana. Pay with crypto or card. Worldwide shipping available.',
   image = '/og-image.png',
-  url = 'https://etchnft.com'
+  url = 'https://etchnft.com',
+  keywords = 'NFT physical collectibles, laser etched NFT, blockchain art, crypto collectibles, digital to physical NFT, NFT laser engraving, custom NFT products, NFT manufacturing'
 } = Astro.props;
 ---
 
@@ -17,7 +18,7 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <Meta {title} {description} {image} {url} />
+    <Meta {title} {description} {image} {url} {keywords} />
 
     <!-- Global Styles -->
     <link rel="stylesheet" href="/src/styles/global.css" />
@@ -54,9 +55,22 @@ const {
         pointer-events: none;
       }
     </style>
+    
+    <!-- Prevent flash of unstyled content -->
+    <script>
+      // Initialize theme immediately to prevent flash
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
   </head>
 
-  <body class="hero-gradient text-white transition-colors duration-300 fade-in-up min-h-screen">
+  <body class="hero-gradient transition-colors duration-300 fade-in-up min-h-screen">
     <div class="retro-grid"></div>
     <CartProvider client:only="react">
       <Nav />
@@ -66,26 +80,10 @@ const {
       </main>
 
       <Footer />
+      
+      <!-- Global Help Center Widget -->
+      <div id="help-widget-container"></div>
     </CartProvider>
 
-    <script>
-      const toggle = document.getElementById('theme-toggle');
-      toggle?.addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-        localStorage.setItem(
-          'theme',
-          document.documentElement.classList.contains('dark') ? 'dark' : 'light'
-        );
-      });
-
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    </script>
   </body>
 </html>
