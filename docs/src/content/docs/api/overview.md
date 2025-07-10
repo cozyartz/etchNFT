@@ -75,7 +75,7 @@ Fetch metadata for a specific NFT including image, attributes, and ownership ver
 POST /api/order
 ```
 
-Create a new order for physical NFT collectibles.
+Create a new order for physical NFT collectibles with smart contract escrow support.
 
 **Request Body:**
 ```json
@@ -100,7 +100,13 @@ Create a new order for physical NFT collectibles.
     "zip": "12345",
     "country": "US"
   },
-  "paymentMethod": "card"
+  "paymentMethod": "card",
+  "web3Options": {
+    "walletAddress": "0x...",
+    "chainId": 1,
+    "useEscrow": true,
+    "signature": "0x..."
+  }
 }
 ```
 
@@ -144,7 +150,83 @@ Get the current status and details of an order.
       "status": "processing",
       "timestamp": "2024-01-11T14:30:00Z"
     }
-  ]
+  ],
+  "web3Details": {
+    "escrowContractAddress": "0x...",
+    "transactionHash": "0x...",
+    "chainId": 1,
+    "escrowStatus": "active"
+  }
+}
+```
+
+#### Cancel Order
+```http
+POST /api/orders/cancel
+```
+
+Cancel an order with automatic refund processing. Orders can be cancelled within 24 hours or after 30 days for emergency refunds.
+
+**Request Body:**
+```json
+{
+  "orderId": "order_abc123",
+  "reason": "Changed mind",
+  "walletAddress": "0x...",
+  "signature": "0x..."
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Order cancelled successfully",
+  "orderId": "order_abc123",
+  "refundDetails": {
+    "type": "blockchain",
+    "transactionHash": "0x...",
+    "amount": 49.99,
+    "method": "cancel_order"
+  },
+  "estimatedRefundTime": "15-30 minutes (depending on network congestion)"
+}
+```
+
+### Smart Contract Integration
+
+#### Create Web3 Order
+```http
+POST /api/web3-order
+```
+
+Create an order with smart contract escrow protection.
+
+**Request Body:**
+```json
+{
+  "items": [...],
+  "walletAddress": "0x...",
+  "chainId": 1,
+  "signature": "0x...",
+  "escrowAmount": "0.05"
+}
+```
+
+#### Process Refund (Admin)
+```http
+POST /api/orders/refund
+```
+
+Admin endpoint for processing refunds with admin API key authentication.
+
+**Request Body:**
+```json
+{
+  "orderId": "order_abc123",
+  "reason": "Quality issue",
+  "refundAmount": 49.99,
+  "adminKey": "your_admin_api_key"
 }
 ```
 
@@ -155,7 +237,7 @@ Get the current status and details of an order.
 GET /api/cert/{orderId}
 ```
 
-Generate and retrieve a certificate of authenticity for completed orders.
+Generate and retrieve a certificate of authenticity for completed orders with blockchain verification.
 
 **Response:**
 ```json
@@ -171,7 +253,9 @@ Generate and retrieve a certificate of authenticity for completed orders.
   "authenticity": {
     "verified": true,
     "timestamp": "2024-01-15T12:00:00Z",
-    "blockNumber": 18500000
+    "blockNumber": 18500000,
+    "escrowContract": "0x...",
+    "verificationHash": "0x..."
   },
   "certificate": {
     "url": "https://etchnft.com/cert/cert_xyz789",
@@ -205,6 +289,10 @@ All API endpoints return consistent error responses:
 - `INVALID_NFT` (400): NFT validation failed
 - `PAYMENT_FAILED` (402): Payment processing error
 - `RATE_LIMITED` (429): Too many requests
+- `ESCROW_FAILED` (422): Smart contract escrow error
+- `REFUND_FAILED` (500): Refund processing error
+- `SIGNATURE_INVALID` (400): Invalid wallet signature
+- `CHAIN_NOT_SUPPORTED` (400): Unsupported blockchain network
 
 ## Rate Limiting
 
@@ -263,8 +351,23 @@ nft = client.nfts.get(
 
 ## Webhooks
 
-EtchNFT can send webhooks for order status updates:
+EtchNFT supports webhooks for Square and Coinbase Commerce payment confirmations:
 
+### Square Webhooks
+```http
+POST /api/webhooks/square
+```
+
+Receives Square payment notifications with signature verification.
+
+### Coinbase Commerce Webhooks
+```http
+POST /api/webhooks/coinbase
+```
+
+Receives cryptocurrency payment confirmations with HMAC verification.
+
+### Order Status Updates
 ```json
 {
   "event": "order.status_changed",
@@ -272,7 +375,11 @@ EtchNFT can send webhooks for order status updates:
     "orderId": "order_abc123",
     "status": "shipped",
     "previousStatus": "processing",
-    "timestamp": "2024-01-15T12:00:00Z"
+    "timestamp": "2024-01-15T12:00:00Z",
+    "web3Details": {
+      "escrowReleased": true,
+      "transactionHash": "0x..."
+    }
   }
 }
 ```

@@ -53,12 +53,22 @@ graph TB
 **Cloudflare Workers**
 - Serverless edge computing for global performance
 - API endpoints for NFT data, orders, and authentication
+- Smart contract integration and Web3 transaction handling
+- Payment webhook processing for Square and Coinbase
 - Automatic scaling and minimal cold starts
 
 **D1 Database**
 - Serverless SQLite database with global replication
 - ACID transactions for order consistency
+- Smart contract escrow tracking and order management
+- RBAC system with role-based permissions
 - Automated backups and point-in-time recovery
+
+**Smart Contract Layer**
+- Solidity contracts deployed on multiple networks
+- Escrow functionality for secure payments
+- Admin controls for emergency refunds
+- Multi-chain deployment support (Ethereum, Polygon, Base, Optimism)
 
 ### Authentication & Security
 
@@ -97,21 +107,33 @@ graph TB
    - User selects NFTs and customization options
    - Order data is validated and stored in D1
    - Inventory and pricing checks are performed
+   - Smart contract escrow initiated for Web3 payments
 
 2. **Payment Processing**
    - Square handles traditional payments (cards, Apple Pay)
    - Coinbase Commerce processes cryptocurrency payments
+   - Smart contract escrow locks funds for Web3 orders
+   - Payment webhooks confirm transaction completion
    - Payment confirmation triggers order fulfillment
 
 3. **Fulfillment**
    - Order details are sent to fulfillment system
    - Laser etching specifications are generated
+   - Quality control and production tracking
+   - Smart contract escrow released upon completion
    - Shipping labels and tracking are created
 
 4. **Notifications**
    - Email confirmations via Resend
    - SMS updates for shipping milestones
+   - Blockchain transaction confirmations
    - Push notifications for mobile app users
+
+5. **Order Management**
+   - 24-hour cancellation window with automatic refunds
+   - Emergency refund capability after 30 days
+   - Admin refund system with audit trails
+   - Certificate of authenticity generation
 
 ## Technology Choices
 
@@ -181,16 +203,28 @@ graph TB
 - TLS 1.3 encryption for all traffic
 - Content Security Policy (CSP) headers
 - Secure cookie configuration with SameSite
+- No private key storage (non-custodial design)
+- Webhook signature verification (Square, Coinbase)
 
 ### Access Control
-- Role-based permissions for admin functions
-- API authentication with JWT tokens
+- Role-based access control (RBAC) system
+- GitHub OAuth for admin authentication
+- API authentication with secure session tokens
+- Admin API key protection for sensitive operations
 - Rate limiting to prevent abuse
+
+### Smart Contract Security
+- Multi-chain deployment with consistent security
+- Escrow protection for customer funds
+- Admin emergency controls with timelock mechanisms
+- Signature verification for wallet interactions
+- Reentrancy guards and overflow protection
 
 ### Compliance
 - GDPR compliance for EU users
 - PCI DSS compliance for payment processing
 - SOC 2 compliance for enterprise customers
+- Legal document templates (ToS, Privacy Policy, Purchase Agreement)
 
 ## Future Architecture Plans
 
@@ -210,5 +244,8 @@ graph TB
 - Dynamic NFT support
 - Cross-chain NFT bridging
 - AI-powered etching optimization
+- Custom NFT minting and upload system
+- Farcaster Frame integration
+- Compressed NFT support (Solana)
 
 This architecture provides a solid foundation for EtchNFT's current needs while maintaining flexibility for future growth and feature development.

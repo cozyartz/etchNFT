@@ -99,8 +99,16 @@ EtchNFT solves these fundamental problems by creating a comprehensive platform t
 - **SVG Certificates**: Scalable vector graphics for high-quality printing
 - **Unique Identifiers**: Each physical item tied to specific blockchain transaction
 
-#### 5. Order Management System
+#### 5. Smart Contract Escrow System
+- **Blockchain Security**: Customer funds held in smart contract escrow
+- **Multi-Chain Support**: Deployed on Ethereum, Polygon, Base, and Optimism
+- **Admin Controls**: Emergency refund capabilities with proper authorization
+- **Transparency**: All transactions verifiable on-chain with immutable audit trail
+
+#### 6. Advanced Order Management
 - **Real-Time Tracking**: Order status updates from creation to delivery
+- **Automated Refunds**: 24-hour cancellation window with instant blockchain refunds
+- **Emergency Procedures**: 30-day emergency refund capability for exceptional cases
 - **Global Shipping**: Worldwide delivery with insurance and tracking
 - **Customer Portal**: Account management and order history
 - **Email Notifications**: Automated updates throughout fulfillment process
@@ -177,6 +185,8 @@ EtchNFT's architecture prioritizes scalability, security, and user experience th
 - **Wagmi 2.15.6**: React hooks for Ethereum interactions
 - **Viem 2.29.4**: TypeScript interface for Ethereum
 - **Solana Web3.js**: Solana blockchain connectivity
+- **Smart Contracts**: Solidity-based escrow system with multi-chain deployment
+- **Ethers.js 6.14.1**: Ethereum library for smart contract interactions
 
 #### User Experience
 - **Framer Motion**: Smooth animations and transitions
@@ -193,17 +203,18 @@ EtchNFT's architecture prioritizes scalability, security, and user experience th
 
 #### Database Schema
 ```sql
--- Users table for authentication
+-- Users table with RBAC support
 CREATE TABLE users (
   id TEXT PRIMARY KEY,
   github_id INTEGER UNIQUE,
   username TEXT NOT NULL,
   email TEXT,
   avatar_url TEXT,
+  role TEXT DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Orders table for NFT etching requests
+-- Enhanced orders table with Web3 support
 CREATE TABLE orders (
   id TEXT PRIMARY KEY,
   wallet_address TEXT,
@@ -226,8 +237,46 @@ CREATE TABLE orders (
   status TEXT DEFAULT 'pending',
   email_sent BOOLEAN DEFAULT FALSE,
   notes TEXT,
+  -- Web3 specific fields
+  chain_id INTEGER,
+  web3_signature TEXT,
+  escrow_contract TEXT,
+  escrow_tx_hash TEXT,
+  refund_tx_hash TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Order cancellations audit table
+CREATE TABLE order_cancellations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  order_id TEXT NOT NULL,
+  wallet_address TEXT,
+  reason TEXT,
+  refund_details TEXT,
+  cancelled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  cancellation_type TEXT DEFAULT 'standard'
+);
+
+-- Admin refunds audit table
+CREATE TABLE admin_refunds (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  order_id TEXT NOT NULL,
+  refund_amount REAL NOT NULL,
+  reason TEXT,
+  refund_details TEXT,
+  processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  processed_by TEXT
+);
+
+-- User roles and permissions
+CREATE TABLE user_roles (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT NOT NULL,
+  role TEXT NOT NULL,
+  granted_by TEXT,
+  granted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Subscribers table for email marketing
@@ -249,18 +298,24 @@ CREATE TABLE sessions (
 ### API Architecture
 
 #### RESTful Endpoints
-- **NFT Discovery**: `/api/nfts/[address]` - Fetch NFT metadata
+- **NFT Discovery**: `/api/nfts/[address]` - Fetch NFT metadata via Alchemy
 - **Order Processing**: `/api/order` - Create new etching orders
+- **Web3 Orders**: `/api/web3-order` - Smart contract escrow orders
 - **Payment Integration**: `/api/crypto-checkout` - Handle cryptocurrency payments
+- **Order Management**: `/api/orders/cancel` - Customer order cancellation
+- **Admin Refunds**: `/api/orders/refund` - Administrative refund processing
+- **Payment Webhooks**: `/api/webhooks/square`, `/api/webhooks/coinbase` - Payment confirmations
 - **Authentication**: `/api/auth/login/github` - GitHub OAuth flow
+- **User Management**: `/api/admin/users` - RBAC user administration
+- **Custom Uploads**: `/api/upload-art`, `/api/mint-upload` - Custom NFT creation
 - **Certificates**: `/api/cert/[id]` - Generate authenticity certificates
 
 #### External Integrations
-- **SimpleHash API**: NFT metadata and ownership verification
-- **Coinbase Commerce**: Cryptocurrency payment processing
-- **Square API**: Traditional payment processing
+- **Alchemy SDK 3.6.1**: Multi-chain NFT data and metadata
+- **Coinbase Commerce**: Cryptocurrency payment processing with webhooks
+- **Square API**: Traditional payment processing with webhook confirmations
 - **Resend**: Transactional email delivery
-- **GitHub OAuth**: Admin authentication
+- **GitHub OAuth**: Admin authentication and RBAC system
 
 ### Security Architecture
 
@@ -268,13 +323,18 @@ CREATE TABLE sessions (
 - **Read-Only Access**: NFT browsing without private key exposure
 - **Zero Key Storage**: No private key storage or management
 - **Blockchain Verification**: Real-time ownership confirmation
+- **Smart Contract Escrow**: Customer funds protected in blockchain escrow
 - **Secure Sessions**: Lucia-based authentication with expiration
+- **Signature Verification**: Wallet signatures for order authorization
 
 #### Data Protection
 - **PCI DSS Compliance**: Secure payment processing
 - **HTTPS Everywhere**: End-to-end encryption
 - **Input Validation**: Comprehensive sanitization and validation
-- **Rate Limiting**: API abuse prevention
+- **Rate Limiting**: API abuse prevention with Redis backend
+- **Webhook Security**: HMAC signature verification for all payment webhooks
+- **RBAC Security**: Role-based access control for administrative functions
+- **Smart Contract Security**: Audited Solidity contracts with reentrancy protection
 
 ### Performance Optimization
 
@@ -459,13 +519,17 @@ EtchNFT operates on a transaction-based revenue model with multiple revenue stre
 - ✅ Cloudflare Workers deployment
 - ✅ Comprehensive documentation
 
-### Phase 2: Enhanced Features (Q2 2025)
+### Phase 2: Enhanced Features (Q2 2025) ✅
+- ✅ Smart contract escrow system with multi-chain deployment
+- ✅ Automated refund processing with 24-hour cancellation window
+- ✅ Payment webhook integration for Square and Coinbase Commerce
+- ✅ RBAC user management system with GitHub OAuth
+- ✅ Custom NFT upload and minting capabilities
+- ✅ Admin audit trails and refund management
 - 🔄 Compressed NFT support (Solana cNFTs)
 - 🔄 Farcaster Frame integration
 - 🔄 QR-linked artifact registry
 - 🔄 AI-powered etching optimization
-- 🔄 Mobile-responsive improvements
-- 🔄 Advanced analytics dashboard
 
 ### Phase 3: Market Expansion (Q3 2025)
 - 📋 Additional blockchain networks (Polygon, Arbitrum, Optimism)
