@@ -17,7 +17,7 @@ const orders = await db.prepare(`
     updated_at,
     wallet_address,
     email,
-    total_amount
+    price_usd
   FROM orders
   ORDER BY created_at DESC
 `).all();
@@ -30,7 +30,7 @@ const stats = await db.prepare(`
     SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing_orders,
     SUM(CASE WHEN status = 'etched' THEN 1 ELSE 0 END) as completed_orders,
     SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled_orders,
-    SUM(total_amount) as total_revenue
+    SUM(price_usd) as total_revenue
   FROM orders
 `).first();
 
@@ -70,7 +70,7 @@ const recentActivity = await db.prepare(`
             </div>
             <a 
               href="/api/auth/logout"
-              class="px-4 py-2 text-sm border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 rounded-lg font-cyber"
+              class="px-4 py-2 text-sm border border-red-500 text-red-500 rounded-lg font-cyber"
             >
               Logout
             </a>
@@ -127,7 +127,7 @@ const recentActivity = await db.prepare(`
             </thead>
             <tbody>
               {orders.results.map(order => (
-                <tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition">
+                <tr class="border-b border-zinc-800">
                   <td class="py-3 pr-4 font-mono text-gray-400">#{order.id}</td>
                   <td class="py-3 pr-4">
                     <div class="text-white font-medium">{order.full_name}</div>
@@ -144,7 +144,7 @@ const recentActivity = await db.prepare(`
                       {order.status}
                     </span>
                   </td>
-                  <td class="py-3 pr-4 text-gray-300">${order.total_amount}</td>
+                  <td class="py-3 pr-4 text-gray-300">${order.price_usd}</td>
                   <td class="py-3 pr-4 text-gray-400 text-xs">
                     {new Date(order.created_at).toLocaleDateString()}
                   </td>
@@ -153,12 +153,12 @@ const recentActivity = await db.prepare(`
                       {order.status !== 'etched' && (
                         <form action="/admin/mark-etched" method="POST" class="inline">
                           <input type="hidden" name="id" value={order.id} />
-                          <button class="text-xs px-3 py-1 bg-primary text-black rounded-full font-semibold hover:bg-primary/80 transition-colors">
+                          <button class="text-xs px-3 py-1 bg-primary text-black rounded-full font-semibold">
                             Mark Etched
                           </button>
                         </form>
                       )}
-                      <button class="text-xs px-3 py-1 bg-secondary text-black rounded-full font-semibold hover:bg-secondary/80 transition-colors">
+                      <button class="text-xs px-3 py-1 bg-secondary text-black rounded-full font-semibold">
                         View
                       </button>
                     </div>
@@ -175,15 +175,19 @@ const recentActivity = await db.prepare(`
         <div class="card-retro p-6">
           <h3 class="text-xl font-cyber font-bold text-white mb-4">Quick Actions</h3>
           <div class="space-y-3">
-            <a href="/admin/drops" class="block p-3 bg-primary/10 border border-primary/30 rounded-lg hover:bg-primary/20 transition-colors">
+            <a href="/admin/drops" class="block p-3 bg-primary/10 border border-primary/30 rounded-lg">
               <div class="text-primary font-semibold">Manage Drops</div>
               <div class="text-gray-400 text-sm">Create and manage NFT drops</div>
             </a>
-            <a href="/admin/subscribers" class="block p-3 bg-secondary/10 border border-secondary/30 rounded-lg hover:bg-secondary/20 transition-colors">
+            <a href="/admin/users" class="block p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+              <div class="text-blue-400 font-semibold">User Management</div>
+              <div class="text-gray-400 text-sm">Manage users, roles, and permissions</div>
+            </a>
+            <a href="/admin/subscribers" class="block p-3 bg-secondary/10 border border-secondary/30 rounded-lg">
               <div class="text-secondary font-semibold">Manage Subscribers</div>
               <div class="text-gray-400 text-sm">View and export email subscribers</div>
             </a>
-            <a href="/admin/orders" class="block p-3 bg-neon-green/10 border border-neon-green/30 rounded-lg hover:bg-neon-green/20 transition-colors">
+            <a href="/admin/orders" class="block p-3 bg-neon-green/10 border border-neon-green/30 rounded-lg">
               <div class="text-neon-green font-semibold">All Orders</div>
               <div class="text-gray-400 text-sm">View complete order history</div>
             </a>

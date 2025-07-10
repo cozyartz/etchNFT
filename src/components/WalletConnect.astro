@@ -15,10 +15,35 @@ const client: 'only' = 'only';
     const wrapper = document.getElementById('nft-gallery-wrapper');
     if (!wrapper) return;
 
-    wrapper.innerHTML = '<p class="text-gray-400 text-center">Loading your NFTs…</p>';
+    // Show enhanced loading state
+    wrapper.innerHTML = `
+      <div class="flex flex-col items-center justify-center py-12">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white mb-4"></div>
+        <p class="text-gray-400">Connected! Loading your NFTs...</p>
+      </div>
+    `;
     
-    const res = await fetch(`/components/NFTGallery?address=${address}`);
-    const html = await res.text();
-    wrapper.innerHTML = html;
+    try {
+      const res = await fetch(`/components/NFTGallery?address=${address}`);
+      if (!res.ok) {
+        throw new Error(`Failed to load NFTs: ${res.status}`);
+      }
+      const html = await res.text();
+      wrapper.innerHTML = html;
+    } catch (error) {
+      wrapper.innerHTML = `
+        <div class="text-center py-12">
+          <div class="bg-red-900/20 border border-red-500 rounded-lg p-6 max-w-md mx-auto">
+            <p class="text-red-400 mb-4">Failed to load NFTs. Please try again.</p>
+            <button 
+              onclick="window.location.reload()" 
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      `;
+    }
   });
 </script>

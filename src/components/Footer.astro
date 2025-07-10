@@ -34,6 +34,12 @@ const client: 'only' = 'only';
           <a href="/EtchNFT-WhitePaper.md" download="EtchNFT-WhitePaper.md" class="footer-link">
             <FooterDownloadIcon client:only={client} />Download PDF
           </a>
+          <a href="/glossary" class="footer-link">
+            <FooterBookIcon client:only={client} />Glossary
+          </a>
+          <a href="/help" class="footer-link">
+            <FooterBookIcon client:only={client} />Help Center
+          </a>
           <a href="https://docs.etchnft.com" class="footer-link">
             <FooterBookIcon client:only={client} />Documentation
           </a>
@@ -90,7 +96,7 @@ const client: 'only' = 'only';
 
 <style>
   .footer-link {
-    @apply text-gray-400 hover:text-primary transition-all duration-300;
+    @apply text-gray-400 hover:text-white transition-all duration-300;
     @apply relative inline-block;
     @apply hover:scale-105 hover:drop-shadow-[0_0_8px_rgba(255,20,147,0.5)];
     @apply font-cyber text-sm tracking-wider;

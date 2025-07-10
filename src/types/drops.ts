@@ -7,36 +7,36 @@ export interface Drop {
   name: string;
   description?: string;
   creator_id: string;
-  
+
   // Metadata
   image_url?: string;
   banner_url?: string;
   collection_size: number;
-  
+
   // Pricing
   price_usd: number;
   currency: string;
-  
+
   // Launch Configuration
   launch_date?: Date;
   end_date?: Date;
   is_active: boolean;
   is_featured: boolean;
-  
+
   // Supply Management
   total_supply: number;
   minted_supply: number;
   max_per_user: number;
-  
+
   // Product Configuration
   product_type: string;
   material: string;
   dimensions: string;
-  
+
   // SEO and Marketing
   slug: string;
   tags?: string[];
-  
+
   created_at: Date;
   updated_at: Date;
 }
@@ -44,31 +44,31 @@ export interface Drop {
 export interface DropItem {
   id: string;
   drop_id: string;
-  
+
   // Item Details
   name: string;
   description?: string;
   token_id: string;
-  
+
   // Artwork
   original_image_url: string;
   thumbnail_url?: string;
   preview_url?: string;
-  
+
   // Laser Processing
   laser_file_url?: string;
-  laser_file_status: 'pending' | 'processing' | 'ready' | 'failed';
+  laser_file_status: "pending" | "processing" | "ready" | "failed";
   processing_notes?: string;
-  
+
   // Metadata
   attributes?: Record<string, any>;
   rarity_rank?: number;
-  
+
   // Availability
   is_available: boolean;
   is_sold: boolean;
   reserved_until?: Date;
-  
+
   created_at: Date;
   updated_at: Date;
 }
@@ -78,36 +78,41 @@ export interface DropPurchase {
   user_id?: string;
   drop_id: string;
   drop_item_id: string;
-  
+
   // Purchase Details
   quantity: number;
   unit_price_usd: number;
   total_price_usd: number;
-  
+
   // Payment Information
   payment_method: string;
   payment_provider?: string;
   payment_tx_id?: string;
-  payment_status: 'pending' | 'completed' | 'failed' | 'refunded';
-  
+  payment_status: "pending" | "completed" | "failed" | "refunded";
+
   // Customer Information
   customer_email: string;
   customer_name: string;
-  
+
   // Shipping Information
   shipping_address_line?: string;
   shipping_city?: string;
   shipping_country?: string;
   shipping_postal_code?: string;
-  
+
   // Order Processing
-  order_status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  order_status:
+    | "pending"
+    | "processing"
+    | "shipped"
+    | "delivered"
+    | "cancelled";
   tracking_number?: string;
-  
+
   // Fulfillment
   laser_file_used?: string;
   production_notes?: string;
-  
+
   created_at: Date;
   updated_at: Date;
 }
@@ -117,30 +122,30 @@ export interface DesignTemplate {
   name: string;
   description?: string;
   category: string;
-  
+
   // Template Files
   template_svg: string;
   preview_image_url?: string;
-  
+
   // Configuration
   dimensions: string;
   material: string;
-  
+
   // Positioning
-  image_position: 'center' | 'top' | 'bottom' | 'left' | 'right';
+  image_position: "center" | "top" | "bottom" | "left" | "right";
   image_max_width: number;
   image_max_height: number;
-  
+
   // Customization Options
   supports_text: boolean;
   max_text_lines: number;
   text_font: string;
   text_size: number;
-  
+
   // Metadata
   is_active: boolean;
   sort_order: number;
-  
+
   created_at: Date;
   updated_at: Date;
 }
@@ -149,33 +154,33 @@ export interface LaserFile {
   id: string;
   drop_item_id?: string;
   template_id?: string;
-  
+
   // File Information
   original_file_url: string;
   processed_file_url: string;
   file_format: string;
   file_size?: number;
-  
+
   // Processing Information
-  processing_status: 'pending' | 'processing' | 'completed' | 'failed';
+  processing_status: "pending" | "processing" | "completed" | "failed";
   processing_algorithm?: string;
   processing_time_ms?: number;
   processing_notes?: string;
-  
+
   // Quality Metrics
   contrast_score?: number;
   detail_score?: number;
-  engraving_quality?: 'excellent' | 'good' | 'fair' | 'poor';
-  
+  engraving_quality?: "excellent" | "good" | "fair" | "poor";
+
   // Laser Settings
   recommended_power: number;
   recommended_speed: number;
   recommended_passes: number;
-  
+
   // Usage Tracking
   times_used: number;
   last_used_at?: Date;
-  
+
   created_at: Date;
   updated_at: Date;
 }
@@ -281,11 +286,21 @@ export interface AdminDropFormProps {
 // Utility Types
 // ===========================================
 
-export type DropStatus = 'upcoming' | 'live' | 'ended';
-export type ProductType = 'plaque' | 'keychain' | 'coaster' | 'pendant' | 'bookmark';
-export type MaterialType = 'wood' | 'acrylic' | 'metal' | 'leather' | 'bamboo';
-export type LaserFileStatus = 'pending' | 'processing' | 'ready' | 'failed';
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type DropStatus = "upcoming" | "live" | "ended";
+export type ProductType =
+  | "plaque"
+  | "keychain"
+  | "coaster"
+  | "pendant"
+  | "bookmark";
+export type MaterialType = "wood" | "acrylic" | "metal" | "leather" | "bamboo";
+export type LaserFileStatus = "pending" | "processing" | "ready" | "failed";
+export type OrderStatus =
+  | "pending"
+  | "processing"
+  | "shipped"
+  | "delivered"
+  | "cancelled";
 
 export interface DropFilters {
   status?: DropStatus;

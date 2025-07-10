@@ -15,33 +15,52 @@ let nft = null;
 let error = null;
 
 try {
-  // Fetch NFT details from SimpleHash API
-  const url = `https://api.simplehash.com/api/v0/nfts/ethereum/${contractAddress}/${tokenId}`;
-  const res = await fetch(url, {
-    headers: {
-      'X-API-KEY': import.meta.env.SIMPLEHASH_API_KEY || ''
-    }
-  });
+  // Import Alchemy SDK for server-side usage
+  const { Alchemy, Network } = await import('alchemy-sdk');
+  
+  // Determine the chain network - try different chains if needed
+  const chains = [
+    { name: 'ethereum', network: Network.ETH_MAINNET },
+    { name: 'polygon', network: Network.MATIC_MAINNET },
+    { name: 'base', network: Network.BASE_MAINNET }
+  ];
+  
+  for (const chain of chains) {
+    try {
+      const alchemy = new Alchemy({
+        apiKey: import.meta.env.ALCHEMY_API_KEY,
+        network: chain.network,
+      });
 
-  if (res.ok) {
-    const data = await res.json();
-    nft = {
-      name: data.name || `${data.collection?.name} #${tokenId}`,
-      collection_name: data.collection?.name || 'Unknown Collection',
-      image_url: data.image_url || data.previews?.image_large_url,
-      token_id: tokenId,
-      contract_address: contractAddress,
-      description: data.description || '',
-      traits: data.extra_metadata?.attributes || [],
-      owner: data.owners?.[0]?.owner_address || '',
-      chain: data.chain || 'ethereum',
-      external_url: data.external_url,
-      animation_url: data.animation_url,
-      rarity_rank: data.rarity?.rank,
-      floor_price: data.collection?.floor_prices?.[0]?.value
-    };
-  } else {
-    error = 'NFT not found';
+      // Get NFT metadata
+      const metadata = await alchemy.nft.getNftMetadata(contractAddress, tokenId);
+      
+      if (metadata) {
+        nft = {
+          name: metadata.name || `${metadata.contract?.name || 'Unknown'} #${tokenId}`,
+          collection_name: metadata.contract?.name || 'Unknown Collection',
+          image_url: metadata.image?.originalUrl || metadata.image?.cachedUrl || metadata.image?.thumbnailUrl,
+          token_id: tokenId,
+          contract_address: contractAddress,
+          description: metadata.description || '',
+          traits: metadata.rawMetadata?.attributes || [],
+          owner: '', // Will be fetched separately if needed
+          chain: chain.name,
+          external_url: metadata.rawMetadata?.external_url,
+          animation_url: metadata.rawMetadata?.animation_url,
+          rarity_rank: null, // Alchemy doesn't provide rarity rank directly
+          floor_price: null // Floor price would need separate API call
+        };
+        break; // Found the NFT, exit the loop
+      }
+    } catch (chainError) {
+      // Continue to next chain if NFT not found on this one
+      console.log(`NFT not found on ${chain.name}:`, chainError.message);
+    }
+  }
+  
+  if (!nft) {
+    error = 'NFT not found on any supported chain';
   }
 } catch (err) {
   console.error('Error fetching NFT:', err);

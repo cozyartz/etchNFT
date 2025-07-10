@@ -1,5 +1,5 @@
 'use client';
-import { PenTool, Images, ListChecks, FileText, InfoIcon, Shield, Sun, Menu } from 'lucide-react';
+import { PenTool, Images, ListChecks, FileText, InfoIcon, Shield, Sun, Moon, Menu } from 'lucide-react';
 
 export function LogoIcon() {
   return <PenTool className="text-2xl text-primary animate-neon-pulse" size={24} />;
@@ -26,7 +26,12 @@ export function AdminIcon() {
 }
 
 export function ThemeToggleIcon() {
-  return <Sun className="text-secondary group-hover:animate-spin transition-all duration-300" size={20} />;
+  // Check if dark mode is active
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+  
+  return isDark ? 
+    <Sun className="text-secondary transition-all duration-300" size={20} /> : 
+    <Moon className="text-secondary transition-all duration-300" size={20} />;
 }
 
 export function MobileMenuIcon() {

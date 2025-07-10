@@ -1,0 +1,494 @@
+---
+import Layout from '../layouts/BaseLayout.astro';
+import { SearchIcon, BookOpenIcon, FilterIcon } from '../components/react/GlossaryIcons';
+
+const title = 'Crypto & Web3 Glossary - EtchNFT';
+const description = 'Complete guide to cryptocurrency, blockchain, and web3 terms. Easy explanations for beginners entering the world of NFTs and digital collectibles.';
+const keywords = 'crypto glossary, web3 terms, blockchain dictionary, NFT definitions, cryptocurrency guide, DeFi explained, EtchNFT help';
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-6xl mx-auto">
+    <!-- Hero Section -->
+    <section class="text-center py-16 mb-12">
+      <div class="glass-strong p-12 scan-lines">
+        <img src="/etchlogo.png" alt="EtchNFT Logo" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 animate-neon-pulse" />
+        <div class="relative mb-8">
+          <h1 class="text-5xl sm:text-7xl font-cyber font-bold text-white glitch" data-text="GLOSSARY">
+            GLOSSARY
+          </h1>
+          <div class="absolute inset-0 bg-primary/10 blur-3xl animate-pulse"></div>
+        </div>
+        <p class="text-xl sm:text-2xl text-gray-300 leading-relaxed font-retro mb-8">
+          Your complete guide to <span class="text-neon animate-neon-pulse">crypto</span> and 
+          <span class="text-secondary animate-flicker">web3</span> terminology
+        </p>
+        <div class="flex items-center justify-center gap-2 text-neon-green font-cyber text-sm tracking-wider">
+          <span class="animate-pulse">●</span>
+          <span>KNOWLEDGE BASE ONLINE</span>
+          <span class="animate-pulse">●</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <section class="mb-12">
+      <div class="card-retro p-8">
+        <div class="flex flex-col lg:flex-row gap-6 items-center">
+          <div class="flex-1 w-full">
+            <div class="relative">
+              <input 
+                type="text" 
+                id="searchInput"
+                placeholder="Search terms... (e.g., 'NFT', 'blockchain', 'wallet')"
+                class="w-full px-6 py-4 pl-14 bg-retro-dark border-2 border-primary/30 rounded-lg text-white placeholder-gray-400 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/50 font-cyber tracking-wider"
+              />
+              <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary">
+                <SearchIcon />
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <select id="categoryFilter" class="px-4 py-3 bg-retro-dark border-2 border-secondary/30 rounded-lg text-white focus:border-neon-green focus:outline-none font-cyber">
+              <option value="all">All Categories</option>
+              <option value="basic">Basic Terms</option>
+              <option value="blockchain">Blockchain</option>
+              <option value="crypto">Cryptocurrency</option>
+              <option value="nft">NFTs</option>
+              <option value="defi">DeFi</option>
+              <option value="trading">Trading</option>
+              <option value="technical">Technical</option>
+              <option value="etchnft">EtchNFT</option>
+            </select>
+            <button id="clearButton" class="btn-ghost px-6 py-3 text-sm font-cyber">
+              <FilterIcon />
+              CLEAR
+            </button>
+          </div>
+        </div>
+        <div class="mt-6">
+          <div id="searchStats" class="text-sm text-gray-400 font-cyber tracking-wider">
+            <span class="animate-pulse">●</span> <span id="resultCount">0</span> terms found
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Glossary Terms -->
+    <section id="glossaryTerms" class="space-y-6">
+      <!-- Terms will be populated by JavaScript -->
+    </section>
+
+    <!-- No Results Message -->
+    <div id="noResults" class="hidden text-center py-12">
+      <div class="glass-strong p-8 scan-lines">
+        <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <SearchIcon />
+        </div>
+        <h3 class="text-2xl font-cyber font-bold text-primary mb-4 tracking-wider">NO RESULTS FOUND</h3>
+        <p class="text-gray-400 mb-6 font-retro">
+          Try adjusting your search terms or browse all categories
+        </p>
+        <button id="showAllButton" class="btn-cyber group">
+          <BookOpenIcon />
+          <span>SHOW ALL TERMS</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Glossary data
+    const glossaryData = [
+      {
+        term: "Blockchain",
+        definition: "A digital ledger that records transactions across multiple computers in a way that makes it nearly impossible to change or hack. Think of it as a shared notebook that everyone can read but no one can erase.",
+        category: "blockchain",
+        examples: ["Bitcoin blockchain", "Ethereum blockchain", "Solana blockchain"],
+        relatedTerms: ["Block", "Node", "Hash"]
+      },
+      {
+        term: "NFT (Non-Fungible Token)",
+        definition: "A unique digital certificate that proves ownership of a specific digital item, like art, music, or collectibles. Unlike cryptocurrencies, each NFT is one-of-a-kind and cannot be exchanged equally for another.",
+        category: "nft",
+        examples: ["Digital art NFT", "Profile picture NFT", "EtchNFT physical collectible"],
+        relatedTerms: ["Token", "Smart Contract", "Metadata"]
+      },
+      {
+        term: "Cryptocurrency",
+        definition: "Digital money that uses cryptography for security and operates independently of traditional banks. It exists only in digital form and can be used for purchases, investments, or transfers.",
+        category: "crypto",
+        examples: ["Bitcoin (BTC)", "Ethereum (ETH)", "Solana (SOL)"],
+        relatedTerms: ["Token", "Coin", "Digital Currency"]
+      },
+      {
+        term: "Wallet",
+        definition: "A digital tool that stores your cryptocurrency and NFTs. It's like a digital bank account that only you control with your private keys. Can be software (apps) or hardware (physical devices).",
+        category: "basic",
+        examples: ["MetaMask", "Rainbow Wallet", "Coinbase Wallet"],
+        relatedTerms: ["Private Key", "Public Key", "Seed Phrase"]
+      },
+      {
+        term: "Smart Contract",
+        definition: "Self-executing contracts with terms directly written into code. They automatically carry out agreements when conditions are met, without needing intermediaries like lawyers or banks.",
+        category: "blockchain",
+        examples: ["NFT minting contract", "DeFi lending contract", "Token swap contract"],
+        relatedTerms: ["Ethereum", "Solidity", "Gas"]
+      },
+      {
+        term: "Gas",
+        definition: "The fee paid to process transactions on a blockchain network. Like paying for fuel to power your car, gas powers blockchain transactions. Higher gas = faster processing.",
+        category: "blockchain",
+        examples: ["Ethereum gas fees", "Transaction cost", "Network congestion"],
+        relatedTerms: ["Gwei", "Transaction Fee", "Block"]
+      },
+      {
+        term: "Mint",
+        definition: "The process of creating a new NFT or cryptocurrency token on a blockchain. Like printing new money, but digital. Once minted, the token officially exists and can be owned.",
+        category: "nft",
+        examples: ["Mint an NFT", "Token creation", "Initial minting"],
+        relatedTerms: ["Smart Contract", "Token", "Blockchain"]
+      },
+      {
+        term: "DeFi (Decentralized Finance)",
+        definition: "Financial services built on blockchain technology that operate without traditional banks or intermediaries. You can lend, borrow, trade, and earn interest directly from your wallet.",
+        category: "defi",
+        examples: ["Uniswap trading", "Aave lending", "Compound interest"],
+        relatedTerms: ["DEX", "Liquidity Pool", "Yield Farming"]
+      },
+      {
+        term: "Web3",
+        definition: "The next generation of the internet built on blockchain technology. Unlike Web2 (current internet), Web3 gives users ownership of their data and digital assets without corporate control.",
+        category: "basic",
+        examples: ["Decentralized apps (dApps)", "Crypto wallets", "Blockchain games"],
+        relatedTerms: ["Decentralization", "Blockchain", "dApp"]
+      },
+      {
+        term: "Private Key",
+        definition: "A secret code that proves ownership of your cryptocurrency and NFTs. It's like the password to your digital safe - never share it with anyone. Losing it means losing access to your assets forever.",
+        category: "basic",
+        examples: ["64-character hex string", "Wallet access code", "Digital signature key"],
+        relatedTerms: ["Public Key", "Seed Phrase", "Wallet"]
+      },
+      {
+        term: "Seed Phrase",
+        definition: "A series of 12-24 words that can restore your entire crypto wallet. It's like a master key that recreates your private keys. Store it safely offline - it's your wallet's backup.",
+        category: "basic",
+        examples: ["12-word recovery phrase", "24-word backup", "Mnemonic phrase"],
+        relatedTerms: ["Private Key", "Wallet Recovery", "Security"]
+      },
+      {
+        term: "Token",
+        definition: "A digital asset created on an existing blockchain. Unlike coins (which have their own blockchain), tokens are built on platforms like Ethereum. They can represent anything from currency to access rights.",
+        category: "crypto",
+        examples: ["ERC-20 tokens", "Utility tokens", "Governance tokens"],
+        relatedTerms: ["Coin", "Smart Contract", "Ethereum"]
+      },
+      {
+        term: "Hash",
+        definition: "A unique digital fingerprint created by processing data through a mathematical algorithm. Even tiny changes in the original data create completely different hashes, making them perfect for security.",
+        category: "technical",
+        examples: ["Transaction hash", "Block hash", "File hash"],
+        relatedTerms: ["Cryptography", "Blockchain", "Security"]
+      },
+      {
+        term: "Node",
+        definition: "A computer that participates in a blockchain network by storing a copy of the blockchain and validating transactions. More nodes = more security and decentralization.",
+        category: "blockchain",
+        examples: ["Bitcoin node", "Ethereum validator", "Network participant"],
+        relatedTerms: ["Validator", "Network", "Decentralization"]
+      },
+      {
+        term: "Consensus",
+        definition: "The process by which a blockchain network agrees on the validity of transactions. Different blockchains use different methods like Proof of Work or Proof of Stake.",
+        category: "blockchain",
+        examples: ["Bitcoin mining", "Ethereum staking", "Network agreement"],
+        relatedTerms: ["Proof of Work", "Proof of Stake", "Validator"]
+      },
+      {
+        term: "Proof of Work",
+        definition: "A consensus mechanism where computers compete to solve complex puzzles to validate transactions and create new blocks. Bitcoin uses this method, but it requires significant energy.",
+        category: "blockchain",
+        examples: ["Bitcoin mining", "Computational puzzle", "Energy intensive"],
+        relatedTerms: ["Mining", "Consensus", "Hash Rate"]
+      },
+      {
+        term: "Proof of Stake",
+        definition: "A more energy-efficient consensus mechanism where validators are chosen to create new blocks based on their stake (ownership) in the network. Ethereum switched to this method.",
+        category: "blockchain",
+        examples: ["Ethereum 2.0", "Validator staking", "Energy efficient"],
+        relatedTerms: ["Staking", "Validator", "Consensus"]
+      },
+      {
+        term: "DEX (Decentralized Exchange)",
+        definition: "A cryptocurrency exchange that operates without a central authority. Users trade directly with each other using smart contracts, maintaining control of their funds throughout.",
+        category: "defi",
+        examples: ["Uniswap", "SushiSwap", "PancakeSwap"],
+        relatedTerms: ["AMM", "Liquidity Pool", "Slippage"]
+      },
+      {
+        term: "AMM (Automated Market Maker)",
+        definition: "A system that provides liquidity for trading by using mathematical formulas instead of traditional order books. It allows instant trading by maintaining pools of tokens.",
+        category: "defi",
+        examples: ["Uniswap AMM", "Constant product formula", "Liquidity provision"],
+        relatedTerms: ["DEX", "Liquidity Pool", "Price Discovery"]
+      },
+      {
+        term: "Liquidity Pool",
+        definition: "A collection of tokens locked in a smart contract that enables trading on decentralized exchanges. Users provide tokens to pools and earn fees from trades.",
+        category: "defi",
+        examples: ["ETH/USDC pool", "Liquidity provision", "Trading pair"],
+        relatedTerms: ["AMM", "Yield Farming", "Impermanent Loss"]
+      },
+      {
+        term: "Staking",
+        definition: "Locking up cryptocurrency to support a blockchain network's operations and earn rewards. It's like earning interest on your savings, but you're helping secure the network.",
+        category: "defi",
+        examples: ["Ethereum staking", "Validator rewards", "Network security"],
+        relatedTerms: ["Proof of Stake", "Validator", "Rewards"]
+      },
+      {
+        term: "Yield Farming",
+        definition: "Earning rewards by providing liquidity to DeFi protocols. Users move their crypto between different platforms to maximize returns, like shopping for the best interest rates.",
+        category: "defi",
+        examples: ["Liquidity mining", "Protocol rewards", "APY optimization"],
+        relatedTerms: ["Liquidity Pool", "DeFi", "Rewards"]
+      },
+      {
+        term: "Slippage",
+        definition: "The difference between expected and actual price when making a trade. High slippage occurs during volatile markets or when trading large amounts relative to available liquidity.",
+        category: "trading",
+        examples: ["Price difference", "Trade execution", "Market impact"],
+        relatedTerms: ["DEX", "Liquidity", "Trading"]
+      },
+      {
+        term: "Gwei",
+        definition: "A unit of measurement for Ethereum gas fees. 1 Gwei = 0.000000001 ETH. It's like using cents instead of dollars - makes small amounts easier to discuss.",
+        category: "blockchain",
+        examples: ["Gas price in Gwei", "Transaction cost", "Network fees"],
+        relatedTerms: ["Gas", "Ethereum", "Transaction Fee"]
+      },
+      {
+        term: "Layer 2",
+        definition: "A secondary blockchain built on top of a main blockchain to improve speed and reduce costs. It handles transactions off the main chain then settles them in batches.",
+        category: "blockchain",
+        examples: ["Polygon", "Arbitrum", "Optimism"],
+        relatedTerms: ["Scaling", "Ethereum", "Rollup"]
+      },
+      {
+        term: "Rollup",
+        definition: "A Layer 2 scaling solution that processes transactions off the main blockchain then posts compressed data back to it. This reduces costs while maintaining security.",
+        category: "technical",
+        examples: ["Optimistic Rollup", "ZK Rollup", "Arbitrum"],
+        relatedTerms: ["Layer 2", "Scaling", "Ethereum"]
+      },
+      {
+        term: "Bridge",
+        definition: "A tool that allows you to move cryptocurrency or NFTs between different blockchains. Like a ferry that carries your assets from one blockchain island to another.",
+        category: "blockchain",
+        examples: ["Ethereum to Polygon", "Cross-chain transfer", "Asset migration"],
+        relatedTerms: ["Cross-chain", "Interoperability", "Multi-chain"]
+      },
+      {
+        term: "Metadata",
+        definition: "Additional information about an NFT stored off-chain, including name, description, image, and properties. It's like a label that describes what's in the package.",
+        category: "nft",
+        examples: ["NFT description", "Image URL", "Trait information"],
+        relatedTerms: ["NFT", "IPFS", "Token URI"]
+      },
+      {
+        term: "IPFS",
+        definition: "InterPlanetary File System - a decentralized storage network for files. Instead of storing files on one server, IPFS distributes them across many computers worldwide.",
+        category: "technical",
+        examples: ["NFT image storage", "Decentralized hosting", "Content addressing"],
+        relatedTerms: ["Storage", "Decentralization", "Metadata"]
+      },
+      {
+        term: "DAO (Decentralized Autonomous Organization)",
+        definition: "An organization governed by smart contracts and token holders rather than traditional management. Members vote on decisions using tokens, creating democratic governance.",
+        category: "defi",
+        examples: ["Governance voting", "Treasury management", "Community decisions"],
+        relatedTerms: ["Governance Token", "Voting", "Community"]
+      },
+      {
+        term: "Governance Token",
+        definition: "A type of token that gives holders voting rights in a protocol or DAO. Like owning shares in a company, but for decentralized organizations.",
+        category: "defi",
+        examples: ["UNI token", "AAVE token", "Protocol voting"],
+        relatedTerms: ["DAO", "Voting Rights", "Decentralization"]
+      },
+      {
+        term: "Phygital",
+        definition: "A combination of physical and digital elements. In the context of NFTs, it means owning both a digital token and a physical item, like EtchNFT's laser-etched collectibles.",
+        category: "etchnft",
+        examples: ["Physical NFT collectible", "Digital certificate + physical item", "Hybrid ownership"],
+        relatedTerms: ["NFT", "Physical Collectible", "EtchNFT"]
+      },
+      {
+        term: "Laser Etching",
+        definition: "A precision manufacturing process that uses laser technology to permanently mark or engrave designs onto various materials. EtchNFT uses this to create physical NFT collectibles.",
+        category: "etchnft",
+        examples: ["Engraved metal plaque", "Etched acrylic display", "Laser-marked apparel"],
+        relatedTerms: ["Manufacturing", "Physical Collectible", "Precision"]
+      },
+      {
+        term: "Multi-chain",
+        definition: "Supporting multiple blockchain networks simultaneously. EtchNFT works with Ethereum, Polygon, and Solana, allowing users to connect different types of wallets.",
+        category: "etchnft",
+        examples: ["Ethereum + Polygon + Solana", "Cross-chain compatibility", "Multiple wallet support"],
+        relatedTerms: ["Blockchain", "Interoperability", "Cross-chain"]
+      },
+      {
+        term: "Certificate of Authenticity",
+        definition: "A digital or physical document that verifies the genuineness of an item. EtchNFT provides digital certificates proving your NFT was officially etched into physical form.",
+        category: "etchnft",
+        examples: ["Digital certificate", "Authenticity proof", "Verification document"],
+        relatedTerms: ["Verification", "Authenticity", "Physical Collectible"]
+      }
+    ];
+
+    // DOM elements
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const clearButton = document.getElementById('clearButton');
+    const glossaryTerms = document.getElementById('glossaryTerms');
+    const noResults = document.getElementById('noResults');
+    const showAllButton = document.getElementById('showAllButton');
+    const resultCount = document.getElementById('resultCount');
+
+    let currentTerms = [...glossaryData];
+
+    // Render terms
+    function renderTerms(terms) {
+      if (terms.length === 0) {
+        glossaryTerms.classList.add('hidden');
+        noResults.classList.remove('hidden');
+        resultCount.textContent = '0';
+        return;
+      }
+
+      glossaryTerms.classList.remove('hidden');
+      noResults.classList.add('hidden');
+      resultCount.textContent = terms.length;
+
+      glossaryTerms.innerHTML = terms.map(term => `
+        <div class="card-retro group term-card" data-term="${term.term.toLowerCase()}" data-category="${term.category}">
+          <div class="flex flex-col lg:flex-row lg:items-start gap-6">
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-4">
+                <h3 class="text-2xl font-cyber font-bold text-primary tracking-wider group-hover:text-white transition-colors duration-300">
+                  ${term.term}
+                </h3>
+                <span class="px-3 py-1 bg-${getCategoryColor(term.category)}/20 text-${getCategoryColor(term.category)} text-xs font-cyber tracking-wider rounded-full border border-${getCategoryColor(term.category)}/30">
+                  ${term.category.toUpperCase()}
+                </span>
+              </div>
+              <p class="text-gray-300 text-lg leading-relaxed mb-6 font-retro">
+                ${term.definition}
+              </p>
+              
+              ${term.examples ? `
+                <div class="mb-4">
+                  <h4 class="text-sm font-cyber font-bold text-neon-green mb-2 tracking-wider">EXAMPLES:</h4>
+                  <div class="flex flex-wrap gap-2">
+                    ${term.examples.map(example => `
+                      <span class="px-3 py-1 bg-neon-green/10 text-neon-green text-xs font-cyber rounded-full border border-neon-green/20">
+                        ${example}
+                      </span>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+              
+              ${term.relatedTerms ? `
+                <div>
+                  <h4 class="text-sm font-cyber font-bold text-secondary mb-2 tracking-wider">RELATED TERMS:</h4>
+                  <div class="flex flex-wrap gap-2">
+                    ${term.relatedTerms.map(related => `
+                      <button class="px-3 py-1 bg-secondary/10 text-secondary text-xs font-cyber rounded-full border border-secondary/20 hover:bg-secondary/20 hover:text-white transition-colors duration-300 related-term-btn" data-term="${related.toLowerCase()}">
+                        ${related}
+                      </button>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Add click handlers for related terms
+      document.querySelectorAll('.related-term-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const term = btn.dataset.term;
+          searchInput.value = term;
+          filterTerms();
+          document.querySelector(`[data-term="${term}"]`)?.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+    }
+
+    // Get category color
+    function getCategoryColor(category) {
+      const colors = {
+        'basic': 'neon-green',
+        'blockchain': 'primary',
+        'crypto': 'secondary',
+        'nft': 'neon-purple',
+        'defi': 'neon-yellow',
+        'trading': 'neon-orange',
+        'technical': 'neon-blue',
+        'etchnft': 'neon'
+      };
+      return colors[category] || 'primary';
+    }
+
+    // Filter terms
+    function filterTerms() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const selectedCategory = categoryFilter.value;
+
+      currentTerms = glossaryData.filter(term => {
+        const matchesSearch = !searchTerm || 
+          term.term.toLowerCase().includes(searchTerm) ||
+          term.definition.toLowerCase().includes(searchTerm) ||
+          term.examples?.some(example => example.toLowerCase().includes(searchTerm)) ||
+          term.relatedTerms?.some(related => related.toLowerCase().includes(searchTerm));
+
+        const matchesCategory = selectedCategory === 'all' || term.category === selectedCategory;
+
+        return matchesSearch && matchesCategory;
+      });
+
+      renderTerms(currentTerms);
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', filterTerms);
+    categoryFilter.addEventListener('change', filterTerms);
+    clearButton.addEventListener('click', () => {
+      searchInput.value = '';
+      categoryFilter.value = 'all';
+      filterTerms();
+    });
+    showAllButton.addEventListener('click', () => {
+      searchInput.value = '';
+      categoryFilter.value = 'all';
+      filterTerms();
+    });
+
+    // Initial render
+    renderTerms(glossaryData);
+
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+      if (e.key === 'Escape') {
+        searchInput.blur();
+      }
+    });
+  </script>
+</Layout>

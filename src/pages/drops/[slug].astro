@@ -1,20 +1,76 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getDropBySlug, getDropItems } from '../../lib/drops';
+import WalletConnectButton from '../../components/react/WalletConnectButton';
 
-const db = Astro.locals.runtime.env.DB as D1Database;
 const slug = Astro.params.slug;
 
 if (!slug) {
   return Astro.redirect('/drops');
 }
 
-const drop = await getDropBySlug(db, slug);
-if (!drop) {
+// Safely get database connection
+let db: D1Database;
+let drop: any = null;
+let items: any[] = [];
+
+try {
+  db = Astro.locals.runtime?.env?.DB as D1Database;
+  
+  if (!db) {
+    console.warn('D1 database not available in local development');
+    // Use mock data for development
+    if (slug === 'genesis-collection') {
+      drop = {
+        id: '1',
+        name: 'EtchNFT Genesis Collection',
+        description: 'First collection of laser-etched NFTs featuring popular crypto art.',
+        slug: 'genesis-collection',
+        image_url: '/placeholder-nft.svg',
+        price_usd: 29.99,
+        is_active: true,
+        is_featured: true,
+        launch_date: new Date('2024-01-15'),
+        end_date: null,
+        total_supply: 100,
+        minted_supply: 23,
+        product_type: 'plaque',
+        material: 'wood',
+        dimensions: '6x4 inches',
+        created_at: new Date(),
+        updated_at: new Date()
+      };
+      items = [
+        {
+          id: '1',
+          drop_id: '1',
+          name: 'Genesis NFT #001',
+          description: 'First NFT in the Genesis collection',
+          token_id: '1',
+          original_image_url: '/placeholder-nft.svg',
+          laser_file_status: 'ready',
+          is_available: true,
+          is_sold: false,
+          created_at: new Date(),
+          updated_at: new Date()
+        }
+      ];
+    } else {
+      return Astro.redirect('/drops');
+    }
+  } else {
+    drop = await getDropBySlug(db, slug);
+    if (!drop) {
+      return Astro.redirect('/drops');
+    }
+    
+    items = await getDropItems(db, drop.id);
+  }
+} catch (error) {
+  console.error('Error accessing drop data:', error);
   return Astro.redirect('/drops');
 }
 
-const items = await getDropItems(db, drop.id);
 const availableItems = items.filter(item => item.is_available && !item.is_sold && item.laser_file_status === 'ready');
 
 // Check drop status
@@ -59,7 +115,7 @@ if (isUpcoming) {
           <div>
             <div class="aspect-square bg-retro-darker rounded-lg overflow-hidden mb-6">
               <img 
-                src={drop.image_url || '/placeholder-nft.png'} 
+                src={drop.image_url || '/placeholder-nft.svg'} 
                 alt={drop.name}
                 class="w-full h-full object-cover"
               />
@@ -133,10 +189,14 @@ if (isUpcoming) {
             {isLive && availableItems.length > 0 && (
               <div class="text-center">
                 <p class="text-gray-400 text-sm mb-4">Choose an item below to purchase</p>
-                <div class="text-green-400 font-cyber text-sm flex items-center justify-center gap-2">
+                <div class="text-green-400 font-cyber text-sm flex items-center justify-center gap-2 mb-6">
                   <span class="animate-pulse">●</span>
                   <span>DROP IS LIVE</span>
                   <span class="animate-pulse">●</span>
+                </div>
+                <div class="flex flex-col items-center gap-3">
+                  <p class="text-gray-400 text-sm">Connect your wallet to purchase</p>
+                  <WalletConnectButton client:only="react" />
                 </div>
               </div>
             )}
@@ -180,7 +240,7 @@ if (isUpcoming) {
                     src={item.original_image_url} 
                     alt={item.name}
                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    onerror="this.src='/placeholder-nft.png'"
+                    onerror="this.src='/placeholder-nft.svg'"
                   />
                 </div>
                 

@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { requirePermission } from "../../lib/auth";
+import AdminUserManagement from "../../components/react/AdminUserManagement";
+
+// Require users.read permission
+const user = await requirePermission(Astro, "users.read");
+if (user instanceof Response) return user;
+
+const client: 'only' = 'only';
+---
+
+<BaseLayout title="User Management - Admin">
+  <section class="min-h-screen bg-zinc-900 py-12">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-3xl font-bold text-white mb-2">User Management</h1>
+          <p class="text-gray-400">Manage users, roles, and permissions</p>
+        </div>
+        <a 
+          href="/admin/admin" 
+          class="bg-zinc-700 text-white px-4 py-2 rounded-lg"
+        >
+          Back to Admin
+        </a>
+      </div>
+
+      <AdminUserManagement client:only={client} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+</style>

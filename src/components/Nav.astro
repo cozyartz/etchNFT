@@ -1,7 +1,8 @@
 ---
 import CartToggle from './react/CartToggle';
 import WalletConnectButton from './react/WalletConnectButton';
-import { LogoIcon, GalleryIcon, OrdersIcon, WhitepaperIcon, AboutIcon, AdminIcon, ThemeToggleIcon, MobileMenuIcon, MobileGalleryIcon, MobileOrdersIcon, MobileWhitepaperIcon, MobileAboutIcon, MobileAdminIcon } from './react/NavIcons';
+import ThemeToggle from './react/ThemeToggle';
+import { LogoIcon, GalleryIcon, OrdersIcon, WhitepaperIcon, AboutIcon, AdminIcon, MobileMenuIcon, MobileGalleryIcon, MobileOrdersIcon, MobileWhitepaperIcon, MobileAboutIcon, MobileAdminIcon } from './react/NavIcons';
 const client: 'only' = 'only';
 ---
 
@@ -26,6 +27,9 @@ const client: 'only' = 'only';
         <a href="/gallery" class="nav-link">
           <GalleryIcon client:only={client} />Gallery
         </a>
+        <a href="/upload" class="nav-link">
+          <OrdersIcon client:only={client} />Upload Art
+        </a>
         <a href="/drops" class="nav-link">
           <OrdersIcon client:only={client} />Drops
         </a>
@@ -49,10 +53,7 @@ const client: 'only' = 'only';
       <WalletConnectButton client:only={client} />
       
       <!-- Theme toggle with retro styling -->
-      <button id="theme-toggle" class="relative p-2 rounded-lg border border-secondary/30 bg-retro-dark hover:bg-secondary/10 transition-all duration-300 group">
-        <ThemeToggleIcon client:only={client} />
-        <div class="absolute inset-0 bg-secondary/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg"></div>
-      </button>
+      <ThemeToggle client:only={client} />
 
       <!-- Cart Toggle with enhanced styling -->
       <CartToggle client:only={client} />
@@ -60,7 +61,7 @@ const client: 'only' = 'only';
   </div>
 
   <!-- Mobile menu button -->
-  <button id="mobile-menu-toggle" class="md:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-retro-dark border border-primary/30 hover:bg-primary/10 transition-all duration-300">
+  <button id="mobile-menu-toggle" class="md:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-retro-dark border border-primary/30">
     <MobileMenuIcon client:only={client} />
   </button>
 
@@ -69,6 +70,9 @@ const client: 'only' = 'only';
     <div class="flex flex-col items-center justify-center h-full gap-8">
       <a href="/gallery" class="mobile-nav-link">
         <MobileGalleryIcon client:only={client} />Gallery
+      </a>
+      <a href="/upload" class="mobile-nav-link">
+        <MobileOrdersIcon client:only={client} />Upload Art
       </a>
       <a href="/drops" class="mobile-nav-link">
         <MobileOrdersIcon client:only={client} />Drops
@@ -85,13 +89,21 @@ const client: 'only' = 'only';
       <a href="/admin/admin" class="mobile-nav-link">
         <MobileAdminIcon client:only={client} />Admin
       </a>
+      
+      <!-- Wallet Connection in Mobile Menu -->
+      <div class="border-t border-primary/20 pt-6 mt-4">
+        <div class="flex flex-col items-center gap-3">
+          <p class="text-gray-400 text-sm font-cyber">Connect Wallet</p>
+          <WalletConnectButton client:only={client} />
+        </div>
+      </div>
     </div>
   </div>
 </nav>
 
 <style>
   .nav-link {
-    @apply px-4 py-2 rounded-lg text-gray-300 hover:text-primary transition-all duration-300;
+    @apply px-4 py-2 rounded-lg text-gray-300 hover:text-white transition-all duration-300;
     @apply relative overflow-hidden;
     @apply before:absolute before:inset-0 before:bg-primary/10 before:rounded-lg;
     @apply before:scale-0 before:transition-transform before:duration-300;
@@ -104,7 +116,7 @@ const client: 'only' = 'only';
   }
   
   .mobile-nav-link {
-    @apply text-2xl font-cyber text-gray-300 hover:text-primary transition-all duration-300;
+    @apply text-2xl font-cyber text-gray-300 hover:text-white transition-all duration-300;
     @apply hover:scale-110 hover:drop-shadow-[0_0_10px_rgba(255,20,147,0.5)];
     @apply tracking-wider;
   }

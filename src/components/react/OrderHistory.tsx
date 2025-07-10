@@ -21,6 +21,8 @@ type Order = {
   address_line: string;
   city: string;
   country: string;
+  source_type?: string;
+  custom_upload_id?: string;
 };
 
 type Props = {
@@ -138,20 +140,28 @@ export default function OrderHistory({ userEmail }: Props) {
 
       {/* Order Statistics */}
       {orders.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="glass p-4 rounded-lg text-center">
-            <div className="text-2xl font-bold text-accent">{orders.length}</div>
-            <div className="text-sm text-gray-400">Total Orders</div>
-          </div>
-          <div className="glass p-4 rounded-lg text-center">
-            <div className="text-2xl font-bold text-green-400">${getTotalSpent().toFixed(2)}</div>
-            <div className="text-sm text-gray-400">Total Spent</div>
-          </div>
-          <div className="glass p-4 rounded-lg text-center">
-            <div className="text-2xl font-bold text-purple-400">
-              {orders.filter(o => o.status === 'delivered').length}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="glass p-4 rounded-lg text-center hover:bg-zinc-800/50 transition">
+              <div className="text-2xl font-bold text-accent animate-pulse">{orders.length}</div>
+              <div className="text-sm text-gray-400">Total Orders</div>
             </div>
-            <div className="text-sm text-gray-400">Delivered</div>
+            <div className="glass p-4 rounded-lg text-center hover:bg-zinc-800/50 transition">
+              <div className="text-2xl font-bold text-green-400">${getTotalSpent().toFixed(2)}</div>
+              <div className="text-sm text-gray-400">Total Spent</div>
+            </div>
+            <div className="glass p-4 rounded-lg text-center hover:bg-zinc-800/50 transition">
+              <div className="text-2xl font-bold text-purple-400">
+                {orders.filter(o => o.status === 'delivered').length}
+              </div>
+              <div className="text-sm text-gray-400">Delivered</div>
+            </div>
+            <div className="glass p-4 rounded-lg text-center hover:bg-zinc-800/50 transition">
+              <div className="text-2xl font-bold text-cyan-400">
+                {orders.filter(o => o.plaque_svg_url).length}
+              </div>
+              <div className="text-sm text-gray-400">SVG Ready</div>
+            </div>
           </div>
         </div>
       )}
@@ -206,7 +216,14 @@ export default function OrderHistory({ userEmail }: Props) {
                         <h3 className="font-semibold text-white truncate">
                           {order.nft_name || 'Untitled NFT'}
                         </h3>
-                        <p className="text-sm text-gray-400">{order.collection}</p>
+                        <p className="text-sm text-gray-400">
+                          {order.collection}
+                          {order.source_type === 'custom' && (
+                            <span className="ml-2 px-2 py-1 bg-blue-400/10 text-blue-400 rounded-full text-xs font-semibold">
+                              Custom Upload
+                            </span>
+                          )}
+                        </p>
                         <p className="text-xs text-gray-500">
                           Order #{order.id.slice(0, 8)}... • {formatDate(order.created_at)}
                         </p>
@@ -231,8 +248,21 @@ export default function OrderHistory({ userEmail }: Props) {
                         rel="noopener noreferrer"
                         className="text-accent hover:text-white transition"
                         onClick={(e) => e.stopPropagation()}
+                        title="View Certificate"
                       >
                         <i className="fa-solid fa-certificate"></i>
+                      </a>
+                    )}
+                    {order.plaque_svg_url && (
+                      <a
+                        href={order.plaque_svg_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-purple-400 hover:text-purple-300 transition"
+                        onClick={(e) => e.stopPropagation()}
+                        title="Download SVG"
+                      >
+                        <i className="fa-solid fa-download"></i>
                       </a>
                     )}
                     <i className="fa-solid fa-chevron-right text-gray-400"></i>
@@ -277,8 +307,8 @@ export default function OrderHistory({ userEmail }: Props) {
 
               <div className="space-y-6">
                 {/* NFT Details */}
-                <div className="flex items-center gap-4 p-4 bg-zinc-800 rounded-lg">
-                  <div className="w-20 h-20 rounded-lg overflow-hidden bg-zinc-700">
+                <div className="flex items-center gap-4 p-4 bg-zinc-800 rounded-lg border border-zinc-700">
+                  <div className="w-20 h-20 rounded-lg overflow-hidden bg-zinc-700 border-2 border-accent/20">
                     {selectedOrder.nft_image ? (
                       <img
                         src={selectedOrder.nft_image}
@@ -291,48 +321,72 @@ export default function OrderHistory({ userEmail }: Props) {
                       </div>
                     )}
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-white">{selectedOrder.nft_name}</h3>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-white text-lg">{selectedOrder.nft_name}</h3>
                     <p className="text-sm text-gray-400">{selectedOrder.collection}</p>
-                    <p className="text-xs text-gray-500">Token #{selectedOrder.token_id}</p>
+                    <p className="text-xs text-gray-500">
+                      {selectedOrder.source_type === 'custom' ? `Upload ID: ${selectedOrder.custom_upload_id?.slice(0, 8)}...` : `Token #${selectedOrder.token_id}`}
+                    </p>
+                    <div className="flex gap-2 mt-2">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusDisplay(selectedOrder.status).bg} ${getStatusDisplay(selectedOrder.status).color}`}>
+                        {selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1)}
+                      </span>
+                      {selectedOrder.source_type === 'custom' && (
+                        <span className="px-2 py-1 bg-blue-400/10 text-blue-400 rounded-full text-xs font-semibold">
+                          Custom Upload
+                        </span>
+                      )}
+                      {selectedOrder.plaque_svg_url && (
+                        <span className="px-2 py-1 bg-purple-400/10 text-purple-400 rounded-full text-xs font-semibold">
+                          SVG Ready
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
                 {/* Order Info */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-400">Order ID:</span>
-                    <p className="font-mono text-white">{selectedOrder.id}</p>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Status:</span>
-                    <p className={`font-semibold ${getStatusDisplay(selectedOrder.status).color}`}>
-                      {selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1)}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Price:</span>
-                    <p className="text-white">${selectedOrder.price_usd?.toFixed(2)}</p>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Payment:</span>
-                    <p className="text-white capitalize">{selectedOrder.payment_method}</p>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Ordered:</span>
-                    <p className="text-white">{formatDate(selectedOrder.created_at)}</p>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Updated:</span>
-                    <p className="text-white">{formatDate(selectedOrder.updated_at)}</p>
+                <div className="bg-zinc-800/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-white mb-3 flex items-center">
+                    <i className="fa-solid fa-info-circle mr-2 text-accent"></i>
+                    Order Information
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-400">Order ID:</span>
+                      <p className="font-mono text-white break-all">{selectedOrder.id}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Network:</span>
+                      <p className="text-white capitalize">{selectedOrder.network}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Price:</span>
+                      <p className="text-white font-semibold">${selectedOrder.price_usd?.toFixed(2)}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Payment:</span>
+                      <p className="text-white capitalize">{selectedOrder.payment_method}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Ordered:</span>
+                      <p className="text-white">{formatDate(selectedOrder.created_at)}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Updated:</span>
+                      <p className="text-white">{formatDate(selectedOrder.updated_at)}</p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Shipping Address */}
-                <div>
-                  <h4 className="font-semibold text-white mb-2">Shipping Address</h4>
-                  <div className="bg-zinc-800 p-4 rounded-lg text-sm text-gray-300">
-                    <p>{selectedOrder.full_name}</p>
+                <div className="bg-zinc-800/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-white mb-3 flex items-center">
+                    <i className="fa-solid fa-truck mr-2 text-accent"></i>
+                    Shipping Address
+                  </h4>
+                  <div className="text-sm text-gray-300 space-y-1">
+                    <p className="font-medium text-white">{selectedOrder.full_name}</p>
                     <p>{selectedOrder.address_line}</p>
                     <p>{selectedOrder.city}, {selectedOrder.country}</p>
                   </div>
@@ -349,6 +403,17 @@ export default function OrderHistory({ userEmail }: Props) {
                     >
                       <i className="fa-solid fa-certificate mr-2"></i>
                       View Award
+                    </a>
+                  )}
+                  {selectedOrder.plaque_svg_url && (
+                    <a
+                      href={selectedOrder.plaque_svg_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-purple-600 text-white text-center py-2 px-4 rounded-lg font-semibold hover:bg-purple-500 transition"
+                    >
+                      <i className="fa-solid fa-download mr-2"></i>
+                      Download SVG
                     </a>
                   )}
                   <a

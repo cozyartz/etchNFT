@@ -10,3 +10,6 @@ compatibility_flags = ["nodejs_compat"]
 binding = "DB"
 database_name = "etchnft"
 database_id = "269db405-82b3-4a9d-851f-e33510373867"
+
+[ai]
+binding = "AI"

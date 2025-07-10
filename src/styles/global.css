@@ -32,15 +32,37 @@
   --bg-darker: #050505;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-muted: #999999;
+}
+
+/* Light Mode Theme */
+:root:not(.dark) {
+  --primary: #ff1493;
+  --secondary: #00a8cc;
+  --accent: #ff69b4;
+  --neon-green: #00cc44;
+  --neon-purple: #8833cc;
+  --bg-dark: #f8f9fa;
+  --bg-darker: #ffffff;
+  --glass-bg: rgba(0, 0, 0, 0.05);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted: #6a6a6a;
 }
 
 body {
   font-family: "Chakra Petch", "Space Grotesk", sans-serif;
   background: var(--bg-dark);
-  color: white;
+  color: var(--text-primary);
   font-display: swap;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Retro Grid Background */
@@ -57,6 +79,13 @@ body::before {
   background-size: 50px 50px;
   pointer-events: none;
   z-index: -1;
+}
+
+/* Light mode grid background */
+:root:not(.dark) body::before {
+  background:
+    linear-gradient(rgba(255, 20, 147, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 20, 147, 0.08) 1px, transparent 1px);
 }
 
 /* Neon Components */
@@ -96,28 +125,38 @@ body::before {
   border-radius: 12px;
 }
 
+/* Light mode glass effects */
+:root:not(.dark) .glass {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root:not(.dark) .glass-strong {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
 /* Retro Button Styles */
 .btn-neon {
   @apply relative px-6 py-3 bg-transparent border-2 border-primary text-primary font-bold uppercase tracking-wider;
-  @apply transition-all duration-300 hover:bg-primary hover:text-black hover:shadow-neon;
+  @apply transition-all duration-300;
   @apply before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full;
   @apply before:bg-primary before:opacity-0 before:transition-opacity before:duration-300;
-  @apply hover:before:opacity-20;
 }
 
 .btn-cyber {
   @apply relative px-8 py-4 bg-gradient-to-r from-primary to-secondary text-black font-bold uppercase tracking-wider;
-  @apply transition-all duration-300 hover:scale-105 hover:shadow-retro-glow;
+  @apply transition-all duration-300;
   @apply before:content-[''] before:absolute before:inset-0 before:bg-cyber-gradient before:opacity-0;
-  @apply before:transition-opacity before:duration-300 hover:before:opacity-100;
+  @apply before:transition-opacity before:duration-300;
   clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 100%, 20px 100%);
 }
 
 .btn-ghost {
   @apply relative px-6 py-3 bg-transparent border border-secondary text-secondary;
-  @apply transition-all duration-300 hover:bg-secondary hover:text-black hover:shadow-neon-cyan;
+  @apply transition-all duration-300;
   @apply before:content-[''] before:absolute before:top-0 before:left-0 before:w-0 before:h-full;
-  @apply before:bg-secondary before:transition-all before:duration-300 hover:before:w-full;
+  @apply before:bg-secondary before:transition-all before:duration-300;
   @apply before:z-[-1];
 }
 
@@ -149,10 +188,6 @@ body::before {
   border-radius: inherit;
   opacity: 0;
   transition: opacity 0.3s ease;
-}
-
-.card-retro:hover::before {
-  opacity: 1;
 }
 
 /* Scan Line Effect */
@@ -329,8 +364,21 @@ h6 {
     0 0 10px rgba(255, 255, 255, 0.3),
     0 0 20px rgba(255, 20, 147, 0.4),
     0 0 30px rgba(255, 20, 147, 0.2);
-  color: #ffffff;
+  color: var(--text-primary);
   margin-bottom: 1rem;
+}
+
+/* Light mode adjustments for headings */
+:root:not(.dark) h1,
+:root:not(.dark) h2,
+:root:not(.dark) h3,
+:root:not(.dark) h4,
+:root:not(.dark) h5,
+:root:not(.dark) h6 {
+  text-shadow:
+    0 0 10px rgba(0, 0, 0, 0.1),
+    0 0 20px rgba(255, 20, 147, 0.3),
+    0 0 30px rgba(255, 20, 147, 0.1);
 }
 
 h1 {
@@ -425,19 +473,15 @@ h6 {
   box-shadow: 0 0 10px var(--primary);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(var(--secondary), var(--primary));
-}
-
 /* Selection styling */
 ::selection {
   background: var(--primary);
-  color: white;
+  color: var(--bg-darker);
 }
 
 ::-moz-selection {
   background: var(--primary);
-  color: white;
+  color: var(--bg-darker);
 }
 
 /* Focus styles */

@@ -28,12 +28,14 @@ export const GET = async ({ url, cookies, redirect, locals }) => {
     // Check if user is admin before allowing login
     const tempUser = {
       email: githubUser.email,
-      githubId: githubUser.login
+      githubId: githubUser.login,
     };
-    
+
     const isAdmin = await isAdminUser(db, tempUser);
     if (!isAdmin) {
-      console.log(`Non-admin user attempted login: ${githubUser.login} (${githubUser.email})`);
+      console.log(
+        `Non-admin user attempted login: ${githubUser.login} (${githubUser.email})`,
+      );
       return redirect("/admin/login?error=unauthorized");
     }
 
@@ -43,7 +45,7 @@ export const GET = async ({ url, cookies, redirect, locals }) => {
     await db
       .prepare(
         `INSERT OR REPLACE INTO users (id, github_id, email, created_at) 
-         VALUES (?, ?, ?, CURRENT_TIMESTAMP)`
+         VALUES (?, ?, ?, CURRENT_TIMESTAMP)`,
       )
       .bind(userId, githubUser.login, githubUser.email)
       .run();

@@ -15,8 +15,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    const db = locals.runtime.env.DB as D1Database;
-    const coinbaseApiKey = locals.runtime.env.COINBASE_COMMERCE_API_KEY;
+    const db = locals.runtime?.env?.DB as D1Database;
+    const coinbaseApiKey = locals.runtime?.env?.COINBASE_COMMERCE_API_KEY;
+
+    if (!db) {
+      return new Response(JSON.stringify({ error: "Database not available" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     if (!coinbaseApiKey) {
       console.error("Missing COINBASE_COMMERCE_API_KEY environment variable");

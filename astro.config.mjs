@@ -20,7 +20,12 @@ export default defineConfig({
     },
     define: {
       'import.meta.env.PUBLIC_SQUARE_APP_ID': JSON.stringify(process.env.PUBLIC_SQUARE_APP_ID ?? ''),
-      'import.meta.env.PUBLIC_SQUARE_LOCATION_ID': JSON.stringify(process.env.PUBLIC_SQUARE_LOCATION_ID ?? '')
+      'import.meta.env.PUBLIC_SQUARE_LOCATION_ID': JSON.stringify(process.env.PUBLIC_SQUARE_LOCATION_ID ?? ''),
+      'import.meta.env.PUBLIC_WALLETCONNECT_PROJECT_ID': JSON.stringify(process.env.PUBLIC_WALLETCONNECT_PROJECT_ID ?? ''),
+      'import.meta.env.ALCHEMY_API_KEY': JSON.stringify(process.env.ALCHEMY_API_KEY ?? ''),
+      'import.meta.env.ALCHEMY_ETH_MAINNET_URL': JSON.stringify(process.env.ALCHEMY_ETH_MAINNET_URL ?? ''),
+      'import.meta.env.ALCHEMY_POLYGON_MAINNET_URL': JSON.stringify(process.env.ALCHEMY_POLYGON_MAINNET_URL ?? ''),
+      'import.meta.env.ALCHEMY_BASE_MAINNET_URL': JSON.stringify(process.env.ALCHEMY_BASE_MAINNET_URL ?? '')
     },
     ssr: {
       external: ['crypto'] // Exclude from SSR bundling

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useCart } from './CartContext';
 import SquareCheckout from './SquareCheckout';
+import Web3Checkout from './Web3Checkout';
 
 type FormData = {
   name: string;
@@ -158,14 +159,6 @@ export default function Checkout() {
               <option value="crypto">Pay with Web3 Wallet</option>
             </select>
 
-            {form.method === 'crypto' && (
-              <button
-                type="submit"
-                className="bg-pink-500 text-black py-2 px-6 rounded-full font-bold mt-4 hover:bg-white transition"
-              >
-                Launch Crypto Checkout →
-              </button>
-            )}
           </form>
 
           <div>
@@ -191,6 +184,19 @@ export default function Checkout() {
 
             {form.method === 'card' && (
               <SquareCheckout form={form} />
+            )}
+            
+            {form.method === 'crypto' && (
+              <Web3Checkout 
+                form={form} 
+                onSuccess={(orderIds) => {
+                  setSubmitted(true);
+                  clearCart();
+                }}
+                onError={(error) => {
+                  console.error('Web3 checkout error:', error);
+                }}
+              />
             )}
           </div>
         </div>

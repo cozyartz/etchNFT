@@ -6,17 +6,16 @@ import {
   RainbowKitProvider,
   ConnectButton,
   darkTheme,
-  lightTheme,
 } from '@rainbow-me/rainbowkit';
-import { WagmiProvider, useAccount, createConfig } from 'wagmi';
+import { WagmiProvider, useAccount } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { mainnet, polygon, base, optimism } from 'wagmi/chains';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 type ReactNode = React.ReactNode;
 
 const wagmiConfig = getDefaultConfig({
   appName: 'EtchNFT',
-  projectId: 'ETCH_NFT_DAPP', // replace with real WalletConnect Project ID if needed
+  projectId: import.meta.env.PUBLIC_WALLETCONNECT_PROJECT_ID || 'ETCH_NFT_DAPP', // replace with real WalletConnect Project ID if needed
   chains: [mainnet, polygon, base, optimism],
   ssr: true,
 });
@@ -24,13 +23,6 @@ const wagmiConfig = getDefaultConfig({
 const queryClient = new QueryClient();
 
 function ThemeSync({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<'dark' | 'light'>('light');
-
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains('dark');
-    setTheme(isDark ? 'dark' : 'light');
-  }, []);
-
   return (
     <RainbowKitProvider
       modalSize="compact"

@@ -32,11 +32,17 @@ export default function SquareCheckout({ form }: Props) {
         return;
       }
 
+      const appId = import.meta.env.PUBLIC_SQUARE_APP_ID;
+      const locationId = import.meta.env.PUBLIC_SQUARE_LOCATION_ID;
+
+      if (!appId || !locationId) {
+        setError('Square configuration missing');
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        const p = window.Square.payments(
-          import.meta.env.PUBLIC_SQUARE_APP_ID,
-          import.meta.env.PUBLIC_SQUARE_LOCATION_ID
-        );
+        const p = window.Square.payments(appId, locationId);
 
         setPayments(p);
 
