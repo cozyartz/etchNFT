@@ -11,5 +11,10 @@ binding = "DB"
 database_name = "etchnft"
 database_id = "269db405-82b3-4a9d-851f-e33510373867"
 
+[[kv_namespaces]]
+binding = "SESSION"
+id = "etchnft_sessions"
+preview_id = "etchnft_sessions_preview"
+
 [ai]
 binding = "AI"

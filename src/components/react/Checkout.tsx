@@ -1,8 +1,17 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useCart } from './CartContext';
-import PayPalCheckout from './PayPalCheckout';
-import Web3Checkout from './Web3Checkout';
+
+// Lazy load payment components for better performance
+const PayPalCheckout = lazy(() => import('./PayPalCheckout'));
+const Web3Checkout = lazy(() => import('./Web3Checkout'));
+
+const PaymentLoadingSpinner = () => (
+  <div className="flex justify-center items-center p-8">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+    <span className="ml-3 text-gray-600">Loading payment options...</span>
+  </div>
+);
 
 type FormData = {
   name: string;
@@ -183,20 +192,24 @@ export default function Checkout() {
             </ul>
 
             {form.method === 'paypal' && (
-              <PayPalCheckout form={form} />
+              <Suspense fallback={<PaymentLoadingSpinner />}>
+                <PayPalCheckout form={form} />
+              </Suspense>
             )}
             
             {form.method === 'crypto' && (
-              <Web3Checkout 
-                form={form} 
-                onSuccess={(orderIds) => {
-                  setSubmitted(true);
-                  clearCart();
-                }}
-                onError={(error) => {
-                  console.error('Web3 checkout error:', error);
-                }}
-              />
+              <Suspense fallback={<PaymentLoadingSpinner />}>
+                <Web3Checkout 
+                  form={form} 
+                  onSuccess={(orderIds) => {
+                    setSubmitted(true);
+                    clearCart();
+                  }}
+                  onError={(error) => {
+                    console.error('Web3 checkout error:', error);
+                  }}
+                />
+              </Suspense>
             )}
           </div>
         </div>

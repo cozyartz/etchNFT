@@ -5,6 +5,21 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import cloudflare from '@astrojs/cloudflare';
 
+// Validate critical environment variables
+const requiredEnvVars = {
+  PUBLIC_PAYPAL_CLIENT_ID: process.env.PUBLIC_PAYPAL_CLIENT_ID,
+  PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET,
+};
+
+const missingVars = Object.entries(requiredEnvVars)
+  .filter(([key, value]) => !value)
+  .map(([key]) => key);
+
+if (missingVars.length > 0) {
+  console.warn(`⚠️  Missing environment variables: ${missingVars.join(', ')}`);
+  console.warn('PayPal integration may not work properly without these variables');
+}
+
 export default defineConfig({
   output: 'server',
   adapter: cloudflare(),
@@ -31,8 +46,23 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
-        external: ['crypto'] // ✅ Correct location for Rollup bundling
-      }
+        external: ['crypto'], // ✅ Correct location for Rollup bundling
+        output: {
+          manualChunks: {
+            // Core vendor libraries
+            'vendor-react': ['react', 'react-dom'],
+            'vendor-web3': ['@rainbow-me/rainbowkit', 'wagmi', 'viem', 'ethers'],
+            'vendor-wallet': ['@solana/wallet-adapter-react', '@solana/web3.js'],
+            'vendor-ui': ['framer-motion', '@headlessui/react', 'lucide-react'],
+            'vendor-crypto': ['alchemy-sdk', '@coinbase/cdp-sdk'],
+            'vendor-paypal': ['@paypal/paypal-server-sdk'],
+            
+            // Separate large language bundles
+            'i18n-core': ['react-hot-toast'],
+          }
+        }
+      },
+      chunkSizeWarningLimit: 1000 // Increase limit to 1MB for cleaner builds
     }
   }
 });

@@ -19,6 +19,16 @@ const REQUIRED_VARS = {
     example: "EXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxx",
     required: true,
   },
+  PAYPAL_ENVIRONMENT: {
+    description: "PayPal environment (sandbox or live)",
+    example: "sandbox",
+    required: false,
+  },
+  PAYPAL_WEBHOOK_SECRET: {
+    description: "PayPal webhook secret for signature verification",
+    example: "webhook_secret_from_paypal_developer_console",
+    required: false,
+  },
   SIMPLEHASH_API_KEY: {
     description: "SimpleHash API key for NFT data",
     example: "sh_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",

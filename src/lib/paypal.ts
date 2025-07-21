@@ -1,13 +1,21 @@
 import { Client, LogLevel, Environment } from '@paypal/paypal-server-sdk';
 
-// Initialize PayPal SDK
+// Initialize PayPal SDK with proper error handling
 const getPayPalClient = () => {
   const clientId = import.meta.env.PAYPAL_CLIENT_ID;
   const clientSecret = import.meta.env.PAYPAL_CLIENT_SECRET;
-  const environment = import.meta.env.PAYPAL_ENVIRONMENT || 'sandbox'; // 'sandbox' or 'live'
+  const environment = import.meta.env.PAYPAL_ENVIRONMENT || 'sandbox';
 
   if (!clientId || !clientSecret) {
-    throw new Error('PayPal credentials not configured');
+    throw new Error(
+      'PayPal credentials not configured. Please set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET environment variables.'
+    );
+  }
+
+  if (!['sandbox', 'live'].includes(environment)) {
+    throw new Error(
+      'Invalid PAYPAL_ENVIRONMENT. Must be either "sandbox" or "live".'
+    );
   }
 
   return new Client({

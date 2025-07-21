@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { useCart } from './CartContext';
+import { trackPayPalEvent } from '../../lib/analytics';
 
 type PayPalProps = {
   form: {
@@ -28,8 +29,16 @@ export default function PayPalCheckout({ form }: PayPalProps) {
   const total = cart.length * 29; // $29 per NFT
 
   useEffect(() => {
+    // Check if PayPal SDK is available
     if (!window.paypal) {
-      setError('PayPal SDK not loaded');
+      setError('PayPal SDK not loaded. Please refresh the page.');
+      setLoading(false);
+      return;
+    }
+
+    // Validate client configuration
+    if (!import.meta.env.PUBLIC_PAYPAL_CLIENT_ID) {
+      setError('PayPal is not properly configured.');
       setLoading(false);
       return;
     }
@@ -40,6 +49,7 @@ export default function PayPalCheckout({ form }: PayPalProps) {
     const paypalButtons = window.paypal.Buttons({
       createOrder: async () => {
         try {
+          trackPayPalEvent('create_order_start', { total, itemCount: cart.length });
           const response = await fetch('/api/paypal/create-order', {
             method: 'POST',
             headers: {
@@ -53,14 +63,22 @@ export default function PayPalCheckout({ form }: PayPalProps) {
           });
 
           if (!response.ok) {
-            throw new Error('Failed to create PayPal order');
+            const errorData = await response.json().catch(() => ({}));
+            const errorMessage = errorData.error || `Server error: ${response.status}`;
+            throw new Error(errorMessage);
           }
 
           const data = await response.json();
+          if (!data.id) {
+            throw new Error('Invalid response from PayPal order creation');
+          }
+
+          trackPayPalEvent('create_order_success', { orderId: data.id });
           return data.id;
         } catch (error) {
           console.error('Error creating PayPal order:', error);
-          setError('Failed to create order. Please try again.');
+          const userMessage = error instanceof Error ? error.message : 'Failed to create order. Please try again.';
+          setError(userMessage);
           throw error;
         }
       },

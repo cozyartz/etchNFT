@@ -31,13 +31,17 @@ const {
     <script src="https://kit.fontawesome.com/53a31143f8.js" crossorigin="anonymous" async></script>
 
     <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id={import.meta.env.PUBLIC_PAYPAL_CLIENT_ID}&currency=USD&intent=capture&components=buttons" defer></script>
+    <script src={`https://www.paypal.com/sdk/js?client-id=${import.meta.env.PUBLIC_PAYPAL_CLIENT_ID}&currency=USD&intent=capture&components=buttons`} defer></script>
     
-    <!-- Preconnect to external domains -->
+    <!-- Preconnect to external domains for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://kit.fontawesome.com">
-    <link rel="dns-prefetch" href="https://www.paypal.com">
+    <link rel="preconnect" href="https://www.paypal.com">
+    <link rel="preconnect" href="https://eth-mainnet.g.alchemy.com">
+    <link rel="preconnect" href="https://polygon-mainnet.g.alchemy.com">
+    <link rel="dns-prefetch" href="https://api.opensea.io">
+    <link rel="dns-prefetch" href="https://metadata.ens.domains">
     
     <style>
       .retro-grid {

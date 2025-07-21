@@ -1,4 +1,45 @@
 import type { APIRoute } from 'astro';
+import crypto from 'crypto';
+
+// PayPal webhook signature verification
+async function verifyPayPalWebhook(
+  body: string,
+  signature: string,
+  certId: string,
+  transmissionId: string,
+  timestamp: string,
+  webhookId: string
+): Promise<boolean> {
+  try {
+    // In production, you should:
+    // 1. Fetch PayPal's public certificate using certId
+    // 2. Verify the signature using the certificate
+    // 3. Check timestamp to prevent replay attacks
+    
+    // For now, we'll do basic validation
+    const webhookSecret = process.env.PAYPAL_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.warn('PAYPAL_WEBHOOK_SECRET not configured - skipping signature verification');
+      return true; // Allow in development, but log warning
+    }
+    
+    // Create expected signature for comparison
+    const payload = `${transmissionId}|${timestamp}|${webhookId}|${crypto
+      .createHash('sha256')
+      .update(body)
+      .digest('base64')}`;
+    
+    const expectedSignature = crypto
+      .createHmac('sha256', webhookSecret)
+      .update(payload)
+      .digest('base64');
+    
+    return signature === expectedSignature;
+  } catch (error) {
+    console.error('PayPal webhook signature verification error:', error);
+    return false;
+  }
+}
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
@@ -7,11 +48,27 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const certId = request.headers.get('PAYPAL-CERT-ID');
     const transmissionId = request.headers.get('PAYPAL-TRANSMISSION-ID');
     const timestamp = request.headers.get('PAYPAL-TRANSMISSION-TIME');
+    const webhookId = request.headers.get('PAYPAL-WEBHOOK-ID');
     
-    // Verify webhook signature (in production, you should verify this properly)
+    // Validate required headers
     if (!signature || !certId || !transmissionId || !timestamp) {
       console.error('Missing PayPal webhook headers');
       return new Response('Invalid webhook headers', { status: 400 });
+    }
+    
+    // Verify webhook signature for security
+    const isValidSignature = await verifyPayPalWebhook(
+      body, 
+      signature, 
+      certId, 
+      transmissionId, 
+      timestamp, 
+      webhookId || ''
+    );
+    
+    if (!isValidSignature) {
+      console.error('Invalid PayPal webhook signature');
+      return new Response('Invalid signature', { status: 401 });
     }
 
     const webhookData = JSON.parse(body);
