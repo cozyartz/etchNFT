@@ -19,8 +19,7 @@ export default defineConfig({
       }
     },
     define: {
-      'import.meta.env.PUBLIC_SQUARE_APP_ID': JSON.stringify(process.env.PUBLIC_SQUARE_APP_ID ?? ''),
-      'import.meta.env.PUBLIC_SQUARE_LOCATION_ID': JSON.stringify(process.env.PUBLIC_SQUARE_LOCATION_ID ?? ''),
+      'import.meta.env.PUBLIC_PAYPAL_CLIENT_ID': JSON.stringify(process.env.PUBLIC_PAYPAL_CLIENT_ID ?? ''),
       'import.meta.env.PUBLIC_WALLETCONNECT_PROJECT_ID': JSON.stringify(process.env.PUBLIC_WALLETCONNECT_PROJECT_ID ?? ''),
       'import.meta.env.ALCHEMY_API_KEY': JSON.stringify(process.env.ALCHEMY_API_KEY ?? ''),
       'import.meta.env.ALCHEMY_ETH_MAINNET_URL': JSON.stringify(process.env.ALCHEMY_ETH_MAINNET_URL ?? ''),

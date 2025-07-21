@@ -98,10 +98,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
           nft.collection_name,
           nft.token_id,
           nft.contract_address,
-          payment?.method || "card",
+          payment?.method || "paypal",
           payment?.provider || "",
           payment?.token || "",
-          45.0, // hardcoded price for now
+          29.0, // updated price per NFT
           form.name,
           form.email,
           form.addressLine,
@@ -109,9 +109,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
           form.country,
           plaqueSVG,
           `/cert/${id}`,
-          "paid", // Mark as paid for card payments
+          "paid", // Mark as paid for PayPal payments
           true,
-          `Card payment via Square - ${payment?.method || "card"}`,
+          `PayPal payment - ${payment?.method || "paypal"}`,
           now,
           now,
         )

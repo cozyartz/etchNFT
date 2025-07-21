@@ -89,7 +89,7 @@ EtchNFT is built with modern web technologies for performance, scalability, and 
 - **Multi-chain support** - Ethereum, Polygon, Solana, Base, Optimism
 
 ### Integrations
-- **Square** - Traditional payment processing with webhooks
+- **PayPal** - Traditional payment processing with webhooks
 - **Coinbase Commerce** - Cryptocurrency payments with webhook confirmations
 - **Alchemy SDK** - Multi-chain NFT metadata and ownership verification
 - **Resend** - Transactional email delivery
@@ -116,7 +116,7 @@ Transform NFTs into high-quality collectibles:
 - **Various sizes** from keepsakes to wall art
 
 ### 💳 Flexible Payment Options
-- **Traditional**: Credit cards, Apple Pay, Google Pay via Square
+- **Traditional**: Credit cards, Apple Pay, Google Pay via PayPal
 - **Crypto**: Bitcoin, Ethereum, and 50+ cryptocurrencies via Coinbase Commerce
 - **Smart Contract Escrow**: Web3 payments with blockchain-based customer protection
 - **Automated Refunds**: 24-hour cancellation window with instant blockchain refunds
@@ -149,8 +149,9 @@ Transform NFTs into high-quality collectibles:
 2. **Required API Keys**
    ```env
    # Payment Processing
-   PUBLIC_SQUARE_APP_ID=your_square_app_id
-   PUBLIC_SQUARE_LOCATION_ID=your_square_location_id
+   PUBLIC_PAYPAL_CLIENT_ID=your_paypal_client_id
+   PAYPAL_CLIENT_SECRET=your_paypal_client_secret
+   PAYPAL_ENVIRONMENT=sandbox
    COINBASE_COMMERCE_API_KEY=your_coinbase_key
 
    # NFT Data (Alchemy SDK)
@@ -346,7 +347,7 @@ Give unique, personalized gifts that combine digital ownership with physical pre
 - ✅ Premium laser etching materials (wood, acrylic, metal)
 - ✅ Smart contract escrow system with multi-chain deployment
 - ✅ Automated refund processing with 24-hour cancellation window
-- ✅ Payment webhook integration (Square, Coinbase Commerce)
+- ✅ Payment webhook integration (PayPal, Coinbase Commerce)
 - ✅ RBAC user management system with GitHub OAuth
 - ✅ Custom NFT upload and minting capabilities
 - ✅ Global shipping infrastructure

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useCart } from './CartContext';
-import SquareCheckout from './SquareCheckout';
+import PayPalCheckout from './PayPalCheckout';
 import Web3Checkout from './Web3Checkout';
 
 type FormData = {
@@ -10,7 +10,7 @@ type FormData = {
   addressLine: string;
   city: string;
   country: string;
-  method: 'card' | 'crypto';
+  method: 'paypal' | 'crypto';
 };
 
 export default function Checkout() {
@@ -21,7 +21,7 @@ export default function Checkout() {
     addressLine: '',
     city: '',
     country: '',
-    method: 'card'
+    method: 'paypal'
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -155,7 +155,7 @@ export default function Checkout() {
               onChange={handleChange}
               className="w-full p-2 rounded bg-zinc-100 dark:bg-zinc-800"
             >
-              <option value="card">Pay with Card or Apple Pay</option>
+              <option value="paypal">Pay with PayPal</option>
               <option value="crypto">Pay with Web3 Wallet</option>
             </select>
 
@@ -182,8 +182,8 @@ export default function Checkout() {
               ))}
             </ul>
 
-            {form.method === 'card' && (
-              <SquareCheckout form={form} />
+            {form.method === 'paypal' && (
+              <PayPalCheckout form={form} />
             )}
             
             {form.method === 'crypto' && (

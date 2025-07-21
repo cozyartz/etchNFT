@@ -30,14 +30,14 @@ const {
     <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/53a31143f8.js" crossorigin="anonymous" async></script>
 
-    <!-- Square Payments SDK (sandbox) -->
-    <script src="https://sandbox.web.squarecdn.com/v1/square.js" defer></script>
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id={import.meta.env.PUBLIC_PAYPAL_CLIENT_ID}&currency=USD&intent=capture&components=buttons" defer></script>
     
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://kit.fontawesome.com">
-    <link rel="dns-prefetch" href="https://sandbox.web.squarecdn.com">
+    <link rel="dns-prefetch" href="https://www.paypal.com">
     
     <style>
       .retro-grid {

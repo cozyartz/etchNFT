@@ -65,8 +65,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     try {
       // Process refund based on payment method
-      if (order.payment_method === "card" && order.tx_hash) {
-        refundResult = await processSquareRefund(
+      if (order.payment_method === "paypal" && order.tx_hash) {
+        refundResult = await processPayPalRefund(
           order,
           finalRefundAmount,
           reason,
@@ -201,26 +201,32 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 };
 
-async function processSquareRefund(order: any, amount: number, reason: string) {
-  // This would integrate with Square's refund API
-  // Placeholder implementation
-  const squareAccessToken = import.meta.env.SQUARE_ACCESS_TOKEN;
+async function processPayPalRefund(order: any, amount: number, reason: string) {
+  // This would integrate with PayPal's refund API
+  const { refundPayment } = await import('../../../lib/paypal');
+  
+  try {
+    // PayPal expects the capture ID for refunds
+    const captureId = order.tx_hash; // This should be the PayPal capture ID
+    
+    const refundResult = await refundPayment(captureId, {
+      currency_code: 'USD',
+      value: amount.toFixed(2)
+    });
 
-  if (!squareAccessToken) {
-    throw new Error("Square access token not configured");
+    return {
+      type: "paypal",
+      amount: amount,
+      method: "paypal_api",
+      paymentId: order.tx_hash,
+      refundId: refundResult.id,
+      status: refundResult.status,
+      note: `PayPal refund of $${amount} initiated. Reason: ${reason}`,
+    };
+  } catch (error) {
+    console.error('PayPal refund error:', error);
+    throw new Error(`PayPal refund failed: ${error.message}`);
   }
-
-  // Square refund API call would go here
-  // For now, return a placeholder response
-  return {
-    type: "square",
-    amount: amount,
-    method: "square_api",
-    paymentId: order.tx_hash,
-    refundId: `refund_${Date.now()}`,
-    status: "pending",
-    note: `Square refund of $${amount} initiated. Reason: ${reason}`,
-  };
 }
 
 async function processWeb3Refund(order: any, amount: number, reason: string) {

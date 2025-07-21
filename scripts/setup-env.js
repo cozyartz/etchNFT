@@ -9,14 +9,14 @@ const fs = require("fs");
 const path = require("path");
 
 const REQUIRED_VARS = {
-  PUBLIC_SQUARE_APP_ID: {
-    description: "Square Application ID for payments",
-    example: "sq0idp-XXXXXXXXXXXXXXXXXXXXXXXX",
+  PUBLIC_PAYPAL_CLIENT_ID: {
+    description: "PayPal Client ID for payments",
+    example: "AXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxx",
     required: true,
   },
-  PUBLIC_SQUARE_LOCATION_ID: {
-    description: "Square Location ID for payments",
-    example: "LXXXXXXXXXXXXXXXXXXXXXXX",
+  PAYPAL_CLIENT_SECRET: {
+    description: "PayPal Client Secret for payments (server-side)",
+    example: "EXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxx",
     required: true,
   },
   SIMPLEHASH_API_KEY: {

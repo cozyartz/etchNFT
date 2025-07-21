@@ -55,7 +55,7 @@ Note: The README mentions `pnpm` but package.json uses `npm` scripts. Use `npm` 
 
 ### Environment & Configuration
 - Environment variables defined in `astro.config.mjs` vite.define
-- Square payment integration (`PUBLIC_SQUARE_APP_ID`, `PUBLIC_SQUARE_LOCATION_ID`)
+- PayPal payment integration (`PUBLIC_PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`)
 - D1 database binding configured in `wrangler.toml`
 - Node.js compatibility enabled for Lucia auth
 - Required environment variables: `SIMPLEHASH_API_KEY`, `COINBASE_COMMERCE_API_KEY`, `RESEND_API_KEY`

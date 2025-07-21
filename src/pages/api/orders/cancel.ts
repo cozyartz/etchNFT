@@ -119,9 +119,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
             method: "cancel_order",
           };
         }
-      } else if (order.payment_method === "card" && order.tx_hash) {
-        // Handle Square refund
-        refundDetails = await processSquareRefund(order, reason);
+      } else if (order.payment_method === "paypal" && order.tx_hash) {
+        // Handle PayPal refund
+        refundDetails = await processPayPalRefund(order, reason);
       } else {
         // Manual refund process
         refundDetails = {
@@ -245,24 +245,46 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 };
 
-async function processSquareRefund(order: any, reason: string) {
-  // This would integrate with Square's refund API
-  // For now, return manual processing
-  return {
-    type: "square",
-    amount: order.price_usd,
-    method: "square_refund",
-    paymentId: order.tx_hash,
-    note: "Square refund initiated - processing within 5-10 business days",
-  };
+async function processPayPalRefund(order: any, reason: string) {
+  // This would integrate with PayPal's refund API
+  const { refundPayment } = await import('../../../lib/paypal');
+  
+  try {
+    const captureId = order.tx_hash; // PayPal capture ID
+    
+    const refundResult = await refundPayment(captureId, {
+      currency_code: 'USD',
+      value: order.price_usd.toFixed(2)
+    });
+
+    return {
+      type: "paypal",
+      amount: order.price_usd,
+      method: "paypal_refund",
+      paymentId: order.tx_hash,
+      refundId: refundResult.id,
+      status: refundResult.status,
+      note: "PayPal refund initiated - processing within 3-5 business days",
+    };
+  } catch (error) {
+    console.error('PayPal cancellation refund error:', error);
+    // Fall back to manual processing
+    return {
+      type: "manual",
+      amount: order.price_usd,
+      method: "manual_processing",
+      error: error.message,
+      note: "PayPal refund failed, will be processed manually within 5-10 business days",
+    };
+  }
 }
 
 function getEstimatedRefundTime(refundType: string): string {
   switch (refundType) {
     case "blockchain":
       return "15-30 minutes (depending on network congestion)";
-    case "square":
-      return "5-10 business days";
+    case "paypal":
+      return "3-5 business days";
     case "manual":
       return "5-10 business days";
     default:
